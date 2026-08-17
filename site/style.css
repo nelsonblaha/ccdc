@@ -23,7 +23,9 @@
   --font-display: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  --measure: 34rem;
+  /* Reading measure, widened with --wide so prose in the tab panels does not sit
+     in a narrow ribbon inside a much wider column. ~76 characters at body size. */
+  --measure: 38rem;
   --wide: 66rem;
 }
 
