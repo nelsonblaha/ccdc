@@ -789,3 +789,17 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     border: 1px solid var(--rule);
   }
 }
+
+/* Minimal source credit under the hero image. NASA asks to be acknowledged; the
+   full line lives in the footer, this is just the visible pointer. */
+.hero-credit {
+  margin-top: 0.45rem;
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  opacity: 0.8;
+}
+.hero-credit a { color: inherit; text-decoration-color: var(--rule); }
+.hero-credit a:hover { color: var(--sun); opacity: 1; }
