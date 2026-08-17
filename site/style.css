@@ -250,6 +250,18 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
    breakpoint, where the edge tab carries the number instead, so on desktop this
    button looks exactly as it did. */
 
+/* The signup button is two lines tall once the count sits inside it, so its
+   neighbours match its height instead of floating at their own. Stretching needs
+   the buttons to be flex containers, otherwise the taller box would leave its
+   label pinned to the top. No effect above the rail's breakpoint, where the count
+   is hidden and every button is one line anyway. */
+.hero .cta-row { align-items: stretch; }
+.hero .cta-row > .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn-with-sub {
   display: inline-flex;
   align-items: center;
