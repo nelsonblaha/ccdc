@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" viewBox="0 0 512 512" role="img" aria-label="Chucodata">
+  <line x1="256" y1="91"  x2="293" y2="205" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="293" y1="205" x2="413" y2="205" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="413" y1="205" x2="316" y2="275" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="316" y1="275" x2="353" y2="389" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="353" y1="389" x2="256" y2="319" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="256" y1="319" x2="159" y2="389" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="159" y1="389" x2="196" y2="275" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="196" y1="275" x2="99"  y2="205" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="99"  y1="205" x2="219" y2="205" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="219" y1="205" x2="256" y2="91"  stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="256" y1="91"  x2="256" y2="256" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="413" y1="205" x2="256" y2="256" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="353" y1="389" x2="256" y2="256" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="159" y1="389" x2="256" y2="256" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <line x1="99"  y1="205" x2="256" y2="256" stroke="#F0A32C" stroke-width="6" opacity="1"/>
+  <circle cx="256" cy="91"  r="19" fill="#F0A32C"/>
+  <circle cx="413" cy="205" r="18" fill="#F0A32C"/>
+  <circle cx="353" cy="389" r="18" fill="#F0A32C"/>
+  <circle cx="159" cy="389" r="18" fill="#F0A32C"/>
+  <circle cx="99"  cy="205" r="18" fill="#F0A32C"/>
+  <circle cx="293" cy="205" r="16" fill="#F0A32C"/>
+  <circle cx="316" cy="275" r="16" fill="#F0A32C"/>
+  <circle cx="256" cy="319" r="16" fill="#F0A32C"/>
+  <circle cx="196" cy="275" r="16" fill="#F0A32C"/>
+  <circle cx="219" cy="205" r="16" fill="#F0A32C"/>
+</svg>

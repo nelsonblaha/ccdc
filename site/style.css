@@ -1143,41 +1143,30 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
 .hero-figure { display: none; margin: 0; }
 
-/* Below the two-column breakpoint the hero is a single stack, and a square mark as
-   wide as the text would push the headline off the first screen. */
-.hero-star { display: none; }
-@media (min-width: 62rem) {
-  .hero-star {
-    display: block;
-    background: var(--sun);
-    -webkit-mask: url(/img/star.svg) center / contain no-repeat;
-    mask: url(/img/star.svg) center / contain no-repeat;
-  }
+/* A character at the head of the headline rather than a block beside it: sized in
+   em so it tracks the type, with the space after it doing the work a space does. */
+.hero-star {
+  display: inline-block;
+  width: 0.92em;
+  height: 0.92em;
+  vertical-align: -0.06em;
 }
 
 @media (min-width: 62rem) {
   .hero > .wrap {
     display: grid;
-    /* Three columns now: the star's track is a real width rather than auto, because
-       a square sized from its own stretched height is circular for an auto track and
-       the browser resolves that to zero. */
-    grid-template-columns: clamp(5.5rem, 11vw, 10rem) minmax(0, 1fr) 21rem;
+    grid-template-columns: minmax(0, 1fr) 21rem;
     column-gap: 2.75rem;
     row-gap: 1.75rem;
     align-items: start;
   }
-  /* Spans the three text rows and centres in them. Literally matching the text's
-     height would make the square as wide as the text is tall, which on a full hero
-     is about 300px of the reading column. */
-  .hero-star   { grid-row: 2 / span 3; grid-column: 1; align-self: center;
-                 aspect-ratio: 1; width: 100%; }
   .langbar     { grid-row: 1; grid-column: 1 / -1; }
   /* Full width so the headline has the whole hero to fit on one line — the 44rem
      reading cap applies to the paragraphs, not to the headline, or the text
      overflows its box and spills across the image column. */
-  .hero-head   { grid-row: 2; grid-column: 2 / -1; max-width: none; }
-  .hero-in     { grid-row: 3; grid-column: 2; }
-  .hero-more   { grid-row: 4; grid-column: 2; }
+  .hero-head   { grid-row: 2; grid-column: 1 / -1; max-width: none; }
+  .hero-in     { grid-row: 3; grid-column: 1; }
+  .hero-more   { grid-row: 4; grid-column: 1; }
   /* Spans every row of hero text and centres in it. Sized by the column width at
      its own aspect ratio — no stretch, so no crop and no distortion.
      `span 2` rather than `2 / -1`: -1 resolves against the EXPLICIT grid, and
@@ -1187,7 +1176,7 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
      3 and 4 — and centred in that area. Deliberately not row 2: the headline sits
      above it. `span 2` not `/ -1`, since -1 resolves against the explicit grid and
      there is no grid-template-rows here. */
-  .hero-figure { grid-row: 3 / span 2; grid-column: 3; display: block; align-self: center; }
+  .hero-figure { grid-row: 3 / span 2; grid-column: 2; display: block; align-self: center; }
   .hero-figure img {
     display: block;
     width: 100%;
@@ -1264,16 +1253,12 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
    sits among muted outline glyphs, and a solid tile there would shout. Opacity
    does the work that colour does for its neighbours, since a raster cannot take
    currentColor, and it lifts to full on hover the way they lighten to --ink. */
-/* Masked rather than pictured, so the colour comes from CSS and one vector serves
-   the bar, the hero and the favicon. A raster could not take a colour at all. */
-.nav-logo {
-  width: 84%;
-  height: 84%;
-  display: block;
-  background: var(--sun);
-  -webkit-mask: url(/img/star.svg) center / contain no-repeat;
-  mask: url(/img/star.svg) center / contain no-repeat;
-}
+/* Plain images rather than CSS masks. The mask never painted, not even with the
+   mask removed and a solid colour set, so the colour is baked into two drawings
+   instead: the full one, and a clean one that drops the satellite nodes hanging
+   outside the star's outline. */
+.nav-logo { width: 84%; height: 84%; display: block; }
+.nav-logo-clean { display: none; }
 
 .nav-icon:hover { color: var(--ink); }
 .nav-icon.is-copied { color: var(--agave); }
@@ -1291,6 +1276,10 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
   /* Sized against the flags beside it: their glyph reads large inside a 45px box,
      and a thin-stroked icon at the same box size reads smaller than it measures. */
   .sectionnav .nav-icon { width: 2.75rem; height: 2.75rem; }
+  /* The rail is quiet and close-set, so the satellite web reads as noise there.
+     The phone bar keeps the full drawing, where it has room to be seen. */
+  .nav-logo-full { display: none; }
+  .nav-logo-clean { display: block; }
   .sectionnav .nav-icon svg { width: 1.55rem; height: 1.55rem; stroke-width: 1.75; }
 
   .nav-top {
