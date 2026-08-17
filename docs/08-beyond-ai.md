@@ -80,10 +80,39 @@ We are not inventing this.
   benefits and income. Structurally this is *almost exactly* the organization
   described in doc 05, already operating. Worth studying their bylaws, and
   worth contacting at roadmap step 12.
+
+  **They are binational, and that is the most valuable thing about them to us.**
+  Their own words: "a democratically run non-profit binational cooperative of
+  movement organizations and activists" [web, mayfirst.coop/en/about,
+  2026-08-17]. Doc 11's open question is how a US nonprofit serves members in
+  Juárez without tripping over foreign-activity rules; they appear to have
+  answered it in practice already. That is worth an email before it is worth a
+  citation — ask how membership, dues and governance actually work across the
+  border, and what their counsel told them.
+
+  **Not cited on the public page, deliberately.** Their framing is explicit:
+  "Digital infrastructure for liberation. Member-run, movement-rooted." That is
+  a fine thing to be and it is not what this organization is claiming to be. A
+  reader who follows the link swaps the frame we built — a utility that
+  publishes its numbers — for a different one, and then the water figures stop
+  being the point. The homepage leads with rural electric cooperatives and
+  credit unions instead: member-governed, Texan, and boring in exactly the way
+  that earns trust from a reader who has not decided yet.
 - **CHATONS** — a collective founded by Framasoft in 2016 out of its
   "De-google-ify Internet" campaign, now 70+ small ethical, transparent hosts
   offering Nextcloud, Mastodon and similar. The model for step 12: a federation
-  of small hosts rather than one large one.
+  of small hosts rather than one large one. Unrelated to May First: one is a
+  single organization with members, the other is a charter plus a directory of
+  independent hosts, in different countries with no formal link. Citing both is
+  citing two examples, not one movement.
+
+  **The charter is the part to steal.** Theirs commits signatories to
+  transparency, no advertising, no data mining, and no lock-in — which is the
+  same ground GOVERNED.md covers, already argued over by seventy hosts. Read it
+  before drafting ours rather than after. Also not cited on the public page,
+  though the risk is much lower than May First's: anti-GAFAM is a critique of
+  practices rather than a US partisan position, and essentially no El Paso
+  reader arrives with priors about a French hosting collective.
 - **Framasoft** itself — roughly 90% donation-funded, which is a useful data
   point for whether the funding model here is realistic.
 - **Rural electric cooperatives** — the closest local ancestor and the best
