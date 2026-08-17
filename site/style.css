@@ -797,11 +797,20 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 
   /* Fill the bar rather than clustering left: size to content, then grow into
      whatever is left over, so the labels spread across the available width.
-     `auto` rather than `0` so WHY does not get as much room as WHY HERE. */
-  .sectionnav { padding-right: 0.35rem; }
+     `auto` rather than `0` so WHY does not get as much room as WHY HERE.
+
+     Wrap to a second row instead of crowding. `min-width: 0` plus shrink let each
+     label be squeezed narrower than its own text, which clipped all five Spanish
+     labels at 353px ("HOJA DE RUTA" wanted 82px and was given 61px) rather than
+     scrolling or wrapping. `flex-shrink: 0` with the intrinsic minimum restored
+     means a label is never narrower than its text, so a row that cannot hold them
+     all breaks instead. The bar keeps its single row wherever they do fit, and
+     initStickTop() measures the real height, so the sticky tab bar below follows
+     a two-row bar without a hardcoded offset. */
+  .sectionnav { padding-right: 0.35rem; flex-wrap: wrap; }
   .sectionnav a {
-    flex: 1 1 auto;
-    min-width: 0;
+    flex: 1 0 auto;
+    min-width: auto;
     text-align: center;
     padding: 0.65rem 0.3rem;
     font-size: 0.62rem;
