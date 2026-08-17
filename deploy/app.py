@@ -493,6 +493,24 @@ def index():
     return render_page("es/index.html" if lang == "es" else "index.html")
 
 
+@app.get("/en/")
+def index_en():
+    """English at an explicit address.
+
+    "/" negotiates, which means a reader whose cookie says Spanish gets Spanish
+    there. Without this route the English flag, which pointed at "/", fetched
+    Spanish and there was no way back: the switch was one-way for anyone whose
+    cookie or browser preferred Spanish. Each language now has an address that
+    means itself, and "/" remains the neutral one for sharing.
+    """
+    return render_page("index.html")
+
+
+@app.get("/en")
+def index_en_bare():
+    return redirect("/en/", code=301)
+
+
 @app.get("/es/")
 def index_es():
     return render_page("es/index.html")

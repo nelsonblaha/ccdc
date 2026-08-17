@@ -339,7 +339,7 @@
      cookie, not the path, so that anything copied from the bar is neutral. */
   function neutralPath(url) {
     var u = new URL(url, location.href);
-    return u.pathname.replace(/^\/es\/?$/, '/') + u.search + u.hash;
+    return u.pathname.replace(/^\/(es|en)\/?$/, '/') + u.search + u.hash;
   }
 
   function currentAnchor() {
@@ -361,6 +361,10 @@
   function swapTo(url, push) {
     var anchor = currentAnchor();
     var tab = selectedTabIndex();
+    // Claim the language before asking for it. "/" answers according to the cookie,
+    // so fetching it while the cookie still says the old language returns the page
+    // we are trying to leave.
+    rememberChoice(/\/es\/?$/.test(url) ? 'es' : 'en');
     return fetch(url, { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
       .then(function (html) {
@@ -391,7 +395,7 @@
      hand /es/ to someone whose browser would rather have English. The cookie is
      what survives a reload, which is why it has to be set before the URL changes. */
   function tidyLanguageUrl() {
-    if (!/^\/es\/?$/.test(location.pathname)) return;
+    if (!/^\/(es|en)\/?$/.test(location.pathname)) return;
     rememberChoice(document.documentElement.lang || 'es');
     history.replaceState(history.state, '', neutralPath(location.href));
   }
