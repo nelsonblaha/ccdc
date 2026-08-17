@@ -657,8 +657,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     margin-bottom: 0;
     white-space: normal;
   }
-  /* A tick per entry — the same gauge language as the water bars. */
-  .sectionnav a::before {
+  /* A tick per entry — the same gauge language as the water bars. The flag is not
+     a destination, so it gets no tick. */
+  .sectionnav a:not(.nav-flag)::before {
     content: "";
     flex: none;
     width: 0.85rem;
@@ -674,7 +675,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sectionnav a::before { transition: none; }
+  .sectionnav a:not(.nav-flag)::before { transition: none; }
 }
 
 /* ---------- citations ----------
@@ -715,9 +716,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
    is visually hidden rather than removed, so the link is still announced as
    "English" / "Español" to a screen reader and still reachable by voice control. */
 
-.langbar a, .langbar [aria-current] { display: inline-flex; align-items: baseline; gap: 0.4rem; }
+.langbar a, .langbar [aria-current] { display: inline-flex; align-items: baseline; gap: 0.4rem; padding: 0.45rem 0.35rem; }
 .langbar .flag {
-  font-size: 1.05em;
+  font-size: 1.2em;
   letter-spacing: 0;
   /* Windows Chrome renders regional-indicator pairs as letters (US / MX) rather
      than flags. That still reads correctly, so no fallback is forced. */
@@ -767,11 +768,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   /* Fill the bar rather than clustering left: size to content, then grow into
      whatever is left over, so the labels spread across the available width.
      `auto` rather than `0` so WHY does not get as much room as WHY HERE. */
-  .sectionnav {
-    /* room at the right end for the language flags, which are pinned there,
-       including their own padding so they never crowd the last nav item */
-    padding-right: 5.5rem;
-  }
+  .sectionnav { padding-right: 0.35rem; }
   .sectionnav a {
     flex: 1 1 auto;
     min-width: 0;
@@ -791,27 +788,31 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   }
   .tab:first-child { padding-left: 0.35rem; }
 
-  /* The switcher moves up into the sticky bar, right-aligned. Fixed rather than
-     re-parented, so there is still exactly one language control in the DOM.
-     Height tracks --stick-top, which JS measures from the nav itself, so the two
-     line up exactly. */
-  .langbar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 51;
-    height: var(--stick-top, 2.6rem);
-    box-sizing: border-box;
+  /* The hero switcher is hidden here: the nav bar carries the flag instead, as a
+     real flex item rather than a fixed overlay. A fixed element stays pinned while
+     the sticky bar rubber-bands during overscroll, which visibly separated the two
+     borders. One bar, one border, nothing to desync. */
+  .hero .langbar { display: none; }
+
+  .nav-top {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-bottom: 0;
-    /* At least the breathing room a tab gets, and a bit more at the screen edge
-       so the control is not pinned flush against it. */
-    padding: 0.65rem 0.9rem;
-    background: var(--surface);
-    border-bottom: 1px solid var(--rule);
+    order: 2;
+    margin-left: auto;
+    padding-left: 0.7rem;
+    padding-right: 0.25rem;
+  }
+  .nav-brand { display: none; }
+  .nav-lang { display: block; opacity: 1; transform: none; pointer-events: auto; }
+  .sectionnav a:not(.nav-flag) { order: 1; }
+  .nav-flag {
+    display: inline-block;
+    font-size: 1.3rem;
+    line-height: 1;
+    text-decoration: none;
+    letter-spacing: 0;
+    padding: 0.55rem;
+    margin: -0.55rem 0;
   }
 }
 
@@ -929,14 +930,14 @@ html[lang="es"] { --h1-ratio: 28.1; }
   }
   .nav-flag {
     display: inline-block;
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     line-height: 1;
     text-decoration: none;
     letter-spacing: 0;
-    /* Padding grows the hit area to roughly 31px; the matching negative margin
-       keeps it from changing the row height. */
-    padding: 0.4rem;
-    margin: -0.4rem;
+    /* Padding takes the hit area to about 44px; the matching negative margin keeps
+       it from changing the row height. */
+    padding: 0.6rem;
+    margin: -0.6rem;
     filter: saturate(0.85);
     transition: filter 140ms ease;
   }

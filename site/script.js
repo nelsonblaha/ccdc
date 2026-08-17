@@ -280,12 +280,16 @@
 
     window.addEventListener('scroll', apply, { passive: true });
     window.addEventListener('resize', apply);
+    function narrowHandover() {
+      // Below 84rem the hero switcher is display:none and the nav flag is the only
+      // control, so it must be the live one regardless of scroll position.
+      docked.setAttribute('aria-hidden', 'false');
+      hero.setAttribute('aria-hidden', 'true');
+      docked.querySelectorAll('a').forEach(function (a) { a.removeAttribute('tabindex'); });
+    }
+    if (!wide.matches) narrowHandover();
     wide.addEventListener('change', function () {
-      if (!wide.matches) {
-        docked.setAttribute('aria-hidden', 'true');
-        hero.setAttribute('aria-hidden', 'false');
-      }
-      on = null;
+      if (!wide.matches) { narrowHandover(); } else { on = null; }
       apply();
     });
     apply();
