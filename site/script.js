@@ -110,6 +110,14 @@
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }, { signal: signal });
 
+    // A fragment navigation used to open the modal by itself through :target.
+    // .is-closed now suppresses that, which is the point, but it also means
+    // back, forward, and a hand-typed #signup would do nothing once the modal
+    // had been closed. Handle the fragment explicitly instead of relying on CSS.
+    window.addEventListener('hashchange', function () {
+      if (location.hash === '#signup') open(null);
+    }, { signal: signal });
+
     if (location.hash === '#signup') open(null);
   }
 

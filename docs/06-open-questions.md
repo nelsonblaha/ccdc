@@ -69,6 +69,18 @@ external answer; none of them should block Phase 0 (doc 04).
 9. **The name.** "Community Data Center" promises hardware we will not own for
    years (doc 05, last section). Rename, or keep it and publish a milestone
    schedule we report against annually including misses.
+
+   **Domain candidates, recorded before anything is registered:**
+   `chucodc.org` and `chucodata.org`. Both keep "Chuco", which is the half of
+   the name that means something locally, and neither claims a facility the way
+   a `datacenter` domain would; `chucodc.org` is shorter to say aloud, and
+   `chucodata.org` is the one someone can spell after hearing it once. Neither
+   is registered yet and this is not a decision, only a note so the options are
+   not rediscovered later. Whatever is chosen becomes the permanent home when
+   the service moves off `ccdc.blaha.io`, which is currently a personal
+   hostname; see doc 09. Check both against the Texas SOS name availability
+   search at the same time as the entity name, since a domain that does not
+   match the filed name is a small permanent annoyance.
 10. **Who is the service *for*?** Any El Paso resident? Anyone who asks?
     Students? Small nonprofits? This determines the charitable class, which
     determines the exemption argument, which determines everything in doc 05.

@@ -125,7 +125,11 @@ gh api -X POST repos/nelsonblaha/ccdc/pages -f 'build_type=workflow'
 ```
 
 The next home is expected to be a domain of its own on the new server rather than
-`github.io`.
+`github.io`. Candidates are `chucodc.org` and `chucodata.org` (doc 06, item 9).
+`ccdc.blaha.io` is a personal hostname and is fine for a proposal nobody has
+joined yet; it is not where a nonprofit that takes dues should live, and the
+admin session in `deploy/app.py` was built so that moving is a matter of setting
+a new secret rather than rewriting anything.
 
 ## Editing rules
 
