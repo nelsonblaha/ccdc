@@ -247,7 +247,112 @@ verification in it.
 ### Stage 4 — Members and elections
 
 Open membership. Hold the first annual meeting. Elect the board. Publish the
-first annual report and Form 990.
+first annual report and Form 990. Mechanics below.
+
+## Membership and how the board actually gets elected
+
+### Separate the two products
+
+The cleanest structure, and the one that resolves the private-benefit problem
+by construction:
+
+| | **Subscription** | **Voting membership** |
+|---|---|---|
+| What it buys | AI access | governance: vote for directors, attend the annual meeting, inspect the books |
+| Who is eligible | anyone (El Paso focus) | El Paso County residents, self-attested |
+| Price | $0 / ~$5 / ~$15 per month | flat annual dues, ~$25–50 |
+| Required to have the other? | **No** | **No** |
+
+A subscriber need not be a member. A member need not subscribe. **Dues buy a
+vote, not compute** — which is what keeps this out of buyers'-club territory
+while still letting members fund the organization.
+
+Two refinements worth building in:
+
+- **Waive dues on request, no questions asked.** If governance is gated by $30,
+  the organization is governed by people who have $30. A published, frictionless
+  waiver costs almost nothing and is a strong answer to the obvious criticism.
+- **Dues that buy only voting rights are largely deductible.** Intangible
+  governance privileges have minimal fair market value. The moment membership
+  also conveys compute, you must subtract its FMV and — for payments over $75
+  where the member receives goods or services — make a written quid-pro-quo
+  disclosure. Keeping compute out of the membership bundle keeps the accounting
+  simple and the deduction clean.
+
+### The bootstrap: the first board is appointed, not elected
+
+There is no way around this and it is not a compromise — every membership
+nonprofit starts here. As incorporator you name the initial directors (minimum
+three, TBOC § 22.204) on **Form 202** and at the organizational meeting. They
+adopt the bylaws. Elections begin once there are members to hold them.
+
+What matters is that the bylaws **commit to the handover on a date certain**,
+adopted while you still control the process. Writing "the first member election
+shall be held no later than [18 months after formation]" into the founding
+bylaws is the single most credible governance act available to you, because you
+are binding yourself at the only moment you have the power to.
+
+### Texas defaults you must consciously override
+
+TBOC supplies defaults that mostly do not fit. Bylaws control; silence is a
+decision.
+
+- **Quorum defaults to one-tenth** of votes entitled to be cast, in person or by
+  proxy (§ 22.159) **[web]**. For a 500-member org that is 50 people — probably
+  achievable. For 5,000 it is not, and a failed quorum means the organization
+  cannot act. Set it deliberately, and allow electronic ballots so "attendance"
+  is not a room in El Paso on a Tuesday.
+- **Proxies are permitted by default** (§ 22.159) **[web]**. Proxy solicitation
+  is *the* classic capture vector for member organizations. Either bar proxies
+  and use direct electronic balloting, or cap how many proxies one person may
+  hold.
+- **One member, one vote regardless of class** is the default (§ 22.160)
+  **[web]**. Keep it. Resist any structure where larger donors get more votes;
+  it is the fastest possible way to lose the plot.
+- **Majority of votes cast at a quorate meeting carries** (§ 22.159) **[web]** —
+  except where you have deliberately required a supermajority (the mission lock,
+  below).
+
+### Anti-capture provisions
+
+Cheap dues plus online signup means a motivated group — a competitor, a
+political faction, or one annoyed person with 40 friends — can take the board in
+a single cycle. Standard, unglamorous protections:
+
+1. **One natural person, one membership, dues paid by that person.** No bulk or
+   gifted memberships with voting rights. No organizational memberships that
+   vote.
+2. **A waiting period.** Membership must be established some fixed period (60–90
+   days) before the record date to vote in that election. This alone defeats
+   most signup surges.
+3. **Staggered terms.** Three classes, three-year terms, roughly one-third
+   elected annually. A hostile majority then needs to win two consecutive
+   elections rather than one, which is the whole point — it converts a raid into
+   a campaign.
+4. **Term limits** for directors, so the board renews without depending on
+   anyone losing an election.
+5. **A petition path onto the ballot.** A nominating committee that controls the
+   entire slate makes elections decorative. Any member should reach the ballot
+   by petition of a small number of members (say 10, or 2% of membership,
+   whichever is less). This is the valve that makes member voting real, and it
+   is the provision a self-interested founder would quietly omit.
+6. **Members may remove directors**, with a defined vote threshold. The board
+   fills interim vacancies until the next annual election.
+
+### Board composition
+
+Five to seven directors is the right size — large enough for real independent
+committees (audit, compensation), small enough to function.
+
+- **Member-elected majority.** This is what makes the governance claim true.
+- At most a minority of appointed or at-large seats, for specific expertise you
+  cannot count on an election to produce — a treasurer with nonprofit finance
+  experience, someone with standing on the local water and energy fight.
+- **No permanent founder seat**, or if there is one during the bootstrap, an
+  explicit expiry written into the bylaws.
+- The supermajority mission lock (below) should require a vote of the
+  **membership**, not just the board — a board can be captured; a membership is
+  much harder to capture quietly.
 
 ## What actually makes it trustworthy
 

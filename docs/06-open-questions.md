@@ -27,6 +27,10 @@ external answer; none of them should block Phase 0 (doc 04).
    **[web]**. This gates Stage 2 entirely, and recruiting people who will
    disagree with you takes longer than any of the software.
 
+   3a. **What date do the founding bylaws commit to the first member election?**
+   Doc 05 argues for a hard deadline written in while you still control the
+   process. Pick it now; it gets harder to pick later, which is the point.
+
 ## Needs a lawyer
 
 4. Bylaws: quorum, voting, member classes, the supermajority lock on the purpose
