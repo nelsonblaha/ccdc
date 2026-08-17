@@ -102,8 +102,8 @@ argument coherent.
 ## Consequences already landed
 
 - **The site is bilingual.** `site/index.html` (en) and `site/es/index.html` (es),
-  sharing `site/style.css` and `site/script.js` so the two cannot drift visually
-  or behaviorally. Switcher in the header of each, `hreflang` alternates, and
+  sharing one stylesheet and one script — now the campaignlanding package — so
+  the two cannot drift visually or behaviorally. Switcher in the header of each, `hreflang` alternates, and
   `/es/gracias` alongside `/thanks`.
 - **The signup endpoint is localized.** One endpoint; the form posts a `lang`
   field, errors return in that language, and `lang` is recorded on each signup —

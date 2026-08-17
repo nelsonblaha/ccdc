@@ -96,8 +96,14 @@ formed, no board exists, no service is running, and no money has changed hands.
 
 ## The public pitch
 
-`site/index.html` and `site/es/index.html` are the advertisement. They share
-`site/style.css` and `site/script.js`, so the two languages cannot drift apart.
+`site/index.html` and `site/es/index.html` are the advertisement. They share one
+stylesheet and one script, so the two languages cannot drift apart, and both of
+those now live in [campaignlanding](https://github.com/nelsonblaha/campaignlanding)
+— this page's machinery, with the campaign taken out of it, so the next person
+with something to propose does not have to rebuild it. What is left in
+`site/style.css` is the one rule that was about these particular words: how wide
+the Spanish headline runs.
+
 Everything in `docs/` is the evidence behind them, which is the point: every
 claim on the site is checkable against the research here.
 
@@ -105,9 +111,11 @@ Live at <https://chucodata.org/>, in whichever language your browser asks for.
 `/es/` and `/en/` name a language explicitly, and `/why`, `/roadmap` and the
 other section slugs open the page at that section.
 
-The signup form is ours. It posts to `deploy/app.py`, which appends to a JSONL
-file on the host, readable over SSH. No Google Form, no third-party form
-service, and nothing that sees the list except us.
+The signup form is ours. It posts to our own server, which appends to a JSONL
+file on the host, readable over SSH. No Google Form, no third-party form service,
+and nothing that sees the list except us. `deploy/app.py` is now the whole of the
+configuration; the code that receives it is campaignlanding, pinned to a tag so a
+deploy never picks up an upstream change nobody here decided to take.
 
 `tools/cost_model.py` is a runnable version of the cost model in doc 03. Change
 the assumptions at the top and re-run rather than trusting the numbers in prose.

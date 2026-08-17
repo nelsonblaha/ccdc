@@ -41,13 +41,19 @@ email addresses.
 
 `ccdc-data/` is gitignored. It must never end up in this repo, which is public.
 
-### Why the form posts to an absolute URL
+### Why the form posts to a relative URL
 
-`https://ccdc.blaha.io/api/signup`, not a relative path. This began as a way to
-let a GitHub Pages mirror's form work; Pages is now disabled and the absolute URL
-is kept because it also lets a local copy of `site/` post to the real endpoint
-while working on the page. `deploy/app.py` allows CORS from `ccdc.blaha.io` and
-the pre-rename `epcdc.blaha.io`, and nothing else.
+`/api/signup`. It used to be absolute, first so a GitHub Pages mirror's form
+would work, and then because it let a local copy of `site/` post to the real
+endpoint while working on the page. Pages is gone, and the cost of the absolute
+form was that the page only worked from one hostname: opened at any other name
+the site answers on, every submission was a cross-origin request that had to be
+allowed by hand.
+
+CORS is still granted, to the canonical host and to the pre-rename `ccdc.blaha.io`
+and `epcdc.blaha.io`, so a page someone already had open keeps working. Nothing
+else is allowed: an allowance for an origin we no longer control the content of
+is worth nothing to us and something to an attacker.
 
 Consequence worth knowing: the form **will not submit from a Claude artifact
 preview**, whose CSP blocks all external requests. Artifacts are for reviewing
