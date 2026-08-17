@@ -899,10 +899,13 @@ html[lang="es"] { --h1-ratio: 28.1; }
   .nav-brand {
     display: block;
     font-family: var(--font-display);
-    font-size: 0.9rem;
+    /* Same size and tracking as the nav labels; gold and a touch heavier so it
+       reads as the mark rather than another destination. */
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--sun);
     padding-bottom: 0.9rem;
   }
 
