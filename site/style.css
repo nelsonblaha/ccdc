@@ -1378,8 +1378,11 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
     pointer-events: auto;
   }
 
-  /* Always present, below the dock: the page's two outward links. */
-  .nav-social { display: flex; align-items: center; gap: 0.35rem; }
+  /* Always present, below the dock: the page's two outward links. The gap matches
+     the dock's exactly, which is what puts the link icon under the first flag: both
+     rows start with a 44px item, so an equal gap makes the second column line up.
+     At 0.35rem it sat 6.4px to the left, which is precisely the difference. */
+  .nav-social { display: flex; align-items: center; gap: 0.75rem; }
   /* Element-qualified on purpose: `.sectionnav a` is (0,2,0) and beat a bare
      `.nav-flag` (0,1,0), so the link kept the nav label's 0.68rem while the span
      took the flag size. This is (0,2,1) and wins outright. */
