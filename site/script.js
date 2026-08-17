@@ -206,7 +206,20 @@
     }
 
     tabs.forEach(function (t, i) {
-      t.addEventListener('click', function () { select(i, false, true); });
+      t.addEventListener('click', function () {
+        // Same rule as the rail: clicking what is already selected has nothing to
+        // switch to, so it hands you the link instead.
+        if (t.getAttribute('aria-selected') === 'true' && t.dataset.slug) {
+          copyText(location.origin + '/' + t.dataset.slug, function () {
+            t.classList.add('is-copied');
+            copiedToast(t);
+            clearTimeout(t._copyTimer);
+            t._copyTimer = setTimeout(function () { t.classList.remove('is-copied'); }, 1200);
+          });
+          return;
+        }
+        select(i, false, true);
+      });
       t.addEventListener('keydown', function (e) {
         var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
         if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true, true); return; }
@@ -218,6 +231,13 @@
     wrap.classList.add('js-tabs');
     var start = 0;
     if (typeof restoreIndex === 'number' && restoreIndex > 0 && restoreIndex < tabs.length) start = restoreIndex;
+    // A slug like /services names a tab by id, which is the same in both languages.
+    var wanted = document.body.getAttribute('data-open-tab');
+    if (wanted) {
+      var byId = -1;
+      tabs.forEach(function (t, i) { if (t.id === wanted) byId = i; });
+      if (byId !== -1) start = byId;
+    }
     select(start, false, false);
 
     // A link to a specific reason should open that reason, not scroll past it.
@@ -625,7 +645,12 @@
         // address instead. Undocumented on purpose — no hint, no tooltip — but it
         // confirms afterwards, since an action with no feedback is indistinguishable
         // from a dead click.
-        if (a.hasAttribute('aria-current') && a.dataset.slug) {
+        // Also when the page is already resting at that section, not only when the
+        // spy has marked it. The spy's band is a slice of the middle of the window,
+        // so at some scroll positions nothing is marked at all, which is why this
+        // worked on a phone and not on the desktop rail.
+        var atRest = Math.abs(window.scrollY - restingTopFor(el)) < 6;
+        if ((a.hasAttribute('aria-current') || atRest) && a.dataset.slug) {
           copyText(location.origin + '/' + a.dataset.slug, function () {
             a.classList.add('is-copied');
             copiedToast(a);
@@ -699,6 +724,7 @@
     var key = document.body.getAttribute('data-scroll-to');
     if (!key) return;
     document.body.removeAttribute('data-scroll-to');
+    document.body.removeAttribute('data-open-tab');
     var el = document.querySelector('[data-section="' + key + '"]');
     if (el) window.scrollTo({ top: Math.max(0, restingTopFor(el)), behavior: 'auto' });
     history.replaceState(history.state, '', location.pathname.replace(/^\/[^/]+$/, '/') + location.search);

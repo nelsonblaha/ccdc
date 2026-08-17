@@ -551,17 +551,43 @@ SECTION_SLUGS = {
 }
 
 
-def _section_page(section: str):
+# The four reasons are tabs inside one section, so their slugs open that section and
+# select the tab. Keyed by the tab's id, which is the same in both languages while the
+# labels are not.
+TAB_SLUGS = {
+    "environment": "tab-env",
+    "privacy": "tab-privacy",
+    "ownership": "tab-own",
+    "services": "tab-svc",
+    "medio-ambiente": "tab-env",
+    "privacidad": "tab-privacy",
+    "propiedad": "tab-own",
+    "servicios": "tab-svc",
+}
+
+
+def _section_page(section: str, tab: str = ""):
     resp = index()
     # Injected into the served HTML rather than passed as a fragment: a fragment
     # would sit in the address bar and be shared, which is what this avoids.
+    attrs = f' data-scroll-to="{section}"' + (f' data-open-tab="{tab}"' if tab else "")
     resp.set_data(
-        resp.get_data(as_text=True).replace(
-            "<body>", f'<body data-scroll-to="{section}">', 1
-        )
+        resp.get_data(as_text=True).replace("<body>", f"<body{attrs}>", 1)
     )
     return resp
 
+
+for _slug, _tab in TAB_SLUGS.items():
+    app.add_url_rule(
+        f"/{_slug}",
+        endpoint=f"tab_{_slug}",
+        view_func=(lambda tab=_tab: _section_page("why", tab)),
+    )
+    app.add_url_rule(
+        f"/{_slug}/",
+        endpoint=f"tab_{_slug}_slash",
+        view_func=(lambda slug=_slug: redirect(f"/{slug}", code=301)),
+    )
 
 for _slug, _section in SECTION_SLUGS.items():
     app.add_url_rule(

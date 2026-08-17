@@ -1525,6 +1525,8 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
 /* The rail's quiet confirmation that a section link copied itself. Nothing marks the
    behaviour beforehand; this only appears after the fact. */
 .sectionnav a.is-copied { color: var(--agave); }
+.tab.is-copied { color: var(--agave); }
+.tab.is-copied .tab-icon { stroke: var(--agave); }
 .sectionnav a.is-copied::before { background: var(--agave); }
 
 /* The copy confirmation. Positioned by script beside whatever was copied; the styling
