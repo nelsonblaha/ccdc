@@ -402,6 +402,62 @@
   }
 
 
+  /* ---- nav icons ----
+     Home scrolls back rather than navigating, so no history entry and no hash.
+     Copy writes the page URL without any fragment, because the thing worth
+     sharing is the page, not wherever the reader happens to be standing in it. */
+  function initNavIcons() {
+    var home = document.querySelector('.nav-home');
+    if (home) {
+      home.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      });
+    }
+    var copy = document.querySelector('.nav-copy');
+    if (!copy) return;
+    var label = copy.getAttribute('aria-label');
+    var copied = copy.getAttribute('data-copied') || 'Copied';
+    var timer = null;
+
+    function flash() {
+      copy.classList.add('is-copied');
+      // The label changes too: a colour change alone says nothing to a screen
+      // reader, and this button's whole feedback is the colour.
+      copy.setAttribute('aria-label', copied);
+      copy.setAttribute('title', copied);
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        copy.classList.remove('is-copied');
+        copy.setAttribute('aria-label', label);
+        copy.setAttribute('title', label);
+      }, 1400);
+    }
+
+    function legacyCopy(text) {
+      var box = document.createElement('textarea');
+      box.value = text;
+      box.setAttribute('readonly', '');
+      box.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(box);
+      box.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      box.remove();
+      return ok;
+    }
+
+    copy.addEventListener('click', function () {
+      var url = location.origin + location.pathname + location.search;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(flash, function () {
+          if (legacyCopy(url)) flash();
+        });
+        return;
+      }
+      if (legacyCopy(url)) flash();
+    });
+  }
+
   var ac = null;
   function boot(restoreTab) {
     if (ac) ac.abort();
@@ -415,6 +471,7 @@
     initSpy(signal);
     initLangDock(signal);
     initLangSwap(signal);
+    initNavIcons();
   }
 
   boot();

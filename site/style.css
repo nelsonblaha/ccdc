@@ -785,7 +785,6 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 .jointag.is-admin { display: flex; }
 
 @media (min-width: 84rem) {
-  .joininline { display: none; }
   .jointag {
     position: fixed;
     right: 0;
@@ -987,10 +986,19 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
   /* Scoped under .sectionnav on purpose: the base `.nav-lang { display: none }`
      lives further down the sheet, and a media query adds no specificity, so an
      unscoped rule here would lose on source order and the control would vanish. */
+  /* display: contents so the dock's children become items of the bar itself.
+     That is what lets the home icon sit at the far left while the flags stay at
+     the far right, from one piece of markup rather than two copies. */
   .sectionnav .nav-top {
-    display: flex;
-    align-items: center;
-    order: 2;
+    display: contents;
+  }
+  .sectionnav .nav-icon { order: 0; margin-left: 0.15rem; }
+  /* On a phone the bar is reached by scrolling anyway, so the home icon is the
+     useful one at every position and the link icon never appears. */
+  .sectionnav .nav-home { display: inline-flex; }
+  .sectionnav .nav-copy { display: none; }
+  .sectionnav .nav-lang {
+    order: 3;
     margin-left: auto;
     padding-left: 0.7rem;
     padding-right: 0.25rem;
@@ -1119,6 +1127,45 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
    absolutely so appearing and disappearing never shifts the mark or the links. */
 
 .nav-top, .nav-brand, .nav-lang { display: none; }
+
+/* ---------- nav icons ----------
+   Same muted ink as the labels beside them, so they read as part of the bar
+   rather than as a second call to action. Stroke follows currentColor, which is
+   what makes the copied state a one-property change. */
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0.3rem;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+.nav-icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nav-icon:hover { color: var(--ink); }
+.nav-icon.is-copied { color: var(--agave); }
+@media (prefers-reduced-motion: reduce) { .nav-icon { transition: none; } }
+
+/* Which of the two shows: at the top of the page there is nothing to go back to,
+   so that slot offers the link instead. Once the dock appears on scroll it
+   becomes the way home. */
+.nav-copy { display: inline-flex; }
+.nav-home { display: none; }
+.sectionnav.has-lang .nav-copy { display: none; }
+.sectionnav.has-lang .nav-home { display: inline-flex; }
 
 @media (min-width: 84rem) {
   .nav-top {
