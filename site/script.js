@@ -447,7 +447,16 @@
     }
 
     copy.addEventListener('click', function () {
-      var url = location.origin + location.pathname + location.search;
+      // Language-neutral on purpose. El Paso and Juárez are fluidly bilingual, so
+      // the sender's language says nothing about the recipient's: a shared /es/
+      // link forces Spanish on whoever opens it. Copying the bare URL lets each
+      // reader's own browser decide, and the cookie still overrides that for
+      // anyone who has chosen. /es/ remains a real URL, just not the shared one.
+      // Anchored to the whole path, not a prefix: a loose /^\/es\// would turn
+      // /es/gracias into /gracias, which does not exist. Only the Spanish home
+      // page has a language-neutral twin.
+      var path = location.pathname.replace(/^\/es\/?$/, '/');
+      var url = location.origin + path + location.search;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(flash, function () {
           if (legacyCopy(url)) flash();
