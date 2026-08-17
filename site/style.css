@@ -1587,3 +1587,7 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
   .btn { font-size: min(0.92rem, 3.1vw); }
   .btn-with-sub .joininline { font-size: min(0.68rem, 2.4vw); }
 }
+
+/* Section headings copy their own link (script.js: initTitleCopy). No cursor change:
+   like the rail, it is undiscoverable on purpose and confirms after the fact. */
+.copy-title.is-copied { color: var(--agave); }

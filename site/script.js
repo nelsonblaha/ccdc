@@ -664,13 +664,57 @@
     });
   }
 
+  /* ---- the section headings copy too ----
+     A heading is not a control, so a click on it cannot mean anything else: it copies
+     that section's address every time, where the rail and the tabs only do it once you
+     are already there. Same tooltip, same brief mark.
+
+     The reasons section has no heading of its own — its title is the tab bar, which
+     already carries this. */
+  function initTitleCopy(signal) {
+    var slugFor = {};
+    document.querySelectorAll('.sectionnav a[data-slug]').forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) slugFor[el.getAttribute('data-section')] = a.dataset.slug;
+    });
+    document.querySelectorAll('[data-section]').forEach(function (sec) {
+      var slug = slugFor[sec.getAttribute('data-section')];
+      if (!slug) return;
+      [sec.querySelector('.eyebrow'), sec.querySelector('h2')].forEach(function (h) {
+        if (!h) return;
+        h.classList.add('copy-title');
+        h.addEventListener('click', function () {
+          // A drag that selects the heading ends in a click on it too. Someone who has
+          // just highlighted the words wants those words, not the link.
+          var sel = window.getSelection();
+          if (sel && String(sel).length) return;
+          copyText(location.origin + '/' + slug, function () {
+            h.classList.add('is-copied');
+            copiedToast(h, firstLineRect(h));
+            clearTimeout(h._copyTimer);
+            h._copyTimer = setTimeout(function () { h.classList.remove('is-copied'); }, 1200);
+          });
+        }, { signal: signal });
+      });
+    });
+  }
+
+  /* A heading's box runs the width of the column, so its own rect would push the
+     tooltip to the far edge, or off it. The first line of text is where the eye is. */
+  function firstLineRect(el) {
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var lines = r.getClientRects();
+    return lines.length ? lines[0] : el.getBoundingClientRect();
+  }
+
   /* ---- the confirmation tooltip ----
      One element, reused, placed beside whatever was just copied. It is a live region
      so the confirmation is announced rather than only shown, and pointer-events are
      off so it can never swallow the next click. It flips to the other side of the
      element when it would run off the window, which matters for the rail, since that
      sits against the left edge, and for the phone footer at the bottom. */
-  function copiedToast(nearEl) {
+  function copiedToast(nearEl, rectOverride) {
     var t = document.getElementById('copied-toast');
     if (!t) {
       t = document.createElement('div');
@@ -682,7 +726,7 @@
     }
     t.textContent = T().copied;
     t.classList.add('is-on');
-    var r = nearEl.getBoundingClientRect();
+    var r = rectOverride || nearEl.getBoundingClientRect();
     var w = t.offsetWidth, h = t.offsetHeight;
     var left = r.right + 10;
     var top = r.top + (r.height - h) / 2;
@@ -747,6 +791,7 @@
     initNavIcons();
     initTiers(signal);
     initSectionLinks(signal);
+    initTitleCopy(signal);
     initArrival();
     initTabGrow(signal);
   }
