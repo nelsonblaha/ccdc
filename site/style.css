@@ -638,3 +638,62 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 @media (prefers-reduced-motion: reduce) {
   .sectionnav a::before { transition: none; }
 }
+
+/* ---------- citations ----------
+   Wikipedia-style numbered superscripts pointing at the reference list in the
+   footer. :target highlights the entry you jumped to, so a click on [2] shows
+   which line answered it. */
+
+.ref { font-size: 0.62em; line-height: 0; vertical-align: super; white-space: nowrap; }
+.ref a {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--sun);
+  text-decoration: none;
+  padding: 0 0.08em;
+}
+.ref a:hover { text-decoration: underline; }
+
+.refs {
+  margin: 0;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+.refs li { color: var(--ink-3); scroll-margin-top: 4.5rem; }
+.refs li::marker { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+.refs li:target { color: var(--ink); box-shadow: -0.5rem 0 0 var(--sun-soft), 0.5rem 0 0 var(--sun-soft); background: var(--sun-soft); }
+.refs cite { font-style: normal; color: var(--ink-2); }
+
+/* Service names in the grid are links to the projects themselves. */
+.svc-item a { text-decoration-color: var(--rule); }
+.svc-item a:hover { text-decoration-color: var(--sun); }
+
+/* ---------- language switcher flags ----------
+   The flag is decorative and the word is the label. On narrow screens the word
+   is visually hidden rather than removed, so the link is still announced as
+   "English" / "Español" to a screen reader and still reachable by voice control. */
+
+.langbar a, .langbar [aria-current] { display: inline-flex; align-items: baseline; gap: 0.4rem; }
+.langbar .flag {
+  font-size: 1.05em;
+  letter-spacing: 0;
+  /* Windows Chrome renders regional-indicator pairs as letters (US / MX) rather
+     than flags. That still reads correctly, so no fallback is forced. */
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+@media (max-width: 34rem) {
+  .langbar .lang-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .langbar .flag { font-size: 1.25em; }
+}
