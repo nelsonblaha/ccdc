@@ -19,6 +19,9 @@
   --ocotillo: #A93227;
   --focus:    #2C5CC5;
   --btn-ink:  #FFF8EC;
+  /* Width the headline occupies per 1px of font-size, measured in the browser.
+     Set per language because the two headlines are different lengths. */
+  --h1-ratio: 22.75;
 
   --font-display: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -95,7 +98,7 @@ h1 {
      per 1px of font-size in this face, so the size is derived from the space
      actually available rather than guessed. */
   white-space: nowrap;
-  font-size: min(2.85rem, calc((min(68rem, 100vw) - 3rem) / 22.75));
+  font-size: min(2.85rem, calc((min(68rem, 100vw) - 3rem) / var(--h1-ratio)));
   line-height: 1.04;
   letter-spacing: -0.035em;
 }
@@ -877,5 +880,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 @media (min-width: 84rem) {
   :root { --wide: min(68rem, calc(100% - 27rem)); }
   .hero > .wrap { max-width: min(68rem, calc(100% - 27rem)); }
-  h1 { font-size: min(2.85rem, calc((min(68rem, 100vw - 27rem) - 3rem) / 22.75)); }
+  h1 { font-size: min(2.85rem, calc((min(68rem, 100vw - 27rem) - 3rem) / var(--h1-ratio))); }
 }
+
+/* The Spanish headline is 48 characters against 39 in English, so it needs more
+   width per point of font-size to stay on one line inside the same column. */
+html[lang="es"] { --h1-ratio: 28.1; }
