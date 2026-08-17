@@ -124,7 +124,23 @@ VERSIONED_ASSETS = ("style.css", "script.js")
 
 CHOICE_COOKIE = "lang"
 
+# --------------------------------------------------------------------------
+# Canonical host.
+#
+# chucodata.org is the intended permanent home (doc 06, item 9). ccdc.blaha.io is
+# a personal hostname that served the proposal while it had no domain of its own.
+#
+# The switch is off until the new name is verified serving the site end to end,
+# because turning it on early would 301 every visitor to a domain that does not
+# resolve yet, and a 301 is exactly the response browsers cache hardest. Flipping
+# it also requires the form's absolute action to move in the same commit: a POST
+# through a 301 is downgraded to GET by browsers, which would silently break
+# signups rather than redirect them.
+# --------------------------------------------------------------------------
 
+CANONICAL_HOST = "chucodata.org"
+LEGACY_HOSTS = {"ccdc.blaha.io", "epcdc.blaha.io", "www.chucodata.org"}
+REDIRECT_LEGACY_HOSTS = os.environ.get("CCDC_CANONICAL_REDIRECT") == "1"
 def prefers_spanish(header: str) -> bool:
     """True when Accept-Language ranks Spanish above English.
 
@@ -220,6 +236,28 @@ CORS_ORIGINS = {
     "https://ccdc.blaha.io",
     "https://epcdc.blaha.io",  # pre-rename alias; drop when nothing points at it
 }
+
+
+@app.before_request
+def canonical_redirect():
+    """Send the old hostnames to the canonical one, preserving path and query.
+
+    Deliberately not applied to /api/ or /healthz. The API is posted to
+    cross-origin by anything still holding an old copy of the page, and a redirect
+    there loses the body; the health check is called by Docker with a bare host
+    header and has nothing to do with names.
+    """
+    if not REDIRECT_LEGACY_HOSTS:
+        return None
+    host = (request.host or "").split(":")[0].lower()
+    if host not in LEGACY_HOSTS:
+        return None
+    if request.path.startswith("/api/") or request.path == "/healthz":
+        return None
+    target = f"https://{CANONICAL_HOST}{request.full_path.rstrip('?') or '/'}"
+    resp = redirect(target, code=301)
+    resp.headers["Cache-Control"] = "public, max-age=3600"
+    return resp
 
 
 @app.after_request
