@@ -552,6 +552,10 @@ def signup_state() -> dict:
     return {"total": total, "unseen": unseen, "active": active, "newest": newest, "records": recs}
 
 
+# Counts the founder, who is on the list in every sense except having submitted
+# the form. Set to 0 to show the stored count alone.
+FOUNDER_OFFSET = 1
+
 JOIN_WORDS = {
     "en": {"lead": "join", "one": "other", "many": "others"},
     "es": {"lead": "\u00fanete a", "one": "persona", "many": "personas"},
@@ -570,9 +574,13 @@ def join_markup(lang: str) -> tuple[str, str]:
     advertises itself.
     """
     st = signup_state()
-    total = st["total"]
-    if not total:
+    if not st["total"]:
         return "", ""
+    # The founder never filled in his own form, so the stored rows are one short
+    # of the people actually on the hook for this. The public number counts him;
+    # /admin shows the stored rows and says so, so the two never look like a
+    # discrepancy.
+    total = st["total"] + FOUNDER_OFFSET
     w = JOIN_WORDS.get(lang, JOIN_WORDS["en"])
     unit = w["one"] if total == 1 else w["many"]
     admin = is_admin()
@@ -745,12 +753,15 @@ def admin():
     )
     body = f"""<div class="row">
   <h1>Mailing list</h1>
-  <span class="dim">{st['total']} total &middot; {escape(since)}</span>
+  <span class="dim">{st['total']} stored &middot; {escape(since)}</span>
   <span style="margin-left:auto">
     <form class="inline" method="post" action="/logout"><button type="submit">Sign out</button></form>
   </span>
 </div>
 {table}
+<p class="dim">The public page says <strong>{st['total'] + FOUNDER_OFFSET}</strong>, which is
+these {st['total']} plus you: FOUNDER_OFFSET in app.py counts the founder, who never
+submitted the form. Set it to 0 to publish the stored count alone.</p>
 <p class="dim">Stored at {escape(str(SIGNUP_FILE))} on the host, mode 0600, and readable
 over SSH. This page is the only route that returns any of it.</p>
 <p class="dim"><a href="/">&larr; Back to the site</a></p>"""
