@@ -844,7 +844,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .sectionnav a:not(.nav-flag) { order: 1; }
   .sectionnav .nav-flag.is-current {
     outline: 1px solid var(--sun);
-    outline-offset: -0.3rem;
+    outline-offset: -0.45rem;
     cursor: default;
   }
   .sectionnav a.nav-flag,
@@ -999,7 +999,7 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
      45px hit area, and so it costs no layout. */
   .sectionnav .nav-flag.is-current {
     outline: 1px solid var(--sun);
-    outline-offset: -0.34rem;
+    outline-offset: -0.5rem;
     cursor: default;
   }
   .sectionnav a.nav-flag:hover { filter: brightness(1.08); }
