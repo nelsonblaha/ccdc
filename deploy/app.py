@@ -8,9 +8,9 @@ What is left in this file is only what is about Chucodata. Everything below is a
 statement about this campaign, not about how a campaign works. If something here
 starts looking like machinery again, it belongs upstream instead.
 
-Signups land in $CCDC_DATA/signups.jsonl and can always be read over SSH. There
+Signups land in $CHUCODATA_DATA/signups.jsonl and can always be read over SSH. There
 is also one authenticated HTTP view of them at /admin, gated by a password whose
-hash lives only in the deploy environment. Without both CCDC_SECRET_KEY and that
+hash lives only in the deploy environment. Without both CHUCODATA_SECRET_KEY and that
 hash, those routes 404 and the page carries no admin markup at all.
 """
 
@@ -19,8 +19,8 @@ from pathlib import Path
 
 from campaignlanding import Config, Language, create_app
 
-SITE_DIR = Path(os.environ.get("CCDC_SITE", "/app/site"))
-DATA_DIR = Path(os.environ.get("CCDC_DATA", "/data"))
+SITE_DIR = Path(os.environ.get("CHUCODATA_SITE", "/app/site"))
+DATA_DIR = Path(os.environ.get("CHUCODATA_DATA", "/data"))
 
 app = create_app(
     Config(
@@ -68,7 +68,7 @@ app = create_app(
         legacy_hosts=frozenset(
             {"ccdc.blaha.io", "epcdc.blaha.io", "www.chucodata.org"}
         ),
-        # ...and the redirect itself comes from CCDC_CANONICAL_REDIRECT in the
+        # ...and the redirect itself comes from CHUCODATA_CANONICAL_REDIRECT in the
         # deploy environment, so it can be turned on only once the new name is
         # verified serving end to end. A 301 is the response browsers cache
         # hardest, and pointing one at a name that does not resolve yet is not
@@ -112,7 +112,7 @@ app = create_app(
         # still sees it at any count, because for them it is not social proof, it
         # is the notification and the way to the list.
         show_count_above=16,
-        # CCDC_SECRET_KEY, CCDC_ADMIN_HASH_FILE, CCDC_CANONICAL_REDIRECT.
+        # CHUCODATA_SECRET_KEY, CHUCODATA_ADMIN_HASH_FILE, CHUCODATA_CANONICAL_REDIRECT.
         env_prefix="CCDC",
         # Unchanged across the extraction on purpose: a new cookie name would sign
         # out every device that is already signed in.

@@ -1,20 +1,22 @@
-# ccdc.blaha.io — follows the existing nelnet pattern: join infra-net, declare
+# chucodata.org — follows the existing nelnet pattern: join infra-net, declare
 # VIRTUAL_HOST, and nginx-proxy + acme-companion handle routing and TLS.
 # *.blaha.io already wildcards to Cloudflare, so no DNS record is needed.
 #
 # Deploy from the repo root on nelnet:
 #   docker compose -f deploy/docker-compose.yml up -d --build
 
+name: chucodata
+
 networks:
   infra-net:
     external: true
 
 services:
-  ccdc:
+  chucodata:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
-    container_name: ccdc
+    container_name: chucodata
     restart: unless-stopped
     # Run as ben so signups.jsonl is owned by ben and readable over plain SSH.
     # The image's own unprivileged user would write files root/ben cannot read
@@ -49,7 +51,7 @@ services:
     volumes:
       # Signups land here. Not in the repo, not in the image, not in a backup
       # that goes to a third party without someone deciding it should.
-      - /home/ben/ccdc-data:/data
+      - /home/ben/chucodata-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8100/healthz')"]
       interval: 60s

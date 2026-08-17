@@ -74,11 +74,9 @@ external answer; none of them should block Phase 0 (doc 04).
    `chucodc.org` and `chucodata.org`. Both keep "Chuco", which is the half of
    the name that means something locally, and neither claims a facility the way
    a `datacenter` domain would; `chucodc.org` is shorter to say aloud, and
-   `chucodata.org` is the one someone can spell after hearing it once. Neither
-   is registered yet and this is not a decision, only a note so the options are
-   not rediscovered later. Whatever is chosen becomes the permanent home when
-   the service moves off `ccdc.blaha.io`, which is currently a personal
-   hostname; see doc 09. Check both against the Texas SOS name availability
+   `chucodata.org` is the one someone can spell after hearing it once. **Settled: `chucodata.org`**, registered and
+   serving as the canonical host since 2026-08-17. `ccdc.blaha.io` still answers
+   and redirects; see doc 09. Check both against the Texas SOS name availability
    search at the same time as the entity name, since a domain that does not
    match the filed name is a small permanent annoyance.
 10. **Who is the service *for*?** Any El Paso resident? Anyone who asks?

@@ -10,11 +10,11 @@ COPY site /app/site
 
 # Never runs as root. docker-compose.yml overrides this with the host uid that
 # owns the data volume; this is the fallback for anyone running the image bare.
-RUN adduser -D -u 10001 ccdc
-USER ccdc
+RUN adduser -D -u 10001 chucodata
+USER chucodata
 
-ENV CCDC_SITE=/app/site \
-    CCDC_DATA=/data \
+ENV CHUCODATA_SITE=/app/site \
+    CHUCODATA_DATA=/data \
     PYTHONUNBUFFERED=1
 
 EXPOSE 8100

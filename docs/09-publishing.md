@@ -3,9 +3,11 @@
 `site/index.html` is the public advertisement — a single self-contained file,
 no build step, no external requests.
 
-## Canonical: ccdc.blaha.io, self-hosted on nelnet
+## Canonical: chucodata.org, self-hosted on nelnet
 
-**`https://ccdc.blaha.io` is the real site.** GitHub Pages is a mirror.
+**`https://chucodata.org` is the real site.** `ccdc.blaha.io` and the pre-rename
+`epcdc.blaha.io` still answer and 301 to it, so links shared before the move keep
+working. GitHub Pages is retired.
 
 `deploy/` holds a small Flask app that serves the static site *and* accepts
 mailing-list signups, in one container. It follows the existing nelnet pattern
@@ -23,15 +25,15 @@ docker compose -f deploy/docker-compose.yml up -d --build
 
 There is no Google Form, no Mailchimp, no analytics, no trackers, and no
 cookies. The form posts to `/api/signup` and the app appends one JSON object per
-signup to `/home/ben/ccdc-data/signups.jsonl` (mode 0600).
+signup to `/home/ben/chucodata-data/signups.jsonl` (mode 0600).
 
 **There is deliberately no HTTP endpoint that returns stored contact details.**
 Read them over SSH:
 
 ```bash
-nelnet 'wc -l /home/ben/ccdc-data/signups.jsonl'
-nelnet 'jq -r "[.ts,.kind,.contact,(.help|join(\",\"))] | @tsv" /home/ben/ccdc-data/signups.jsonl'
-nelnet 'jq -r "select(.help|index(\"board\")) | .contact" /home/ben/ccdc-data/signups.jsonl'
+nelnet 'wc -l /home/ben/chucodata-data/signups.jsonl'
+nelnet 'jq -r "[.ts,.kind,.contact,(.help|join(\",\"))] | @tsv" /home/ben/chucodata-data/signups.jsonl'
+nelnet 'jq -r "select(.help|index(\"board\")) | .contact" /home/ben/chucodata-data/signups.jsonl'
 ```
 
 Abuse controls, in order of usefulness: a honeypot field, a per-IP rate limit
@@ -39,7 +41,7 @@ Abuse controls, in order of usefulness: a honeypot field, a per-IP rate limit
 written to the container logs** — docker logs are not a place for other people's
 email addresses.
 
-`ccdc-data/` is gitignored. It must never end up in this repo, which is public.
+`chucodata-data/` is gitignored. It must never end up in this repo, which is public.
 
 ### Why the form posts to a relative URL
 
@@ -134,7 +136,7 @@ gh api -X POST repos/nelsonblaha/chucodata/pages -f 'build_type=workflow'
 in the same Cloudflare account as `blaha.io`, proxied, with the apex and `www`
 pointing at the same origin nginx-proxy already answers on. `ccdc.blaha.io` and
 `epcdc.blaha.io` 301 to it, path and query preserved, controlled by
-`CCDC_CANONICAL_REDIRECT` in the deploy environment.
+`CHUCODATA_CANONICAL_REDIRECT` in the deploy environment.
 
 Two things that redirect deliberately does not touch. `/api/` is exempt, because a
 POST through a 301 is downgraded to GET by browsers and a reader holding an older
