@@ -81,6 +81,25 @@ external answer; none of them should block Phase 0 (doc 04).
     ledger has to handle anonymous or lightly-authenticated public users too,
     or abuse is unbounded.
 
+## Needs doing, not deciding
+
+**Turn off Cloudflare Web Analytics for the `blaha.io` zone.** Cloudflare injects
+`static.cloudflareinsights.com/beacon.min.js` into HTML for browser requests
+across the whole zone. It is **invisible to `curl`** without a browser
+User-Agent, which is why it went unnoticed — and it made the privacy panel's "no
+analytics" claim false for real visitors while looking true to anyone checking
+the way an engineer would.
+
+The page now states this plainly instead. To actually fix it: Cloudflare dashboard
+→ the `blaha.io` zone → Analytics → Web Analytics, and disable the automatic
+setup / RUM beacon. Needs Ben's dashboard access. Then restore the stronger
+sentence.
+
+Worth keeping as a lesson rather than just a task: the claim was checked with the
+wrong tool, and the wrong tool said everything was fine. Anything this project
+asserts about what it does *not* do should be verified the way a visitor
+experiences it.
+
 ## Needs verification before quoting publicly
 
 13. Cloud Run **instance-based** per-unit rates — could not verify; doc 03 marks
