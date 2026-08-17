@@ -892,7 +892,10 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
   .sectionnav .nav-icon { width: 2.2rem; margin-left: 0.05rem; }
 }
 
-@media (max-width: 25rem) {
+/* 23rem, not 25: measured with the squeeze tier applied, a 393px Pixel 4 has about
+   25px of slack in Spanish and keeps the word. Only 360px-and-under phones, where
+   Spanish overruns by ~8px, fall back to the mark. */
+@media (max-width: 23rem) {
   .sectionnav .nav-short { display: none; }
   .sectionnav .nav-min { display: inline; }
 }
