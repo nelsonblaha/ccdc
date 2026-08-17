@@ -21,7 +21,7 @@
   --btn-ink:  #FFF8EC;
   /* Width the headline occupies per 1px of font-size, measured in the browser.
      Set per language because the two headlines are different lengths. */
-  --h1-ratio: 22.75;
+  --h1-ratio: 24.4;
   /* Same idea for the eyebrow above the headline, measured the same way. */
   --sun-ratio: 27.0;
 
@@ -1149,6 +1149,12 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
   display: inline-block;
   width: 1.59em;
   height: 1.59em;
+  /* The drawing carries its own margin: its leftmost ink sits inside the box, so
+     the box is pulled left by that much to line the star up with the text column
+     rather than with empty space. The right margin replaces the literal space that
+     used to follow it, which was wider than the mark needs. */
+  margin-left: -0.11em;
+  margin-right: 0.22em;
   /* middle, not a hand-tuned offset: the mark is symmetrical and has no baseline
      of its own, and an em offset tuned by eye stops being centred the moment the
      size changes. */
@@ -1216,7 +1222,7 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
 /* The Spanish headline is 48 characters against 39 in English, so it needs more
    width per point of font-size to stay on one line inside the same column. */
-html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
+html[lang="es"] { --h1-ratio: 29.9; --sun-ratio: 29.3; }
 
 /* ---------- rail brand and docked language flag ----------
    Desktop only. The flag sits on the same line as the mark, to its right, and
