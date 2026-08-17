@@ -641,7 +641,9 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
   height: 1.25em;
   flex: none;
   fill: none;
-  stroke: currentColor;
+  /* The accent rather than currentColor: the label shifts between --ink and --ink-3
+     with selection, and the mark should not dim along with it. */
+  stroke: var(--sun);
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1141,6 +1143,18 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
 .hero-figure { display: none; margin: 0; }
 
+/* Below the two-column breakpoint the hero is a single stack, and a square mark as
+   wide as the text would push the headline off the first screen. */
+.hero-star { display: none; }
+@media (min-width: 62rem) {
+  .hero-star {
+    display: block;
+    background: var(--sun);
+    -webkit-mask: url(/img/star.svg) center / contain no-repeat;
+    mask: url(/img/star.svg) center / contain no-repeat;
+  }
+}
+
 @media (min-width: 62rem) {
   .hero > .wrap {
     display: grid;
@@ -1149,13 +1163,19 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
     row-gap: 1.75rem;
     align-items: start;
   }
+  grid-template-columns: auto minmax(0, 1fr) 21rem;
+  /* Spans the three text rows and is square, so "as tall as the text" also sets its
+     width. Capped, because an unbounded square would eat the column it stands
+     beside once the hero gets tall. */
+  .hero-star   { grid-row: 2 / span 3; grid-column: 1; align-self: stretch;
+                 aspect-ratio: 1; max-width: 13rem; }
   .langbar     { grid-row: 1; grid-column: 1 / -1; }
   /* Full width so the headline has the whole hero to fit on one line — the 44rem
      reading cap applies to the paragraphs, not to the headline, or the text
      overflows its box and spills across the image column. */
-  .hero-head   { grid-row: 2; grid-column: 1 / -1; max-width: none; }
-  .hero-in     { grid-row: 3; grid-column: 1; }
-  .hero-more   { grid-row: 4; grid-column: 1; }
+  .hero-head   { grid-row: 2; grid-column: 2 / -1; max-width: none; }
+  .hero-in     { grid-row: 3; grid-column: 2; }
+  .hero-more   { grid-row: 4; grid-column: 2; }
   /* Spans every row of hero text and centres in it. Sized by the column width at
      its own aspect ratio — no stretch, so no crop and no distortion.
      `span 2` rather than `2 / -1`: -1 resolves against the EXPLICIT grid, and
@@ -1165,7 +1185,7 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
      3 and 4 — and centred in that area. Deliberately not row 2: the headline sits
      above it. `span 2` not `/ -1`, since -1 resolves against the explicit grid and
      there is no grid-template-rows here. */
-  .hero-figure { grid-row: 3 / span 2; grid-column: 2; display: block; align-self: center; }
+  .hero-figure { grid-row: 3 / span 2; grid-column: 3; display: block; align-self: center; }
   .hero-figure img {
     display: block;
     width: 100%;
@@ -1242,15 +1262,16 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
    sits among muted outline glyphs, and a solid tile there would shout. Opacity
    does the work that colour does for its neighbours, since a raster cannot take
    currentColor, and it lifts to full on hover the way they lighten to --ink. */
+/* Masked rather than pictured, so the colour comes from CSS and one vector serves
+   the bar, the hero and the favicon. A raster could not take a colour at all. */
 .nav-logo {
-  width: 82%;
-  height: 82%;
+  width: 84%;
+  height: 84%;
   display: block;
-  opacity: 0.62;
-  transition: opacity 140ms ease;
+  background: var(--sun);
+  -webkit-mask: url(/img/star.svg) center / contain no-repeat;
+  mask: url(/img/star.svg) center / contain no-repeat;
 }
-.nav-icon:hover .nav-logo { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .nav-logo { transition: none; } }
 
 .nav-icon:hover { color: var(--ink); }
 .nav-icon.is-copied { color: var(--agave); }
