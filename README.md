@@ -65,6 +65,8 @@ custom layer that handles:
 | [07 — Roadmap](docs/07-roadmap.md) | Twelve steps from paperwork to owning hardware, with the detail behind each |
 | [08 — Beyond AI](docs/08-beyond-ai.md) | Why AI is the wedge and not the point: the shared-server argument, and the organizations already doing this |
 | [09 — Publishing](docs/09-publishing.md) | How `site/` gets deployed, and the public-repo decision |
+| [10 — The repo as a governance mechanism](docs/10-repo-as-governance.md) | Requiring director signatures to change the organization's commitments — why signatures beat permissions, why not unanimity, and the four ways it breaks |
+| [GOVERNED.md](GOVERNED.md) | The operative version: which paths are organizational commitments, and what approval each tier needs. Written to be cited by the bylaws. |
 
 ## The public pitch
 
