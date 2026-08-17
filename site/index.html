@@ -384,6 +384,54 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 .chip.now { color: var(--sun); border-color: var(--sun); }
 .chip.next { color: var(--agave); border-color: var(--agave); }
 
+/* ---------- signup form ---------- */
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.field label, .checks legend {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--ink-3);
+}
+
+.field input[type="text"], .field textarea {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  padding: 0.7rem 0.8rem;
+  width: 100%;
+}
+.field input[type="text"]:focus, .field textarea:focus { border-color: var(--sun); }
+.field textarea { resize: vertical; min-height: 4.5rem; }
+.field .hint { font-size: 0.82rem; color: var(--ink-3); }
+
+.checks { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.checks legend { padding: 0; margin-bottom: 0.15rem; }
+.check { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.93rem; color: var(--ink-2); cursor: pointer; }
+.check input { margin-top: 0.35rem; accent-color: var(--sun); flex: none; }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.form-msg { font-size: 0.95rem; padding: 0.8rem 1rem; border: 1px solid var(--rule); display: none; }
+.form-msg.show { display: block; }
+.form-msg.ok { border-color: var(--agave); color: var(--agave); }
+.form-msg.err { border-color: var(--ocotillo); color: var(--ocotillo); }
+
+.form-card button { align-self: flex-start; cursor: pointer; font: inherit; }
+
 footer { border-top: 1px solid var(--rule); background: var(--sunk); }
 footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
 .srcs { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.84rem; }
@@ -396,10 +444,10 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
   <div class="wrap">
     <div class="hero-in">
       <p class="sunline">A proposal &middot; El Paso, Texas</p>
-      <h1>A data center El&nbsp;Paso actually owns.</h1>
-      <p class="lede">Meta is building a $10&nbsp;billion AI data center in Northeast El Paso. This is a proposal for a much smaller one that belongs to the city instead — a nonprofit AI service, governed by a board El&nbsp;Pasoans elect, that publishes every number it would rather keep quiet.</p>
+      <h1>A data center El&nbsp;Pasoans actually own.</h1>
+      <p class="lede">Meta is building a $10&nbsp;billion AI data center in Northeast El Paso. This is a proposal for a much smaller one that belongs to the people who live here — a nonprofit AI service, governed by a board its members elect, that publishes every number it would rather keep quiet.</p>
       <div class="cta-row">
-        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform">Get updates &rarr;</a>
+        <a class="btn" href="#signup">Get updates &rarr;</a>
         <a class="btn btn-quiet" href="#what-doesnt-exist">What doesn't exist yet</a>
       </div>
       <p class="fine">No entity. No board. No service running. Nothing to buy and nothing to donate to. Signing up gets you email and nothing else.</p>
@@ -458,8 +506,9 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
   <div class="wrap stack-lg">
     <div class="col stack">
       <p class="eyebrow">The proposal</p>
-      <h2>A nonprofit AI service, owned by nobody and governed by El&nbsp;Paso.</h2>
-      <p>Not a rival to Meta's facility. Something much smaller and completely different in kind: the same sort of AI assistant people pay $20 a month for — chat, document analysis, research, writing help — run by a Texas nonprofit whose board is <strong>elected by El&nbsp;Paso residents</strong> and whose books are open.</p>
+      <h2>A nonprofit AI service, owned by its members and accountable to El&nbsp;Pasoans.</h2>
+      <p>Not a rival to Meta's facility. Something much smaller and completely different in kind: the same sort of AI assistant people pay $20 a month for — chat, document analysis, research, writing help — run by a Texas nonprofit whose board is <strong>elected by its members</strong> and whose books are open.</p>
+      <p>To be clear about what this is <em>not</em>: it isn't a city program, it isn't asking for public money, and it has no connection to city government. It's a private nonprofit that El&nbsp;Pasoans join and run themselves — closer to a credit union or an electric co-op than to anything at City Hall.</p>
       <p>The founding proposal would put a few commitments beyond the reach of a future board acting alone: <strong>your conversations are never used to train anything</strong>, the finances are published in full, and the electricity and water behind the service are reported honestly — including the parts we're estimating and the years we fall short.</p>
     </div>
 
@@ -771,11 +820,45 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
       </div>
     </div>
 
-    <div class="col stack">
-      <div class="cta-row">
-        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform">Sign up for updates &rarr;</a>
-      </div>
-      <p class="fine">Email or phone, and nothing else. No donations requested, now or on the confirmation page.</p>
+    <div class="col stack" id="signup">
+      <h3>Add your name</h3>
+      <form class="form-card" method="post" action="https://epcdc.blaha.io/api/signup">
+        <div class="field">
+          <label for="contact">Email or phone <span aria-hidden="true">*</span></label>
+          <input type="text" id="contact" name="contact" required autocomplete="email" placeholder="you@example.com">
+          <p class="hint">Used to email you about this project. Nothing else, ever &mdash; not sold, not shared, not handed to an advertiser.</p>
+        </div>
+
+        <div class="field">
+          <label for="name">Name <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
+          <input type="text" id="name" name="name" autocomplete="name">
+        </div>
+
+        <fieldset class="checks">
+          <legend>I might be able to help with</legend>
+          <label class="check"><input type="checkbox" name="help" value="updates" checked> Nothing &mdash; just keep me posted</label>
+          <label class="check"><input type="checkbox" name="help" value="board"> Serving as a founding director</label>
+          <label class="check"><input type="checkbox" name="help" value="legal"> Texas nonprofit law, bylaws, or filings</label>
+          <label class="check"><input type="checkbox" name="help" value="technical"> Running servers or writing software</label>
+          <label class="check"><input type="checkbox" name="help" value="spread"> Telling people about it</label>
+        </fieldset>
+
+        <div class="field">
+          <label for="note">Anything you want to say <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
+          <textarea id="note" name="note" rows="3"></textarea>
+        </div>
+
+        <div class="hp" aria-hidden="true">
+          <label for="website">Leave this empty</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="t" id="t" value="">
+
+        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+        <button class="btn" type="submit">Sign me up &rarr;</button>
+      </form>
+      <p class="fine">This form is ours. It posts to our own server and writes to a file we control &mdash; no Google Forms, no Mailchimp, no analytics, no trackers, no cookies. It's a small thing, and it's the entire argument in miniature: <a href="https://github.com/nelsonblaha/epcdc/blob/main/deploy/app.py">you can read the code that receives it</a>.</p>
+      <p class="fine">No donations requested, now or on the confirmation page. There is nothing to donate to yet.</p>
     </div>
   </div>
 </section>
@@ -813,6 +896,53 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
     });
   }, { threshold: 0.4 });
   bars.forEach(function (b) { io.observe(b); });
+})();
+
+/* Signup: posts via fetch for an inline result. Without JS the form still
+   submits normally to /api/signup and lands on the /thanks page. */
+(function () {
+  var form = document.querySelector('form[action="https://epcdc.blaha.io/api/signup"]');
+  if (!form) return;
+  var msg = document.getElementById('form-msg');
+  var stamp = document.getElementById('t');
+  if (stamp) stamp.value = String(Date.now() / 1000);
+
+  function say(text, kind) {
+    msg.textContent = text;
+    msg.className = 'form-msg show ' + kind;
+  }
+
+  form.addEventListener('submit', function (e) {
+    if (!window.fetch) return;
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    var original = btn.textContent;
+    btn.textContent = 'Sending…';
+
+    fetch("https://epcdc.blaha.io/api/signup", {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'X-Requested-With': 'fetch', 'Accept': 'application/json' }
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (res.ok && res.d.ok) {
+          form.reset();
+          say("You're on the list. We'll write when there's something real to report.", 'ok');
+          btn.textContent = 'Signed up';
+          return;
+        }
+        say(res.d.error || 'That did not go through. Try again in a moment.', 'err');
+        btn.disabled = false;
+        btn.textContent = original;
+      })
+      .catch(function () {
+        say('Could not reach the server. Try again in a moment.', 'err');
+        btn.disabled = false;
+        btn.textContent = original;
+      });
+  });
 })();
 </script>
 

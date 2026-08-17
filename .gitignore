@@ -15,3 +15,8 @@ node_modules/
 *.pem
 *.key
 service-account*.json
+
+# signup data never belongs in the repo
+epcdc-data/
+data/
+*.jsonl

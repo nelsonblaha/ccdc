@@ -1,7 +1,57 @@
 # Publishing the site
 
 `site/index.html` is the public advertisement — a single self-contained file,
-no build step, no dependencies, no external requests.
+no build step, no external requests.
+
+## Canonical: epcdc.blaha.io, self-hosted on nelnet
+
+**`https://epcdc.blaha.io` is the real site.** GitHub Pages is a mirror.
+
+`deploy/` holds a small Flask app that serves the static site *and* accepts
+mailing-list signups, in one container. It follows the existing nelnet pattern
+exactly: join the external `infra-net`, declare `VIRTUAL_HOST`, and
+`nginx-proxy` + `acme-companion` handle routing and TLS automatically — the
+same way `git.blaha.io`, `chat.blaha.io`, and the rest already work. `*.blaha.io`
+already wildcards to Cloudflare, so **no DNS record is required.**
+
+```bash
+# on nelnet, from the repo root
+docker compose -f deploy/docker-compose.yml up -d --build
+```
+
+### Signups
+
+There is no Google Form, no Mailchimp, no analytics, no trackers, and no
+cookies. The form posts to `/api/signup` and the app appends one JSON object per
+signup to `/home/ben/epcdc-data/signups.jsonl` (mode 0600).
+
+**There is deliberately no HTTP endpoint that returns stored contact details.**
+Read them over SSH:
+
+```bash
+nelnet 'wc -l /home/ben/epcdc-data/signups.jsonl'
+nelnet 'jq -r "[.ts,.kind,.contact,(.help|join(\",\"))] | @tsv" /home/ben/epcdc-data/signups.jsonl'
+nelnet 'jq -r "select(.help|index(\"board\")) | .contact" /home/ben/epcdc-data/signups.jsonl'
+```
+
+Abuse controls, in order of usefulness: a honeypot field, a per-IP rate limit
+(5/hour), a submit-speed trap, and length caps. The contact value is **never
+written to the container logs** — docker logs are not a place for other people's
+email addresses.
+
+`epcdc-data/` is gitignored. It must never end up in this repo, which is public.
+
+### Why the form posts to an absolute URL
+
+`https://epcdc.blaha.io/api/signup`, not a relative path, so the GitHub Pages
+mirror's form works too. `deploy/app.py` allows CORS from exactly two origins
+(`epcdc.blaha.io`, `nelsonblaha.github.io`) and nothing else.
+
+Consequence worth knowing: the form **will not submit from a Claude artifact
+preview**, whose CSP blocks all external requests. Artifacts are for reviewing
+copy, not for collecting signups.
+
+## Mirror: GitHub Pages
 
 ## Decision made (2026-08-16): this repo is public
 
