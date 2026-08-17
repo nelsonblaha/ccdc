@@ -24,7 +24,7 @@
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --measure: 34rem;
-  --wide: 60rem;
+  --wide: 66rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -86,7 +86,11 @@ body {
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
 
 h1 {
-  font-size: clamp(2rem, 6.2vw, 3.6rem);
+  /* Must fit on one line at every width. The headline measures 22.694px of width
+     per 1px of font-size in this face, so the size is derived from the space
+     actually available rather than guessed. */
+  white-space: nowrap;
+  font-size: min(2.85rem, calc((min(68rem, 100vw) - 3rem) / 22.75));
   line-height: 1.04;
   letter-spacing: -0.035em;
 }
@@ -145,7 +149,9 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 /* Wider than the reading column: the hero carries a second column for the image,
    while every other section stays at 60rem for line length. */
 .hero > .wrap {
-  max-width: 74rem;
+  /* 44rem of text + 2.75rem gap + 21rem of image = 67.75rem; wider than that
+     would only open dead space between the two columns. */
+  max-width: 68rem;
   padding-top: 5rem;
   padding-bottom: 4rem;
   display: flex;
@@ -813,13 +819,14 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 @media (min-width: 62rem) {
   .hero > .wrap {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 26rem;
+    grid-template-columns: minmax(0, 1fr) 21rem;
     column-gap: 2.75rem;
     row-gap: 1.75rem;
     align-items: start;
   }
   .langbar     { grid-row: 1; grid-column: 1 / -1; }
-  .hero-head   { grid-row: 2; grid-column: 1; }
+  /* Full width so the headline has the whole hero to fit on one line. */
+  .hero-head   { grid-row: 2; grid-column: 1 / -1; }
   .hero-in     { grid-row: 3; grid-column: 1; }
   .hero-more   { grid-row: 4; grid-column: 1; }
   /* Spans every row of hero text and centres in it. Sized by the column width at
@@ -853,3 +860,15 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 }
 .hero-credit a { color: inherit; text-decoration-color: var(--rule); }
 .hero-credit a:hover { color: var(--sun); opacity: 1; }
+
+/* ---------- keep the centred column clear of the fixed left rail ----------
+   The rail sits at left:2rem and is at most 10rem wide, so it occupies up to
+   12rem. Content is centred, so reserving 13.5rem on both sides puts the content
+   edge at 13.5rem — clear of the rail at every width, with no magic breakpoints.
+   Without this the wider hero overlapped the rail between 84rem and ~97rem. */
+
+@media (min-width: 84rem) {
+  .wrap { max-width: min(66rem, calc(100% - 27rem)); }
+  .hero > .wrap { max-width: min(68rem, calc(100% - 27rem)); }
+  h1 { font-size: min(2.85rem, calc((min(68rem, 100vw - 27rem) - 3rem) / 22.75)); }
+}
