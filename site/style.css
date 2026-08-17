@@ -1414,7 +1414,10 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
   .sectionnav .nav-flag.is-current::after {
     content: "";
     position: absolute;
-    inset: 0.42rem;
+    /* 0.33rem, not 0.42: the ring is inset from a ~45px box, so shrinking the inset
+       by 0.09rem on each side grows the circle from about 29px across to about 32,
+       which is the 10% Ben asked for. */
+    inset: 0.33rem;
     border: 1px solid var(--sun);
     border-radius: 50%;
     pointer-events: none;
