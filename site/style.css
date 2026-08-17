@@ -1147,12 +1147,12 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
    em so it tracks the type, with the space after it doing the work a space does. */
 .hero-star {
   display: inline-block;
-  width: 1.06em;
-  height: 1.06em;
-  /* Sits low enough to sit on the baseline the letters use rather than floating
-     above it. The drawing has no optical baseline of its own, so this is set by
-     eye against the cap height beside it. */
-  vertical-align: -0.16em;
+  width: 1.59em;
+  height: 1.59em;
+  /* middle, not a hand-tuned offset: the mark is symmetrical and has no baseline
+     of its own, and an em offset tuned by eye stops being centred the moment the
+     size changes. */
+  vertical-align: middle;
 }
 
 @media (min-width: 62rem) {
