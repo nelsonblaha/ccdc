@@ -95,6 +95,13 @@ body {
 
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
 
+/* text-wrap: balance optimises for even line lengths, which on a two-sentence
+   heading strands the first word of the second sentence at the end of line one.
+   Marking each clause inline-block leaves the boundary between them as the only
+   comfortable break, so the heading splits where a reader would pause. A clause
+   still wraps internally if it alone is wider than the line. */
+.clause { display: inline-block; }
+
 h1 {
   /* Narrow screens: wrap, and keep the display size. Fitting 39 characters on one
      line at 390px would mean a 15px headline, smaller than body text. */
