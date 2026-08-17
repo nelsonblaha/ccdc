@@ -10,11 +10,11 @@ COPY site /app/site
 
 # Never runs as root. docker-compose.yml overrides this with the host uid that
 # owns the data volume; this is the fallback for anyone running the image bare.
-RUN adduser -D -u 10001 epcdc
-USER epcdc
+RUN adduser -D -u 10001 ccdc
+USER ccdc
 
-ENV EPCDC_SITE=/app/site \
-    EPCDC_DATA=/data \
+ENV CCDC_SITE=/app/site \
+    CCDC_DATA=/data \
     PYTHONUNBUFFERED=1
 
 EXPOSE 8100

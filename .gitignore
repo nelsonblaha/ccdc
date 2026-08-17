@@ -17,6 +17,6 @@ node_modules/
 service-account*.json
 
 # signup data never belongs in the repo
-epcdc-data/
+ccdc-data/
 data/
 *.jsonl

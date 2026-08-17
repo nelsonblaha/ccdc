@@ -31,6 +31,11 @@ external answer; none of them should block Phase 0 (doc 04).
    Doc 05 argues for a hard deadline written in while you still control the
    process. Pick it now; it gets harder to pick later, which is the point.
 
+   1b. **Is Ciudad Juárez in scope?** Doc 11. Serving Juárez residents over the
+   internet is straightforward; hardware or staff in Mexico is not. If yes, the
+   purpose clause must say so **at filing** — the third thing that has to be
+   settled before Form 202.
+
 ## Needs a lawyer
 
 4. Bylaws: quorum, voting, member classes, the supermajority lock on the purpose
@@ -49,6 +54,14 @@ external answer; none of them should block Phase 0 (doc 04).
    provider's contract, not just our own promise.
 8. Do we need charitable solicitation registration in states other than Texas if
    we solicit donations on a public website? **[unverified]**
+
+8a. **A Mexican privacy lawyer**: does the 2025 LFPDPPP reach a service run from
+   US servers? Doc 11 marks this unresolved, and it gates any Juárez outreach
+   that collects data at scale.
+
+8b. **Native review of the Spanish site copy** before it does real work. Written
+   for a border-Mexican register and careful about the traps (`mil millones`, not
+   `billón`), but not a native speaker's ear.
 
 ## Needs a decision from you
 

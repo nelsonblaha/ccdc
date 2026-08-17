@@ -1,6 +1,6 @@
 name: Publish site to GitHub Pages
 
-# Serves site/ at https://nelsonblaha.github.io/epcdc/ (or a custom domain).
+# Serves site/ at https://nelsonblaha.github.io/ccdc/ (or a custom domain).
 #
 # Requires Pages to be enabled with source "GitHub Actions" in repo settings.
 # On a free GitHub plan that also requires the repository to be public — see

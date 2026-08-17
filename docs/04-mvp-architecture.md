@@ -16,7 +16,7 @@ flowchart TB
         M[Member]
     end
 
-    subgraph site["epcdc-site — custom, small"]
+    subgraph site["ccdc-site — custom, small"]
         L[Landing / mission / transparency reports]
         D[Donate — Stripe Checkout]
         J[Join — membership signup]
@@ -27,7 +27,7 @@ flowchart TB
         F[["inlet filter: check member balance"]]
     end
 
-    subgraph custom["epcdc-ledger — custom, small"]
+    subgraph custom["ccdc-ledger — custom, small"]
         W[Stripe webhook receiver]
         B[Credit ledger + membership records]
     end
@@ -58,7 +58,7 @@ flowchart TB
 
 ## The three things we build
 
-### 1. `epcdc-site` — public website
+### 1. `ccdc-site` — public website
 
 Static or near-static. Astro, plain HTML, or a small Next.js app; the choice
 does not matter and should not be argued about.
@@ -73,7 +73,7 @@ year.
 
 **Effort: ~1 week.**
 
-### 2. `epcdc-ledger` — membership and credit service
+### 2. `ccdc-ledger` — membership and credit service
 
 Owns the answer to "is this person a member in good standing, and how much
 compute do they have left this period?" This must live outside Open WebUI
@@ -99,7 +99,7 @@ fork) with an `inlet` hook. `utils/middleware.py` invokes `filter_type='inlet'`
 on every request before it reaches the model **[code]**. The filter:
 
 1. reads the user id from the request
-2. asks `epcdc-ledger` for the balance
+2. asks `ccdc-ledger` for the balance
 3. raises with a friendly message if the member is out of allocation
 4. otherwise passes through, and reports consumption on the way out (`outlet`)
 
@@ -128,12 +128,12 @@ payments, no ledger, no site. The goal is to have something to show a
 prospective board member, and to find out whether anyone actually wants this.
 Under 50 users, so branding is unrestricted and the license question is moot.
 
-**Phase 1 — make it real (~3 weeks).** `epcdc-site` + Stripe + the pending→user
+**Phase 1 — make it real (~3 weeks).** `ccdc-site` + Stripe + the pending→user
 approval flow. Now you can accept donations. If the entity is not formed yet,
 donations are **not tax-deductible** and you must say so plainly on the page
 (doc 05 covers the fiscal-sponsorship bridge that fixes this).
 
-**Phase 2 — make it sustainable (~2 weeks).** `epcdc-ledger` + the inlet
+**Phase 2 — make it sustainable (~2 weeks).** `ccdc-ledger` + the inlet
 filter. **Do not open public signups before this exists.** Unbounded spend
 against a donated budget is how this fails in month two, and "we ran out of
 money because we didn't meter it" is precisely the kind of unkept-promise story

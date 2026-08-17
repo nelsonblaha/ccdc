@@ -3,9 +3,9 @@
 `site/index.html` is the public advertisement — a single self-contained file,
 no build step, no external requests.
 
-## Canonical: epcdc.blaha.io, self-hosted on nelnet
+## Canonical: ccdc.blaha.io, self-hosted on nelnet
 
-**`https://epcdc.blaha.io` is the real site.** GitHub Pages is a mirror.
+**`https://ccdc.blaha.io` is the real site.** GitHub Pages is a mirror.
 
 `deploy/` holds a small Flask app that serves the static site *and* accepts
 mailing-list signups, in one container. It follows the existing nelnet pattern
@@ -23,15 +23,15 @@ docker compose -f deploy/docker-compose.yml up -d --build
 
 There is no Google Form, no Mailchimp, no analytics, no trackers, and no
 cookies. The form posts to `/api/signup` and the app appends one JSON object per
-signup to `/home/ben/epcdc-data/signups.jsonl` (mode 0600).
+signup to `/home/ben/ccdc-data/signups.jsonl` (mode 0600).
 
 **There is deliberately no HTTP endpoint that returns stored contact details.**
 Read them over SSH:
 
 ```bash
-nelnet 'wc -l /home/ben/epcdc-data/signups.jsonl'
-nelnet 'jq -r "[.ts,.kind,.contact,(.help|join(\",\"))] | @tsv" /home/ben/epcdc-data/signups.jsonl'
-nelnet 'jq -r "select(.help|index(\"board\")) | .contact" /home/ben/epcdc-data/signups.jsonl'
+nelnet 'wc -l /home/ben/ccdc-data/signups.jsonl'
+nelnet 'jq -r "[.ts,.kind,.contact,(.help|join(\",\"))] | @tsv" /home/ben/ccdc-data/signups.jsonl'
+nelnet 'jq -r "select(.help|index(\"board\")) | .contact" /home/ben/ccdc-data/signups.jsonl'
 ```
 
 Abuse controls, in order of usefulness: a honeypot field, a per-IP rate limit
@@ -39,13 +39,13 @@ Abuse controls, in order of usefulness: a honeypot field, a per-IP rate limit
 written to the container logs** — docker logs are not a place for other people's
 email addresses.
 
-`epcdc-data/` is gitignored. It must never end up in this repo, which is public.
+`ccdc-data/` is gitignored. It must never end up in this repo, which is public.
 
 ### Why the form posts to an absolute URL
 
-`https://epcdc.blaha.io/api/signup`, not a relative path, so the GitHub Pages
+`https://ccdc.blaha.io/api/signup`, not a relative path, so the GitHub Pages
 mirror's form works too. `deploy/app.py` allows CORS from exactly two origins
-(`epcdc.blaha.io`, `nelsonblaha.github.io`) and nothing else.
+(`ccdc.blaha.io`, `nelsonblaha.github.io`) and nothing else.
 
 Consequence worth knowing: the form **will not submit from a Claude artifact
 preview**, whose CSP blocks all external requests. Artifacts are for reviewing
@@ -81,7 +81,7 @@ until two things are true:
 2. **The repository is public** — on a free GitHub plan, Pages from a private
    repo requires a paid plan
 
-Point 2 is the decision, and it is not only about the site. **Making `epcdc`
+Point 2 is the decision, and it is not only about the site. **Making `ccdc`
 public publishes `docs/` too**, including:
 
 - `05-governance.md`, which analyses founder compensation, board capture, and
@@ -100,8 +100,8 @@ deliberate choice rather than a side effect of wanting a prettier landing page.
 
 | | What happens | Cost |
 |---|---|---|
-| **A — Separate public repo** | New public `epcdc-site` holding only `site/`. `epcdc` stays private. | Two repos to keep in sync; the site loses its link to the evidence behind it |
-| **B — Make `epcdc` public** | Site *and* research go public. The radical-transparency play. | Irreversible in practice — search engines and archives cache |
+| **A — Separate public repo** | New public `ccdc-site` holding only `site/`. `ccdc` stays private. | Two repos to keep in sync; the site loses its link to the evidence behind it |
+| **B — Make `ccdc` public** | Site *and* research go public. The radical-transparency play. | Irreversible in practice — search engines and archives cache |
 | **C — Publish elsewhere** | Cloudflare Pages, Netlify, or a plain VM serve a private repo's contents for free | One more account; no GitHub Pages dependency |
 
 **Recommendation: A now, B later.** Ship the site immediately without deciding
@@ -112,13 +112,13 @@ up — but it should happen because it was chosen, not because Pages needed it.
 ## Enabling Pages once the repo is public
 
 ```bash
-gh api -X POST repos/nelsonblaha/epcdc/pages \
+gh api -X POST repos/nelsonblaha/ccdc/pages \
   -f 'build_type=workflow'
-gh workflow run pages.yml --repo nelsonblaha/epcdc
+gh workflow run pages.yml --repo nelsonblaha/ccdc
 ```
 
-Then the site is at `https://nelsonblaha.github.io/epcdc/`. A custom domain
-(`epcdc.org` or similar) needs a `CNAME` file in `site/` and a DNS record.
+Then the site is at `https://nelsonblaha.github.io/ccdc/`. A custom domain
+(`ccdc.org` or similar) needs a `CNAME` file in `site/` and a DNS record.
 
 ## Editing rules
 

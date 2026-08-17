@@ -3,515 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El Paso Community Data Center</title>
-<meta name="description" content="A proposal for a nonprofit, community-governed AI service in El Paso — what it would cost, how it would be run, and what doesn't exist yet.">
-<style>
-/* ---------------------------------------------------------------
-   Palette: desert haze ground (cool, violet-biased) against a
-   marigold sun accent. Agave green marks figures we can verify;
-   ocotillo red marks figures that should worry you.
-   Type: monospace display + data (this is an organization whose
-   product is published numbers), humanist sans for reading.
-   --------------------------------------------------------------- */
-:root {
-  --ground:   #ECEDF1;
-  --surface:  #FFFFFF;
-  --sunk:     #E2E4EA;
-  --ink:      #15171E;
-  --ink-2:    #4C5164;
-  --ink-3:    #767C90;
-  --rule:     #D2D5DE;
-  --sun:      #C77503;
-  --sun-soft: #F6E4C4;
-  --agave:    #1C6555;
-  --ocotillo: #A93227;
-  --focus:    #2C5CC5;
-
-  --font-display: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-  --measure: 34rem;
-  --wide: 60rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:   #101219;
-    --surface:  #181B23;
-    --sunk:     #1E222C;
-    --ink:      #E9EBF1;
-    --ink-2:    #A2A8BC;
-    --ink-3:    #767C90;
-    --rule:     #2B2F3B;
-    --sun:      #F0A32C;
-    --sun-soft: #3A2C13;
-    --agave:    #46A891;
-    --ocotillo: #E4776A;
-    --focus:    #7CA0F0;
-  }
-}
-
-:root[data-theme="dark"] {
-  --ground:   #101219;
-  --surface:  #181B23;
-  --sunk:     #1E222C;
-  --ink:      #E9EBF1;
-  --ink-2:    #A2A8BC;
-  --ink-3:    #767C90;
-  --rule:     #2B2F3B;
-  --sun:      #F0A32C;
-  --sun-soft: #3A2C13;
-  --agave:    #46A891;
-  --ocotillo: #E4776A;
-  --focus:    #7CA0F0;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--ground);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-
-.wrap {
-  max-width: var(--wide);
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.col { max-width: var(--measure); }
-
-/* ---------- type ---------- */
-
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
-
-h1 {
-  font-size: clamp(2rem, 6.2vw, 3.6rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-}
-
-h2 {
-  font-size: clamp(1.35rem, 3vw, 1.85rem);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-}
-
-h3 {
-  font-size: 1.02rem;
-  letter-spacing: -0.01em;
-}
-
-p { margin: 0; }
-
-a { color: inherit; text-decoration-color: var(--ink-3); text-underline-offset: 3px; }
-a:hover { text-decoration-color: var(--sun); }
-
-:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
-
-.eyebrow {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--ink-3);
-  margin: 0;
-}
-
-.lede { font-size: 1.15rem; color: var(--ink-2); }
-
-.fine { font-size: 0.86rem; color: var(--ink-3); line-height: 1.55; }
-
-strong { font-weight: 650; color: var(--ink); }
-
-.num {
-  font-family: var(--font-display);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
-/* ---------- structure ---------- */
-
-section { border-top: 1px solid var(--rule); }
-section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
-
-.stack { display: flex; flex-direction: column; gap: 1.25rem; }
-.stack-lg { display: flex; flex-direction: column; gap: 2.5rem; }
-.stack-sm { display: flex; flex-direction: column; gap: 0.6rem; }
-
-/* ---------- hero ---------- */
-
-.hero { border-top: none; background: var(--surface); }
-.hero > .wrap { padding-top: 5rem; padding-bottom: 4rem; }
-
-.hero-in { display: flex; flex-direction: column; gap: 1.75rem; max-width: 44rem; }
-
-.sunline {
-  display: flex;
-  align-items: baseline;
-  gap: 0.9rem;
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-3);
-}
-.sunline::before {
-  content: "";
-  width: 2.5rem;
-  height: 2px;
-  background: var(--sun);
-  transform: translateY(-0.25em);
-  flex: none;
-}
-
-/* ---------- buttons ---------- */
-
-.cta-row { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
-
-.btn {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  padding: 0.85rem 1.4rem;
-  background: var(--sun);
-  color: #FFF8EC;
-  border: 1px solid var(--sun);
-  text-decoration: none;
-  transition: transform 120ms ease, filter 120ms ease;
-}
-.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-
-:root[data-theme="dark"] .btn { color: #1A1204; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .btn { color: #1A1204; }
-}
-
-.btn-quiet {
-  background: transparent;
-  color: var(--ink);
-  border: 1px solid var(--rule);
-}
-.btn-quiet:hover { border-color: var(--sun); filter: none; }
-
-/* ---------- data blocks ---------- */
-
-.meter { display: flex; flex-direction: column; gap: 1.5rem; }
-
-.bar-row { display: grid; grid-template-columns: 1fr; gap: 0.35rem; }
-
-.bar-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: var(--ink-2);
-}
-
-.bar-val { font-family: var(--font-display); font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
-
-.bar-track { height: 0.7rem; background: var(--sunk); overflow: hidden; }
-
-.bar-fill {
-  height: 100%;
-  width: 0;
-  background: var(--ink-3);
-  transition: width 900ms cubic-bezier(0.22, 0.8, 0.3, 1);
-}
-.bar-fill.is-alert { background: var(--ocotillo); }
-.bar-fill.is-sun { background: var(--sun); }
-
-@media (prefers-reduced-motion: reduce) {
-  .bar-fill { transition: none; }
-  .btn { transition: none; }
-}
-
-.ledger { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-.ledger th, .ledger td { text-align: left; padding: 0.65rem 0.9rem 0.65rem 0; border-bottom: 1px solid var(--rule); }
-.ledger th {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--ink-3);
-  font-weight: 500;
-}
-.ledger td.n { text-align: right; font-family: var(--font-display); font-variant-numeric: tabular-nums; padding-right: 0; white-space: nowrap; }
-.ledger tr.total td { border-bottom: none; border-top: 2px solid var(--ink); font-weight: 700; padding-top: 0.8rem; }
-.ledger .muted { color: var(--ink-3); }
-.scroll-x { overflow-x: auto; }
-
-/* ---------- tier cards ---------- */
-
-.tiers { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-@media (min-width: 44rem) { .tiers { grid-template-columns: repeat(2, 1fr); } }
-
-.tier { background: var(--surface); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.tier-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; }
-.tier-price .per { font-size: 0.8rem; color: var(--ink-3); font-weight: 400; letter-spacing: 0; }
-.tier-name {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-3);
-}
-.tier p { font-size: 0.93rem; color: var(--ink-2); }
-.tier.is-free { background: var(--sun-soft); }
-.tier.is-free .tier-name { color: var(--sun); }
-
-/* ---------- asks ---------- */
-
-.asks { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
-.ask {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: 1rem;
-  padding: 1.35rem 0;
-  border-bottom: 1px solid var(--rule);
-  align-items: start;
-}
-.ask-n { font-family: var(--font-display); font-size: 0.8rem; color: var(--sun); font-variant-numeric: tabular-nums; padding-top: 0.28rem; }
-.ask p { font-size: 0.95rem; color: var(--ink-2); margin-top: 0.15rem; }
-
-/* ---------- callout ---------- */
-
-.callout {
-  border-left: 3px solid var(--sun);
-  padding: 0.35rem 0 0.35rem 1.4rem;
-  font-size: 1.05rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.quote { border-left: 3px solid var(--rule); padding: 0.35rem 0 0.35rem 1.4rem; }
-.quote p { font-size: 1.02rem; }
-.quote cite { display: block; margin-top: 0.6rem; font-style: normal; font-size: 0.84rem; color: var(--ink-3); }
-
-.honest { background: var(--surface); }
-
-.tag {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid currentColor;
-  color: var(--agave);
-}
-.tag.is-none { color: var(--ocotillo); }
-
-.ul { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.ul li { color: var(--ink-2); }
-.ul li strong { color: var(--ink); }
-
-/* ---------- services ---------- */
-
-.svc { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-@media (min-width: 40rem) { .svc { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 58rem) { .svc { grid-template-columns: repeat(3, 1fr); } }
-
-.svc-item { background: var(--surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.2rem; }
-.svc-item b { font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
-.svc-item span { font-size: 0.85rem; color: var(--ink-3); }
-
-/* ---------- roadmap ---------- */
-
-.acts { display: flex; flex-direction: column; gap: 3rem; }
-
-.act-head {
-  display: flex;
-  align-items: baseline;
-  gap: 0.9rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 2px solid var(--ink);
-  margin-bottom: 0.25rem;
-}
-.act-head h3 { font-size: 1.15rem; }
-.act-head .act-when {
-  margin-left: auto;
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--ink-3);
-  white-space: nowrap;
-}
-
-.phase {
-  display: grid;
-  grid-template-columns: 2.75rem 1fr;
-  gap: 1rem;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid var(--rule);
-  align-items: start;
-}
-.phase-n {
-  font-family: var(--font-display);
-  font-variant-numeric: tabular-nums;
-  font-size: 0.82rem;
-  color: var(--ink-3);
-  padding-top: 0.3rem;
-}
-.phase-body { display: flex; flex-direction: column; gap: 0.3rem; }
-.phase-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.7rem; }
-.phase-title h4 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.phase p { font-size: 0.93rem; color: var(--ink-2); }
-
-.chip {
-  font-family: var(--font-display);
-  font-size: 0.63rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.15rem 0.45rem;
-  border: 1px solid var(--rule);
-  color: var(--ink-3);
-  white-space: nowrap;
-}
-.chip.now { color: var(--sun); border-color: var(--sun); }
-.chip.next { color: var(--agave); border-color: var(--agave); }
-
-/* ---------- signup form ---------- */
-
-.form-card {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.field { display: flex; flex-direction: column; gap: 0.4rem; }
-
-.field label, .checks legend {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-  color: var(--ink-3);
-}
-
-.field input[type="text"], .field textarea {
-  font: inherit;
-  font-size: 1rem;
-  color: var(--ink);
-  background: var(--ground);
-  border: 1px solid var(--rule);
-  padding: 0.7rem 0.8rem;
-  width: 100%;
-}
-.field input[type="text"]:focus, .field textarea:focus { border-color: var(--sun); }
-.field textarea { resize: vertical; min-height: 4.5rem; }
-.field .hint { font-size: 0.82rem; color: var(--ink-3); }
-
-.checks { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.55rem; }
-.checks legend { padding: 0; margin-bottom: 0.15rem; }
-.check { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.93rem; color: var(--ink-2); cursor: pointer; }
-.check input { margin-top: 0.35rem; accent-color: var(--sun); flex: none; }
-
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-.form-msg { font-size: 0.95rem; padding: 0.8rem 1rem; border: 1px solid var(--rule); display: none; }
-.form-msg.show { display: block; }
-.form-msg.ok { border-color: var(--agave); color: var(--agave); }
-.form-msg.err { border-color: var(--ocotillo); color: var(--ocotillo); }
-
-.form-card button { cursor: pointer; font: inherit; }
-
-/* ---------- signup modal ---------- */
-
-.modal { display: none; position: fixed; inset: 0; z-index: 100; }
-/* :target is the no-JS path; .is-open is the scripted one. Single rule for both
-   so nothing later has to override an earlier display value. */
-.modal:target, .modal.is-open { display: grid; place-items: center; padding: 1rem; }
-
-.modal-scrim {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 12, 18, 0.55);
-  backdrop-filter: blur(2px);
-  display: block;
-}
-
-.modal-card {
-  position: relative;
-  z-index: 1;
-  margin: auto;
-  max-width: 34rem;
-  max-height: calc(100dvh - 2rem);
-  overflow-y: auto;
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  box-shadow: 0 18px 50px rgba(10, 12, 18, 0.28);
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.modal-card .form-card { border: 0; padding: 0; background: transparent; }
-
-.modal-close {
-  position: absolute;
-  top: 0.65rem;
-  right: 0.9rem;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  line-height: 1;
-  color: var(--ink-3);
-  text-decoration: none;
-  padding: 0.25rem 0.4rem;
-}
-.modal-close:hover { color: var(--sun); }
-
-/* The Cancel button reuses .modal-close for behaviour, not for the × styling. */
-.modal-card .cta-row .modal-close {
-  position: static;
-  font-size: 0.92rem;
-  padding: 0.85rem 1.4rem;
-  color: var(--ink);
-}
-
-body.modal-open { overflow: hidden; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .modal:target .modal-card, .modal.is-open .modal-card { animation: modal-in 160ms ease-out; }
-  @keyframes modal-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: none; }
-  }
-}
-
-footer { border-top: 1px solid var(--rule); background: var(--sunk); }
-footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
-.srcs { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.84rem; }
-</style>
+<title>Chuco Community Data Center</title>
+<meta name="description" content="A proposal for a nonprofit, community-owned AI service for El Paso and Ciudad Juárez — what it would cost, how it would be run, and what doesn't exist yet.">
+<link rel="alternate" hreflang="en" href="https://ccdc.blaha.io/">
+<link rel="alternate" hreflang="es" href="https://ccdc.blaha.io/es/">
+<link rel="alternate" hreflang="x-default" href="https://ccdc.blaha.io/">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
+    <nav class="langbar" aria-label="Language">
+      <span aria-current="page" lang="en">English</span>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="es/" lang="es" hreflang="es">Español</a>
+    </nav>
     <div class="hero-in">
-      <p class="sunline">A proposal &middot; El Paso, Texas</p>
-      <h1>A data center El&nbsp;Pasoans actually own.</h1>
+      <p class="sunline">A proposal &middot; El Paso &middot; Ciudad Ju&aacute;rez</p>
+      <h1>A data center El&nbsp;Chuco actually owns.</h1>
       <p class="lede">Meta is building a $10&nbsp;billion AI data center in Northeast El Paso. This is a proposal for a much smaller one that belongs to the people who live here, governed by a board its members elect.</p>
       <div class="cta-row">
         <a class="btn" href="#signup">Get updates &rarr;</a>
@@ -587,9 +98,9 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
 
     <div class="tiers">
       <div class="tier is-free">
-        <p class="tier-name">Anyone with an El Paso ID</p>
+        <p class="tier-name">Anyone with an El Paso or Ju&aacute;rez ID</p>
         <p class="tier-price">Free<span class="per"> &mdash; a real allowance, not a trial</span></p>
-        <p>The proposal includes a minimum level of free access for any El Paso resident who wants it. This is the point of the organization, not a marketing funnel.</p>
+        <p>The proposal includes a minimum level of free access for anyone living in the metro, on either side of the river. This is the point of the organization, not a marketing funnel.</p>
       </div>
       <div class="tier">
         <p class="tier-name">Supporter</p>
@@ -610,6 +121,25 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
 
     <div class="col">
       <p class="fine">Dues waived on request, no questions asked. If governance costs $30, the organization is governed by people who have $30.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BINATIONAL ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Both sides of the river</p>
+      <h2>The water doesn't stop at the bridge, so neither should the response.</h2>
+      <p>El Paso and Ciudad Ju&aacute;rez are one metropolitan area of roughly 2.5&nbsp;million people that happens to have an international border running through it. More to the point here: the <strong>Rio Grande</strong> and the <strong>Hueco Bolson aquifer</strong> are shared, and so is the air. A data center's draw on either one is a binational fact whether or not anyone treats it that way.</p>
+      <p>Which means an organization built on local accountability for water and power, that drew its own line at the river, would be arguing a visibly weaker version of its own case. So the intent is to serve the whole metro from the start &mdash; and the site is in Spanish for the same reason.</p>
+    </div>
+
+    <div class="col stack">
+      <h3>What that costs us, honestly</h3>
+      <p>Serving Ju&aacute;rez residents over the internet is genuinely straightforward. A US nonprofit may serve people in another country; charitable status does not require a domestic-only beneficiary class, and donations stay deductible because that depends on where the <em>organization</em> is, not where it works. The added work is a Spanish-language privacy notice that satisfies Mexican law, honoring data rights under it, and some extra reporting on the annual tax return.</p>
+      <p><strong>Putting hardware or staff physically in Ju&aacute;rez is a different order of difficulty</strong> &mdash; a Mexican entity, its own tax registration, import duties on equipment, two sets of books. That is a later decision and we are not pretending otherwise.</p>
+      <p class="fine">Mexico replaced its federal data protection law in March 2025 and dissolved INAI, its independent privacy regulator, moving enforcement to a federal ministry. We do not yet know whether that law reaches a service run from servers in the United States. That question needs a Mexican lawyer, and it is on the list rather than quietly assumed away.</p>
     </div>
   </div>
 </section>
@@ -642,14 +172,14 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
       <div class="svc-item"><b>Jitsi</b><span>Video calls without a seat license</span></div>
       <div class="svc-item"><b>SearXNG</b><span>Web search with no tracking and no ads</span></div>
       <div class="svc-item"><b>Email &amp; lists</b><span>For local nonprofits and neighborhood groups</span></div>
-      <div class="svc-item"><b>Web hosting</b><span>For El Paso organizations that can't afford it</span></div>
+      <div class="svc-item"><b>Web hosting</b><span>For local organizations that can't afford it</span></div>
       <div class="svc-item"><b>Backups</b><span>Somewhere other than a company in Seattle</span></div>
     </div>
 
     <div class="col stack">
       <h3>This has been done before</h3>
       <p><strong>May First Movement Technology</strong> is a US nonprofit membership cooperative where members pay dues, collectively own the equipment, and use it for hosting, email, and Nextcloud accounts. <strong>CHATONS</strong> is a French-founded collective of more than seventy small, ethical, transparent hosts offering exactly these services as an alternative to the big five. And the closest local ancestor is older than any of it: <strong>rural electric cooperatives</strong>, formed because the utilities wouldn't serve people the market found inconvenient.</p>
-      <p>None of this is a novel idea. What would be new is doing it in El&nbsp;Paso, on purpose, in the middle of an argument about who gets to build data centers here.</p>
+      <p>None of this is a novel idea. What would be new is doing it here, in El&nbsp;Paso and Ju&aacute;rez, on purpose, in the middle of an argument about who gets to build data centers in this valley.</p>
     </div>
   </div>
 </section>
@@ -707,7 +237,7 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
           <span class="phase-n">01</span>
           <div class="phase-body">
             <div class="phase-title"><h4>Find out if anyone wants this</h4><span class="chip now">Now</span></div>
-            <p>A list of El Pasoans who'd use it. If that list stays short, this shouldn't exist, and we'll say so instead of pushing ahead.</p>
+            <p>A list of people here who would use it. If that list stays short, this shouldn't exist, and we'll say so instead of pushing ahead.</p>
           </div>
         </div>
 
@@ -754,7 +284,7 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
           <span class="phase-n">06</span>
           <div class="phase-body">
             <div class="phase-title"><h4>Turn the service on</h4><span class="chip">Build</span></div>
-            <p>One server, open-source software, free access for El&nbsp;Paso residents, paid tiers below cost. Metered from the first day so a generous promise can't quietly bankrupt us — running out of money because we didn't measure it is exactly the failure this organization exists to be the opposite of.</p>
+            <p>One server, open-source software, free access for residents on both sides of the river, paid tiers below cost. Metered from the first day so a generous promise can't quietly bankrupt us — running out of money because we didn't measure it is exactly the failure this organization exists to be the opposite of.</p>
           </div>
         </div>
 
@@ -892,7 +422,7 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
       <div class="cta-row">
         <a class="btn" href="#signup">Add your name &rarr;</a>
       </div>
-      <p class="fine">This form is ours. It posts to our own server and writes to a file we control &mdash; no Google Forms, no Mailchimp, no analytics, no trackers, no cookies. It's a small thing, and it's the entire argument in miniature: <a href="https://github.com/nelsonblaha/epcdc/blob/main/deploy/app.py">you can read the code that receives it</a>.</p>
+      <p class="fine">This form is ours. It posts to our own server and writes to a file we control &mdash; no Google Forms, no Mailchimp, no analytics, no trackers, no cookies. It's a small thing, and it's the entire argument in miniature: <a href="https://github.com/nelsonblaha/ccdc/blob/main/deploy/app.py">you can read the code that receives it</a>.</p>
       <p class="fine">No donations requested, now or on the confirmation page. There is nothing to donate to yet.</p>
     </div>
   </div>
@@ -909,7 +439,7 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
   <div class="modal-card">
     <a class="modal-close" href="#" aria-label="Close">&times;</a>
     <h3 id="signup-title">Add your name</h3>
-    <form class="form-card" method="post" action="https://epcdc.blaha.io/api/signup">
+    <form class="form-card" method="post" action="https://ccdc.blaha.io/api/signup">
       <div class="field">
         <label for="contact">Email or phone <span aria-hidden="true">*</span></label>
         <input type="text" id="contact" name="contact" required autocomplete="email" placeholder="you@example.com">
@@ -940,6 +470,7 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
       </div>
       <input type="hidden" name="t" id="t" value="">
+      <input type="hidden" name="lang" value="en">
 
       <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
       <div class="cta-row">
@@ -961,140 +492,11 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
       <a href="https://insideclimatenews.org/news/21012026/meta-data-center-in-sunny-el-paso-will-rely-on-natural-gas/">Inside Climate News</a>
       <a href="https://cbs4local.com/newsletter-daily/meta-touts-10b-el-paso-data-center-water-and-grid-pledges-as-council-weighs-incentives">CBS4 &mdash; water and grid pledges</a>
     </div>
-    <p class="fine">This page is a proposal published by a private individual. It is not affiliated with, endorsed by, or speaking for the City of El&nbsp;Paso, El&nbsp;Paso Water, El&nbsp;Paso Electric, or Meta. Figures attributed to Meta are the company's own public statements. Cost figures are modeled from published vendor pricing and will change.</p>
+    <p class="fine">This page is a proposal published by a private individual. It is not affiliated with, endorsed by, or speaking for the City of El&nbsp;Paso, El&nbsp;Paso Water, El&nbsp;Paso Electric, the Municipio de Ju&aacute;rez, any agency of the United States or Mexico, or Meta. &ldquo;Chuco&rdquo; is a long-standing local nickname for El&nbsp;Paso and is used here with affection, not on anyone's authority. Figures attributed to Meta are the company's own public statements. Cost figures are modeled from published vendor pricing and will change.</p>
   </div>
 </footer>
 
-<script>
-(function () {
-  var bars = document.querySelectorAll('.bar-fill');
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function fill(el) { el.style.width = el.getAttribute('data-w') + '%'; }
-  if (reduce || !('IntersectionObserver' in window)) {
-    bars.forEach(fill);
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      var el = e.target;
-      setTimeout(function () { fill(el); }, Array.prototype.indexOf.call(bars, el) * 130);
-      io.unobserve(el);
-    });
-  }, { threshold: 0.4 });
-  bars.forEach(function (b) { io.observe(b); });
-})();
-
-/* Signup modal. Without JS the anchors still work via :target — this adds the
-   parts CSS can't: focus trap, Esc, scroll lock, focus restored to the trigger,
-   and no leftover #signup in the URL. */
-(function () {
-  var modal = document.getElementById('signup');
-  if (!modal) return;
-  var card = modal.querySelector('.modal-card');
-  var lastTrigger = null;
-
-  function focusables() {
-    return Array.prototype.filter.call(
-      card.querySelectorAll('a[href], button, input:not([type="hidden"]), textarea, [tabindex]:not([tabindex="-1"])'),
-      function (el) { return el.offsetParent !== null && !el.disabled; }
-    );
-  }
-
-  function open(trigger) {
-    lastTrigger = trigger || null;
-    modal.classList.add('is-open');
-    document.body.classList.add('modal-open');
-    var first = card.querySelector('#contact');
-    if (first) first.focus();
-  }
-
-  function close() {
-    modal.classList.remove('is-open');
-    document.body.classList.remove('modal-open');
-    // :target would keep it open even after the class is gone.
-    if (location.hash === '#signup') {
-      history.replaceState(null, '', location.pathname + location.search);
-    }
-    if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
-  }
-
-  document.querySelectorAll('a[href="#signup"]').forEach(function (a) {
-    a.addEventListener('click', function (e) { e.preventDefault(); open(a); });
-  });
-
-  modal.addEventListener('click', function (e) {
-    if (e.target.closest('.modal-close') || e.target.classList.contains('modal-scrim')) {
-      e.preventDefault();
-      close();
-    }
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (!modal.classList.contains('is-open')) return;
-    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-    if (e.key !== 'Tab') return;
-    var f = focusables();
-    if (!f.length) return;
-    var first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  });
-
-  // Someone arriving on a shared /#signup link gets the scripted modal, not the
-  // bare :target one.
-  if (location.hash === '#signup') open(null);
-})();
-
-/* Signup: posts via fetch for an inline result. Without JS the form still
-   submits normally to /api/signup and lands on the /thanks page. */
-(function () {
-  var form = document.querySelector('form[action="https://epcdc.blaha.io/api/signup"]');
-  if (!form) return;
-  var msg = document.getElementById('form-msg');
-  var stamp = document.getElementById('t');
-  if (stamp) stamp.value = String(Date.now() / 1000);
-
-  function say(text, kind) {
-    msg.textContent = text;
-    msg.className = 'form-msg show ' + kind;
-  }
-
-  form.addEventListener('submit', function (e) {
-    if (!window.fetch) return;
-    e.preventDefault();
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    var original = btn.textContent;
-    btn.textContent = 'Sending…';
-
-    fetch("https://epcdc.blaha.io/api/signup", {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { 'X-Requested-With': 'fetch', 'Accept': 'application/json' }
-    })
-      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-      .then(function (res) {
-        if (res.ok && res.d.ok) {
-          form.reset();
-          say("You're on the list. We'll write when there's something real to report.", 'ok');
-          btn.textContent = 'Signed up';
-          var cancel = form.querySelector('.modal-close');
-          if (cancel) cancel.textContent = 'Close';
-          return;
-        }
-        say(res.d.error || 'That did not go through. Try again in a moment.', 'err');
-        btn.disabled = false;
-        btn.textContent = original;
-      })
-      .catch(function () {
-        say('Could not reach the server. Try again in a moment.', 'err');
-        btn.disabled = false;
-        btn.textContent = original;
-      });
-  });
-})();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>

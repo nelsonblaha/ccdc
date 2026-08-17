@@ -1,7 +1,12 @@
-# EPCDC — El Paso Community Data Center
+# CCDC — Chuco Community Data Center
 
-Working repo for a proposed El Paso–specific nonprofit that operates AI
-infrastructure the community can actually inspect, govern, and trust.
+**Centro Comunitario de Datos de Chuco**
+
+Working repo for a proposed nonprofit serving the El Paso–Ciudad Juárez metro,
+operating AI infrastructure the community can actually inspect, govern, and
+trust. "El Chuco" is the local nickname for El Paso — used here because it reads
+as the place people live in rather than a municipal government, and because it
+has never stopped at the river (doc 11).
 
 ## Why
 
@@ -11,10 +16,14 @@ one city council member has said publicly they took those commitments at face
 value. The trust gap that leaves behind is the opening: a locally-governed,
 nonprofit AI provider whose numbers are published rather than promised.
 
+The water and the air are shared with Juárez, so the response is binational too —
+an organization arguing for local accountability over a shared aquifer that drew
+its own line at the river would be making a weaker version of its own case.
+
 The premise is *local control and verifiable ethics*, not price. We will almost
 certainly never beat OpenAI on cost per token. We can beat them on:
 
-- a board El Paso residents can name, meet, and remove
+- a board residents can name, meet, and remove
 - published water/electricity/carbon figures per unit of compute
 - no training on user conversations, contractually and technically
 - money that stays in the community
@@ -65,13 +74,15 @@ custom layer that handles:
 | [07 — Roadmap](docs/07-roadmap.md) | Twelve steps from paperwork to owning hardware, with the detail behind each |
 | [08 — Beyond AI](docs/08-beyond-ai.md) | Why AI is the wedge and not the point: the shared-server argument, and the organizations already doing this |
 | [09 — Publishing](docs/09-publishing.md) | How `site/` gets deployed, and the public-repo decision |
+| [11 — Binational scope](docs/11-binational-scope.md) | Serving Ciudad Juárez, why the name changed, and the one question that needs a Mexican lawyer |
 | [10 — The repo as a governance mechanism](docs/10-repo-as-governance.md) | Requiring director signatures to change the organization's commitments — why signatures beat permissions, why not unanimity, and the four ways it breaks |
 | [GOVERNED.md](GOVERNED.md) | The operative version: which paths are organizational commitments, and what approval each tier needs. Written to be cited by the bylaws. |
 
 ## The public pitch
 
-`site/index.html` is the advertisement — a single self-contained page, no build
-step. It's what you send people. Everything in `docs/` is the evidence behind
+`site/index.html` (English) and `site/es/index.html` (Spanish) are the
+advertisement, sharing `site/style.css` and `site/script.js` so the two cannot
+drift. It's what you send people. Everything in `docs/` is the evidence behind
 it, which is the whole point: the claims on the site are checkable against the
 research in this repo.
 

@@ -1,4 +1,4 @@
-# epcdc.blaha.io — follows the existing nelnet pattern: join infra-net, declare
+# ccdc.blaha.io — follows the existing nelnet pattern: join infra-net, declare
 # VIRTUAL_HOST, and nginx-proxy + acme-companion handle routing and TLS.
 # *.blaha.io already wildcards to Cloudflare, so no DNS record is needed.
 #
@@ -10,11 +10,11 @@ networks:
     external: true
 
 services:
-  epcdc:
+  ccdc:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
-    container_name: epcdc
+    container_name: ccdc
     restart: unless-stopped
     # Run as ben so signups.jsonl is owned by ben and readable over plain SSH.
     # The image's own unprivileged user would write files root/ben cannot read
@@ -23,14 +23,16 @@ services:
     networks:
       - infra-net
     environment:
-      - VIRTUAL_HOST=epcdc.blaha.io
+      # ccdc.blaha.io is canonical; epcdc.blaha.io is kept so links shared
+      # before the rename still resolve. Drop the alias once nothing points at it.
+      - VIRTUAL_HOST=ccdc.blaha.io,epcdc.blaha.io
       - VIRTUAL_PORT=8100
-      - LETSENCRYPT_HOST=epcdc.blaha.io
+      - LETSENCRYPT_HOST=ccdc.blaha.io,epcdc.blaha.io
       - LETSENCRYPT_EMAIL=nelson.blaha@gmail.com
     volumes:
       # Signups land here. Not in the repo, not in the image, not in a backup
       # that goes to a third party without someone deciding it should.
-      - /home/ben/epcdc-data:/data
+      - /home/ben/ccdc-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8100/healthz')"]
       interval: 60s

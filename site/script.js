@@ -1,0 +1,158 @@
+/* Shared by the English and Spanish pages. Strings are chosen from the
+   document's own lang attribute, so there is one copy of the behaviour and no
+   chance of the two pages drifting apart. */
+(function () {
+  'use strict';
+
+  var STRINGS = {
+    en: {
+      sending: 'Sending…',
+      ok: "You're on the list. We'll write when there's something real to report.",
+      failed: 'That did not go through. Try again in a moment.',
+      unreachable: 'Could not reach the server. Try again in a moment.',
+      signedUp: 'Signed up',
+      close: 'Close'
+    },
+    es: {
+      sending: 'Enviando…',
+      ok: 'Ya estás en la lista. Te escribiremos cuando haya algo real que contar.',
+      failed: 'No se pudo enviar. Inténtalo de nuevo en un momento.',
+      unreachable: 'No se pudo conectar con el servidor. Inténtalo de nuevo en un momento.',
+      signedUp: 'Listo',
+      close: 'Cerrar'
+    }
+  };
+
+  var T = STRINGS[document.documentElement.lang] || STRINGS.en;
+  var ENDPOINT = 'https://ccdc.blaha.io/api/signup';
+
+  /* ---- water-comparison bars fill as they scroll into view ---- */
+  (function () {
+    var bars = document.querySelectorAll('.bar-fill');
+    if (!bars.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function fill(el) { el.style.width = el.getAttribute('data-w') + '%'; }
+    if (reduce || !('IntersectionObserver' in window)) {
+      bars.forEach(fill);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        setTimeout(function () { fill(el); }, Array.prototype.indexOf.call(bars, el) * 130);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    bars.forEach(function (b) { io.observe(b); });
+  })();
+
+  /* ---- signup modal ----
+     Without JS the anchors still work via the :target rule. This adds what CSS
+     cannot: focus trap, Esc, scroll lock, focus returned to the trigger, and no
+     leftover #signup in the URL. */
+  (function () {
+    var modal = document.getElementById('signup');
+    if (!modal) return;
+    var card = modal.querySelector('.modal-card');
+    var lastTrigger = null;
+
+    function focusables() {
+      return Array.prototype.filter.call(
+        card.querySelectorAll('a[href], button, input:not([type="hidden"]), textarea, [tabindex]:not([tabindex="-1"])'),
+        function (el) { return el.offsetParent !== null && !el.disabled; }
+      );
+    }
+
+    function open(trigger) {
+      lastTrigger = trigger || null;
+      modal.classList.add('is-open');
+      document.body.classList.add('modal-open');
+      var first = card.querySelector('#contact');
+      if (first) first.focus();
+    }
+
+    function close() {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      // :target would keep it open even after the class is gone.
+      if (location.hash === '#signup') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+      if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+    }
+
+    document.querySelectorAll('a[href="#signup"]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); open(a); });
+    });
+
+    modal.addEventListener('click', function (e) {
+      if (e.target.closest('.modal-close') || e.target.classList.contains('modal-scrim')) {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!modal.classList.contains('is-open')) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      var f = focusables();
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    // Someone arriving on a shared /#signup link gets the scripted modal.
+    if (location.hash === '#signup') open(null);
+  })();
+
+  /* ---- signup submit: fetch for an inline result; native POST without JS ---- */
+  (function () {
+    var form = document.querySelector('form[action="' + ENDPOINT + '"]');
+    if (!form) return;
+    var msg = document.getElementById('form-msg');
+    var stamp = document.getElementById('t');
+    if (stamp) stamp.value = String(Date.now() / 1000);
+
+    function say(text, kind) {
+      msg.textContent = text;
+      msg.className = 'form-msg show ' + kind;
+    }
+
+    form.addEventListener('submit', function (e) {
+      if (!window.fetch) return;
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      var original = btn.textContent;
+      btn.textContent = T.sending;
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'X-Requested-With': 'fetch', 'Accept': 'application/json' }
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok && res.d.ok) {
+            form.reset();
+            say(T.ok, 'ok');
+            btn.textContent = T.signedUp;
+            var cancel = form.querySelector('.modal-close');
+            if (cancel) cancel.textContent = T.close;
+            return;
+          }
+          say(res.d.error || T.failed, 'err');
+          btn.disabled = false;
+          btn.textContent = original;
+        })
+        .catch(function () {
+          say(T.unreachable, 'err');
+          btn.disabled = false;
+          btn.textContent = original;
+        });
+    });
+  })();
+})();

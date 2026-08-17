@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Runnable cost model for the El Paso Community Data Center MVP.
+"""Runnable cost model for the Chuco Community Data Center MVP.
 
 The prose in docs/03-cost-model.md is generated from these assumptions. Change
 the numbers here and re-run rather than editing tables by hand.
