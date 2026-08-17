@@ -867,6 +867,12 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
        bar height in the unwrapped case. */
     padding-block: 0.5rem;
   }
+  /* Alternating fills so each label's extent is readable. Once the labels grow to
+     fill the row there is only 0.3rem between one word and the next, and they ran
+     together. --sunk is the existing subtle alternate surface, so this holds up in
+     light, dark and the un-stamped default without a new token. */
+  .sectionnav a:not(.nav-flag):not(.nav-brand):nth-of-type(odd) { background: var(--sunk); }
+
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
   .sectionnav a:not(.nav-flag):not(.nav-brand) { order: 1; }

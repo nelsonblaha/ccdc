@@ -374,7 +374,17 @@
         swapTo(a.href, true);
       });
     });
-    window.addEventListener('popstate', function () { swapTo(location.href, false); }, { signal: signal });
+    /* Chrome fires popstate for same-document fragment navigation as well as for
+       history traversal, so a click on a #section link in the nav arrives here too.
+       Swapping on that refetched the page, rebuilt the body and restored the position
+       recorded before the click, which undid the jump: the page reached the section
+       and then flashed back to where the reader had been. Only a change of language
+       is a swap; a hash click leaves the path alone. */
+    window.addEventListener('popstate', function () {
+      var want = /^\/es(\/|$)/.test(location.pathname) ? 'es' : 'en';
+      if (want === (document.documentElement.lang || 'en')) return;
+      swapTo(location.href, false);
+    }, { signal: signal });
   }
 
   /* ---- the rail's mark returns to the top ----
