@@ -1570,3 +1570,18 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
     overflow: visible;
   }
 }
+
+/* ---------- phone: buttons size to the longest label ----------
+   The Spanish "Ver el código y la investigación →" is the longest, and at a fixed
+   0.92rem it wrapped its arrow onto a second line on an S24+. Ben's call: shrink
+   the type on every button rather than let one of them wrap, so the row stays a row
+   and the buttons stay a set.
+
+   min() rather than clamp(): the cap is the desktop size, and below the width where
+   3.1vw reaches it the label simply tracks the window. Measured at 3.1vw the longest
+   Spanish button clears its column at 320px, which is the narrowest phone worth
+   supporting. */
+@media (max-width: 52rem) {
+  .btn { font-size: min(0.92rem, 3.1vw); }
+  .btn-with-sub .joininline { font-size: min(0.68rem, 2.4vw); }
+}
