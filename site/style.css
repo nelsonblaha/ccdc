@@ -887,60 +887,63 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
    width per point of font-size to stay on one line inside the same column. */
 html[lang="es"] { --h1-ratio: 28.1; }
 
-/* ---------- rail brand and docked language control ----------
-   Desktop only: the mobile bar already carries the flags pinned at its right end,
-   and a brand there would crowd five nav labels. The language block starts
-   collapsed and expands when the hero's own switcher scrolls out of view, which
-   pushes the section links down. */
+/* ---------- rail brand and docked language flag ----------
+   Desktop only. The flag sits on the same line as the mark, to its right, and
+   fades in once the hero's own switcher has scrolled away. It is positioned
+   absolutely so appearing and disappearing never shifts the mark or the links. */
 
-.nav-brand, .nav-lang { display: none; }
+.nav-top, .nav-brand, .nav-lang { display: none; }
 
 @media (min-width: 84rem) {
+  .nav-top {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    position: relative;
+    padding-bottom: 0.9rem;
+  }
+
   .nav-brand {
     display: block;
     font-family: var(--font-display);
-    /* Same size and tracking as the nav labels; gold and a touch heavier so it
-       reads as the mark rather than another destination. */
+    /* Same size and tracking as the nav labels; the accent colour and a heavier
+       weight mark it as the name rather than a sixth destination. */
     font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.13em;
     color: var(--sun);
-    padding-bottom: 0.9rem;
   }
 
   .nav-lang {
-    display: flex;
-    align-items: baseline;
-    gap: 0.45rem;
-    font-family: var(--font-display);
-    font-size: 0.64rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    max-height: 0;
-    margin-bottom: 0;
+    display: block;
     opacity: 0;
-    overflow: hidden;
-    transform: translateY(-4px);
-    transition: max-height 220ms ease, opacity 170ms ease,
-                transform 220ms ease, margin-bottom 220ms ease;
+    transform: translateX(-3px);
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
   }
   .sectionnav.has-lang .nav-lang {
-    max-height: 2.5rem;
-    margin-bottom: 0.9rem;
     opacity: 1;
     transform: none;
+    pointer-events: auto;
   }
-  .nav-lang a, .nav-lang span { text-decoration: none; }
-  /* The rail copy sets its own gap: flag then a two-letter code. */
-  .nav-lang a, .nav-lang > span { display: inline-flex; align-items: baseline; gap: 0.3rem; }
-  .nav-lang a { color: var(--ink-3); }
-  .nav-lang a:hover { color: var(--sun); }
-  .nav-lang [aria-current] { color: var(--ink); font-weight: 600; }
-  .nav-lang .sep { color: var(--rule); letter-spacing: 0; }
-  .nav-lang .flag { font-size: 1.05em; letter-spacing: 0; }
+  .nav-flag {
+    display: inline-block;
+    font-size: 1.15rem;
+    line-height: 1;
+    text-decoration: none;
+    letter-spacing: 0;
+    /* Padding grows the hit area to roughly 31px; the matching negative margin
+       keeps it from changing the row height. */
+    padding: 0.4rem;
+    margin: -0.4rem;
+    filter: saturate(0.85);
+    transition: filter 140ms ease;
+  }
+  .nav-flag:hover { filter: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .nav-lang { transition: none; }
+  .nav-flag { transition: none; }
 }
