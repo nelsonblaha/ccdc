@@ -6,19 +6,24 @@
    product is published numbers), humanist sans for reading.
    --------------------------------------------------------------- */
 :root {
-  --ground:   #ECEDF1;
-  --surface:  #FFFFFF;
-  --sunk:     #E2E4EA;
-  --ink:      #15171E;
-  --ink-2:    #4C5164;
+  /* Dark is the default rather than the alternative. A browser that reports no
+     colour preference — Facebook's in-app browser among them — was being handed the
+     light palette, which is not what this page is meant to look like. */
+  color-scheme: dark light;
+
+  --ground:   #101219;
+  --surface:  #181B23;
+  --sunk:     #1E222C;
+  --ink:      #E9EBF1;
+  --ink-2:    #A2A8BC;
   --ink-3:    #767C90;
-  --rule:     #D2D5DE;
-  --sun:      #C77503;
-  --sun-soft: #F6E4C4;
-  --agave:    #1C6555;
-  --ocotillo: #A93227;
-  --focus:    #2C5CC5;
-  --btn-ink:  #FFF8EC;
+  --rule:     #2B2F3B;
+  --sun:      #F0A32C;
+  --sun-soft: #3A2C13;
+  --agave:    #46A891;
+  --ocotillo: #E4776A;
+  --focus:    #7CA0F0;
+  --btn-ink:  #1A1204;
   /* Width the headline occupies per 1px of font-size, measured in the browser.
      Set per language because the two headlines are different lengths. */
   /* The headline's one-line width in ems, measured rather than guessed: 23.92 in
@@ -42,38 +47,38 @@
   --wide: 68rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:   #101219;
-    --surface:  #181B23;
-    --sunk:     #1E222C;
-    --ink:      #E9EBF1;
-    --ink-2:    #A2A8BC;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ground:   #ECEDF1;
+    --surface:  #FFFFFF;
+    --sunk:     #E2E4EA;
+    --ink:      #15171E;
+    --ink-2:    #4C5164;
     --ink-3:    #767C90;
-    --rule:     #2B2F3B;
-    --sun:      #F0A32C;
-    --sun-soft: #3A2C13;
-    --agave:    #46A891;
-    --ocotillo: #E4776A;
-    --focus:    #7CA0F0;
-    --btn-ink:  #1A1204;
+    --rule:     #D2D5DE;
+    --sun:      #C77503;
+    --sun-soft: #F6E4C4;
+    --agave:    #1C6555;
+    --ocotillo: #A93227;
+    --focus:    #2C5CC5;
+    --btn-ink:  #FFF8EC;
   }
 }
 
-:root[data-theme="dark"] {
-  --ground:   #101219;
-  --surface:  #181B23;
-  --sunk:     #1E222C;
-  --ink:      #E9EBF1;
-  --ink-2:    #A2A8BC;
+:root[data-theme="light"] {
+  --ground:   #ECEDF1;
+  --surface:  #FFFFFF;
+  --sunk:     #E2E4EA;
+  --ink:      #15171E;
+  --ink-2:    #4C5164;
   --ink-3:    #767C90;
-  --rule:     #2B2F3B;
-  --sun:      #F0A32C;
-  --sun-soft: #3A2C13;
-  --agave:    #46A891;
-  --ocotillo: #E4776A;
-  --focus:    #7CA0F0;
-  --btn-ink:  #1A1204;
+  --rule:     #D2D5DE;
+  --sun:      #C77503;
+  --sun-soft: #F6E4C4;
+  --agave:    #1C6555;
+  --ocotillo: #A93227;
+  --focus:    #2C5CC5;
+  --btn-ink:  #FFF8EC;
 }
 
 * { box-sizing: border-box; }
@@ -1484,9 +1489,15 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
     pointer-events: auto;
   }
 
-  /* One size for everything in the bar, icons and flags alike. */
+  /* One size for everything in the bar, icons and flags alike.
+
+     flex: none is the load-bearing line. The top bar gives every anchor
+     flex: 1 0 auto so the labels spread across it, and the Facebook link is an
+     anchor, so in the footer it grew to fill the row and swallowed the width
+     setting under it: in a flex container, grow beats width. */
   .sectionnav .nav-social .nav-icon,
   .sectionnav .nav-lang .nav-flag {
+    flex: none;
     width: 2.5rem;
     height: 2.5rem;
     margin: 0;
