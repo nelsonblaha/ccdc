@@ -698,6 +698,71 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .sectionnav a:not(.nav-flag):not(.nav-brand)::before { transition: none; }
 }
 
+/* ---------- join count ----------
+   One number, two presentations, and the styles are public because the element
+   is. Below the rail's breakpoint it rides along in the button row as plain
+   text: a fixed edge tag has no side margin to sit in at those widths and would
+   cover the prose. At the rail's width there is a column of empty margin for it,
+   and it becomes a stacked tag with the number carrying the emphasis.
+
+   `is-new` is only ever emitted for a signed-in administrator, so the accent
+   state cannot appear for a visitor. */
+
+.joininline {
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+.joininline b { font-weight: 700; color: var(--ink-2); }
+a.joininline:hover { color: var(--ink-2); }
+a.joininline:hover b { color: var(--sun); }
+a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
+
+/* Hidden until there is margin to hold it. */
+.jointag { display: none; }
+
+@media (min-width: 84rem) {
+  .joininline { display: none; }
+  .jointag {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.12rem;
+    padding: 0.7rem 0.55rem;
+    background: var(--surface);
+    color: var(--ink-3);
+    border: 1px solid var(--rule);
+    border-right: 0;
+    border-radius: 0.4rem 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    line-height: 1.1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 140ms ease, color 140ms ease;
+  }
+  .jt-n {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .jointag:hover { border-color: var(--sun); }
+  .jointag:hover .jt-n { color: var(--sun); }
+  .jointag.is-new { border-color: var(--sun); color: var(--sun); }
+  .jointag.is-new .jt-n { color: var(--sun); }
+}
+
+@media print { .jointag { display: none; } }
+
 /* ---------- citations ----------
    Wikipedia-style numbered superscripts pointing at the reference list in the
    footer. :target highlights the entry you jumped to, so a click on [2] shows

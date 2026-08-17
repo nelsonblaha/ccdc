@@ -191,11 +191,12 @@ def render_page(relative: str) -> Response:
                 html = html.replace(
                     f'{attr}="{prefix}{name}"', f'{attr}="{prefix}{name}?v={digest}"'
                 )
-    # The tag is added to the markup rather than hidden with CSS, so a reader who
-    # is not signed in receives no trace of it: not the element, not the count,
-    # not the stylesheet rules.
-    if is_admin():
-        html = html.replace("</body>", admin_tag_html() + "</body>", 1)
+    # Placement is in the markup, at <!--JOIN-TAG--> and <!--JOIN-INLINE-->; the
+    # count and the destination are decided here. Both markers are replaced
+    # unconditionally, so a page never ships a stray comment or a stale count.
+    tag, inline = join_markup("es" if relative.startswith("es/") else "en")
+    html = html.replace("<!--JOIN-TAG-->", tag)
+    html = html.replace("<!--JOIN-INLINE-->", inline)
     return Response(
         html,
         mimetype="text/html",
@@ -551,32 +552,46 @@ def signup_state() -> dict:
     return {"total": total, "unseen": unseen, "active": active, "newest": newest, "records": recs}
 
 
-def admin_tag_html() -> str:
+JOIN_WORDS = {
+    "en": {"lead": "join", "one": "other", "many": "others"},
+    "es": {"lead": "\u00fanete a", "one": "persona", "many": "personas"},
+}
+
+
+def join_markup(lang: str) -> tuple[str, str]:
+    """(edge tag, inline text) for the join count.
+
+    Public: every visitor sees the same words and the same number. What differs
+    is where it goes. A visitor's tag opens the signup form, which is the whole
+    point of showing a count next to an invitation; the administrator's goes to
+    the list, and is the only trace of /admin anywhere in the markup.
+
+    Empty strings when there is nothing to count, so an empty list never
+    advertises itself.
+    """
     st = signup_state()
-    cls = "ccdc-admin-tag" + (" is-new" if st["active"] else "")
-    new_line = (
-        f'<span class="new">+{st["unseen"]}</span>' if st["active"] and st["unseen"] else ""
+    total = st["total"]
+    if not total:
+        return "", ""
+    w = JOIN_WORDS.get(lang, JOIN_WORDS["en"])
+    unit = w["one"] if total == 1 else w["many"]
+    admin = is_admin()
+    # The lit state is only ever visible to the administrator: a visitor has no
+    # watermark, so their tag is never in it.
+    lit = " is-new" if admin and st["active"] else ""
+    tag = (
+        f'<a class="jointag{lit}" href="{"/admin" if admin else "#signup"}">'
+        f'<span class="jt-lead">{w["lead"]}</span>'
+        f'<span class="jt-n">{total}</span>'
+        f'<span class="jt-unit">{unit}</span></a>'
     )
-    # Colours come from the site's own custom properties, so the tag follows
-    # light, dark and the un-stamped default without duplicating the palette.
-    # Literal fallbacks cover the case where the stylesheet failed to load.
-    return f'''<style>
-.ccdc-admin-tag{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:90;
- display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.55rem .4rem;
- background:var(--surface,#181B23);color:var(--ink-3,#767C90);
- border:1px solid var(--rule,#2B2F3B);border-right:0;border-radius:.4rem 0 0 .4rem;
- font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.58rem;
- letter-spacing:.1em;text-transform:uppercase;text-decoration:none;line-height:1}}
-.ccdc-admin-tag .n{{font-size:.95rem;letter-spacing:0;font-weight:700;
- color:var(--ink,#E9EBF1)}}
-.ccdc-admin-tag.is-new{{color:var(--sun,#F0A32C);border-color:var(--sun,#F0A32C)}}
-.ccdc-admin-tag.is-new .n,.ccdc-admin-tag .new{{color:var(--sun,#F0A32C)}}
-.ccdc-admin-tag .new{{font-size:.55rem;letter-spacing:0}}
-.ccdc-admin-tag:hover{{border-color:var(--sun,#F0A32C)}}
-@media print{{.ccdc-admin-tag{{display:none}}}}
-</style>
-<a class="{cls}" href="/admin" title="Mailing list">
-<span class="n">{st["total"]}</span><span>list</span>{new_line}</a>'''
+    text = f'{w["lead"]} <b>{total}</b> {unit}'
+    inline = (
+        f'<a class="joininline{lit}" href="/admin">{text}</a>'
+        if admin
+        else f'<span class="joininline">{text}</span>'
+    )
+    return tag, inline
 
 
 def _admin_shell(title: str, inner: str) -> str:
