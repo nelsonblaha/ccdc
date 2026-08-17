@@ -831,7 +831,7 @@ def _plain_page(title: str, body: str, lang: str = "en") -> str:
     return f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title} &middot; Chuco Community Data Center</title>
+<title>{title} &middot; Chucodata</title>
 <style>
 :root {{ color-scheme: light dark; }}
 body {{ margin:0; min-height:100vh; display:grid; place-items:center;
