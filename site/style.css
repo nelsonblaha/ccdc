@@ -711,7 +711,12 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 .joininline {
   align-self: center;
   font-family: var(--font-display);
-  font-size: 0.8rem;
+  /* Sits beside the signup button, so it has to fit in what the button leaves of
+     a phone's line. Smaller than body text and never broken mid-phrase: if the
+     line cannot hold it, the whole phrase moves rather than splitting across the
+     button's right edge. */
+  font-size: 0.76rem;
+  white-space: nowrap;
   color: var(--ink-3);
   text-decoration: none;
 }
