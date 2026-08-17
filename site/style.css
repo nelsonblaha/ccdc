@@ -1252,8 +1252,8 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
 @media (min-width: 84rem) {
   /* Sized against the flags beside it: their glyph reads large inside a 45px box,
      and a thin-stroked icon at the same box size reads smaller than it measures. */
-  .sectionnav .nav-icon { width: 2.9rem; height: 2.9rem; }
-  .sectionnav .nav-icon svg { width: 1.75rem; height: 1.75rem; stroke-width: 1.7; }
+  .sectionnav .nav-icon { width: 2.75rem; height: 2.75rem; }
+  .sectionnav .nav-icon svg { width: 1.55rem; height: 1.55rem; stroke-width: 1.75; }
 
   .nav-top {
     display: flex;
