@@ -28,9 +28,18 @@ services:
       # chucodata.org is the intended permanent home (doc 06, item 9). Added before
       # DNS propagates on purpose: the vhost is inert until something resolves here,
       # and this way the site answers the moment it does.
-      - VIRTUAL_HOST=ccdc.blaha.io,epcdc.blaha.io,chucodata.org,www.chucodata.org
+      - VIRTUAL_HOST=chucodata.org,www.chucodata.org,ccdc.blaha.io,epcdc.blaha.io
       - VIRTUAL_PORT=8100
-      - LETSENCRYPT_HOST=ccdc.blaha.io,epcdc.blaha.io,chucodata.org,www.chucodata.org
+      # chucodata.org leads deliberately. acme.sh keys a certificate on the first
+      # name, and it had already recorded the two new names as alternates without
+      # reissuing: it logs "Domains not changed. Skipping. Next renewal time is
+      # 2026-10-15", so the certificate on disk still carried only the two
+      # blaha.io names. Cloudflare in Full mode accepts a mismatched origin
+      # certificate, so nothing looked wrong, but its Automatic mode upgrades
+      # toward Full (Strict) on its own schedule and that would have failed
+      # closed weeks later with no change to blame. Leading with the canonical
+      # name makes this a new certificate rather than a renewal of an old one.
+      - LETSENCRYPT_HOST=chucodata.org,www.chucodata.org,ccdc.blaha.io,epcdc.blaha.io
       - LETSENCRYPT_EMAIL=nelson.blaha@gmail.com
     # Admin credentials live in deploy/.env on the host, which is gitignored.
     # This repo is public: a password hash in git is an invitation to crack it
