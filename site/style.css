@@ -728,7 +728,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 
 .langbar a, .langbar [aria-current] { display: inline-flex; align-items: baseline; gap: 0.4rem; padding: 0.45rem 0.35rem; }
 .langbar .flag {
-  font-size: 1.2em;
+  /* A little larger than the label beside it, but nowhere near the rail flags:
+     0.72rem x 1.6 is about 18px against the rail's 25.6px. */
+  font-size: 1.6em;
   letter-spacing: 0;
   /* Windows Chrome renders regional-indicator pairs as letters (US / MX) rather
      than flags. That still reads correctly, so no fallback is forced. */
