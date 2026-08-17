@@ -1238,17 +1238,19 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-/* The mark replaces the drawn house. It carries its own dark ground, so it is
-   rounded like an app icon rather than sitting as a hard square among outline
-   glyphs, and it fills more of its button than a stroke icon would, since a solid
-   tile reads heavier at the same size. */
+/* The mark replaces the drawn house. In the bar it has no ground of its own: it
+   sits among muted outline glyphs, and a solid tile there would shout. Opacity
+   does the work that colour does for its neighbours, since a raster cannot take
+   currentColor, and it lifts to full on hover the way they lighten to --ink. */
 .nav-logo {
-  width: 88%;
-  height: 88%;
-  border-radius: 22%;
+  width: 82%;
+  height: 82%;
   display: block;
+  opacity: 0.62;
+  transition: opacity 140ms ease;
 }
-.nav-icon:hover .nav-logo { filter: brightness(1.12); }
+.nav-icon:hover .nav-logo { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .nav-logo { transition: none; } }
 
 .nav-icon:hover { color: var(--ink); }
 .nav-icon.is-copied { color: var(--agave); }
