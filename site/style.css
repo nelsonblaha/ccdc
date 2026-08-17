@@ -854,6 +854,15 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     margin-left: auto;
     padding-left: 0.7rem;
     padding-right: 0.25rem;
+    /* Absorbs the flags' negative vertical margin. That margin buys a large tap
+       target without making the bar taller, which works while the flags share a
+       row with the labels, because the labels set the row height. Once the bar
+       wraps the flags onto a row of their own they set it themselves, and the box
+       hung 6.8px below the bar with the selected outline landing 0.2px off the
+       bottom border, so the box read as breaking the border. This padding makes
+       the row tall enough to contain the flags either way; it costs one pixel of
+       bar height in the unwrapped case. */
+    padding-block: 0.5rem;
   }
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
