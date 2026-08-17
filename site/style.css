@@ -1320,6 +1320,10 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
 .nav-logo { width: 84%; height: 84%; display: block; }
 .nav-logo-clean { display: none; }
 
+/* A filled brand glyph, unlike the stroked icons beside it: with fill:none and a
+   stroke it rendered as a heavy double outline, which is what made it look huge. */
+.nav-fb svg { fill: currentColor; stroke: none; }
+
 .nav-icon:hover { color: var(--ink); }
 .nav-icon.is-copied { color: var(--agave); }
 @media (prefers-reduced-motion: reduce) { .nav-icon { transition: none; } }
@@ -1426,4 +1430,66 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
 /* Wide enough for all four labels on one line, but still the narrow-screen bar. */
 @media (min-width: 38rem) and (max-width: 52rem) {
   .tablist { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+
+/* ---------- phone: the bottom bar takes the flags too ----------
+   Appended deliberately at the end of the sheet. These override rules that appear
+   earlier in the phone block, and this stylesheet has already produced three bugs
+   from equal-specificity rules losing on position.
+
+   The flags leave the top bar, which frees about 100px there and lets the labels
+   grow to a readable size. Two fixed elements share the bar rather than one: CSS
+   cannot reparent the flags into .nav-social, so .nav-social paints the bar across
+   the full width and the flags sit over its right end. Both take the same bottom
+   padding, so they agree on the baseline. */
+@media (max-width: 52rem) {
+  .sectionnav .nav-social {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.4rem;
+    padding: 0.25rem 0.9rem;
+    padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+  }
+  .sectionnav .nav-social .nav-icon { margin-left: 0; }
+
+  .sectionnav .nav-lang {
+    position: fixed;
+    right: 0.9rem;
+    bottom: 0;
+    left: auto;
+    z-index: 61;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    order: 0;
+    margin: 0;
+    padding: 0.25rem 0;
+    padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  /* Bigger, now that there is room: the labels were at 0.62rem because the flags
+     were sharing their row. */
+  .sectionnav a:not(.nav-flag):not(.nav-icon) {
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    padding: 0.7rem 0.36rem;
+  }
+  /* The mark grows with them rather than staying small beside larger text, and the
+     button stays a comfortable tap target without the glyph shouting. */
+  .sectionnav .nav-icon { width: 2.7rem; height: 2.7rem; }
+  .sectionnav .nav-icon svg { width: 1.35rem; height: 1.35rem; }
+
+  body { padding-bottom: 3.6rem; }
 }
