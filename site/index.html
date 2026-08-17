@@ -26,7 +26,7 @@
       <a class="nav-flag" href="es/" lang="es" hreflang="es" aria-label="Cambiar a espa&ntilde;ol" tabindex="-1">🇲🇽</a>
     </div>
   </div>
-  <a href="#reasons">Why</a>
+  <a href="#reasons"><span class="nav-long">Why</span><span class="nav-short">Why</span><span class="nav-min" aria-hidden="true">?</span></a>
   <a href="#proposal"><span class="nav-long">The proposal</span><span class="nav-short">Proposal</span></a>
   <a href="#roadmap"><span class="nav-long">Roadmap</span><span class="nav-short">Plan</span></a>
   <a href="#border"><span class="nav-long">Why here</span><span class="nav-short">Here</span></a>
@@ -76,10 +76,10 @@
 
     <div class="tabs" id="reason-tabs">
       <div class="tablist" role="tablist" aria-label="Reasons">
-        <button class="tab" role="tab" id="tab-env" aria-controls="panel-env" aria-selected="true">Environment</button>
-        <button class="tab" role="tab" id="tab-privacy" aria-controls="panel-privacy" aria-selected="false">Privacy</button>
-        <button class="tab" role="tab" id="tab-own" aria-controls="panel-own" aria-selected="false">Ownership</button>
-        <button class="tab" role="tab" id="tab-svc" aria-controls="panel-svc" aria-selected="false">Services</button>
+        <button class="tab" role="tab" id="tab-env" aria-controls="panel-env" aria-selected="true"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 3.5C11 3.5 4.5 8.5 4.5 17c0 1.4.2 2.6.6 3.6"/><path d="M5.1 20.6C9.5 20.9 20.5 18.5 20.5 3.5"/><path d="M6 19c3.5-5.5 7.5-8.5 12-10.5"/></svg><span>Environment</span></button>
+        <button class="tab" role="tab" id="tab-privacy" aria-controls="panel-privacy" aria-selected="false"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4.2" y="10.2" width="15.6" height="9.6" rx="2.2"/><path d="M8 10.2V7.6a4 4 0 0 1 8 0v2.6"/></svg><span>Privacy</span></button>
+        <button class="tab" role="tab" id="tab-own" aria-controls="panel-own" aria-selected="false"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8.2" cy="15.4" r="3.7"/><path d="M10.9 12.7 19.4 4.2"/><path d="M16.2 7.4 18.6 9.8"/></svg><span>Ownership</span></button>
+        <button class="tab" role="tab" id="tab-svc" aria-controls="panel-svc" aria-selected="false"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.8" y="3.8" width="7" height="7" rx="1.6"/><rect x="13.2" y="3.8" width="7" height="7" rx="1.6"/><rect x="3.8" y="13.2" width="7" height="7" rx="1.6"/><rect x="13.2" y="13.2" width="7" height="7" rx="1.6"/></svg><span>Services</span></button>
       </div>
 
       <div class="panel stack-lg" role="tabpanel" id="panel-env" aria-labelledby="tab-env" tabindex="0">
@@ -466,7 +466,6 @@
         <a class="btn" href="#signup">Add your name &rarr;</a>
         <!--JOIN-INLINE-->
       </div>
-      <p class="fine">This form is ours: it posts to our own server and writes to a file we control. <a href="https://github.com/nelsonblaha/ccdc/blob/main/deploy/app.py">You can read the code that receives it</a>.</p>
       <p class="fine">No donations requested, now or on the confirmation page. There is nothing to donate to yet.</p>
     </div>
   </div>
@@ -516,6 +515,7 @@
         <button class="btn" type="submit">Sign me up &rarr;</button>
         <a class="btn btn-quiet" href="#" data-modal-close>Cancel</a>
       </div>
+      <p class="fine form-provenance">This form is ours: it posts to our own server and writes to a file we control. <a href="https://github.com/nelsonblaha/ccdc/blob/main/deploy/app.py">You can read the code that receives it</a>.</p>
     </form>
   </div>
 </div>
