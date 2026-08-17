@@ -709,3 +709,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   }
   .langbar .flag { font-size: 1.25em; }
 }
+
+/* The "Why" label belongs to the tab bar, so pull it out of the section's
+   2.5rem rhythm and let it sit just above the bar. It cannot live inside .tabs:
+   the tablist is sticky, and wrapping it would shrink its containing block and
+   kill the stickiness. */
+.tabs-label { margin-bottom: -1.9rem; }
