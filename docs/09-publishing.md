@@ -127,7 +127,7 @@ one. `site/` remains plain static files, so Pages can be turned back on in a few
 minutes if that ever becomes useful:
 
 ```bash
-gh api -X POST repos/nelsonblaha/ccdc/pages -f 'build_type=workflow'
+gh api -X POST repos/nelsonblaha/chucodata/pages -f 'build_type=workflow'
 ```
 
 `chucodata.org` was registered on 2026-08-17 and is now the canonical home. It sits
