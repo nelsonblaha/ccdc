@@ -766,7 +766,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   }
   /* A tick per entry — the same gauge language as the water bars. The flag is not
      a destination, so it gets no tick. */
-  .sectionnav a:not(.nav-flag):not(.nav-brand)::before {
+  .sectionnav a:not(.nav-flag):not(.nav-brand):not(.nav-icon)::before {
     content: "";
     flex: none;
     width: 0.85rem;
@@ -774,7 +774,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     background: var(--rule);
     transition: width 140ms ease, background-color 140ms ease;
   }
-  .sectionnav a:hover::before { background: var(--ink-3); }
+  .sectionnav a:not(.nav-icon):hover::before { background: var(--ink-3); }
   .sectionnav a[aria-current] { border-bottom: 0; }
   .sectionnav a[aria-current]::before { width: 1.7rem; background: var(--sun); }
 
@@ -808,7 +808,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sectionnav a:not(.nav-flag):not(.nav-brand)::before { transition: none; }
+  .sectionnav a:not(.nav-flag):not(.nav-brand):not(.nav-icon)::before { transition: none; }
 }
 
 /* ---------- join count ----------
@@ -1159,7 +1159,7 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
-  .sectionnav a:not(.nav-flag):not(.nav-brand) { order: 1; }
+  .sectionnav a:not(.nav-flag):not(.nav-brand):not(.nav-icon) { order: 1; }
   /* No box on the current language here. The two flags read as a switcher on their
      own, and the page's own text says which language you are in. The rail keeps its
      box, where the flags sit beside the mark with no surrounding text to say it. */
@@ -1344,7 +1344,9 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
   .nav-top {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* Left, in line with the labels below, rather than centred in a column whose
+       width is set by the longest label. */
+    align-items: flex-start;
     gap: 0.5rem;
     position: relative;
     padding-bottom: 0.9rem;
