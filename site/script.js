@@ -16,6 +16,7 @@
       failed: 'That did not go through. Try again in a moment.',
       unreachable: 'Could not reach the server. Try again in a moment.',
       signedUp: 'Signed up',
+      tiers: 'Access tiers',
       close: 'Close'
     },
     es: {
@@ -24,6 +25,7 @@
       failed: 'No se pudo enviar. Inténtalo de nuevo en un momento.',
       unreachable: 'No se pudo conectar con el servidor. Inténtalo de nuevo en un momento.',
       signedUp: 'Listo',
+      tiers: 'Niveles de acceso',
       close: 'Cerrar'
     }
   };
@@ -518,6 +520,49 @@
     apply();
   }
 
+  /* ---- the tier cards are selectable ----
+     Nothing is submitted and nothing is remembered: it exists because picking one
+     is satisfying. The roles are added here rather than in the markup so that
+     without a script there is no radio group promising an interaction that cannot
+     happen; the free card simply looks chosen, which it is. */
+  function initTiers(signal) {
+    var group = document.querySelector('.tiers');
+    if (!group) return;
+    var tiers = Array.prototype.slice.call(group.querySelectorAll('.tier'));
+    if (tiers.length < 2) return;
+
+    group.classList.add('is-live');
+    group.setAttribute('role', 'radiogroup');
+    group.setAttribute('aria-label', T().tiers);
+
+    function select(i, focus) {
+      tiers.forEach(function (t, j) {
+        var on = j === i;
+        t.classList.toggle('is-selected', on);
+        t.setAttribute('aria-checked', String(on));
+        // Roving tabindex: the group is one tab stop, arrows move within it.
+        t.setAttribute('tabindex', on ? '0' : '-1');
+      });
+      if (focus) tiers[i].focus();
+    }
+
+    tiers.forEach(function (t, i) {
+      t.setAttribute('role', 'radio');
+      t.addEventListener('click', function () { select(i, true); });
+      t.addEventListener('keydown', function (e) {
+        var last = tiers.length - 1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); select(i === last ? 0 : i + 1, true); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); select(i === 0 ? last : i - 1, true); }
+        else if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+        else if (e.key === 'End') { e.preventDefault(); select(last, true); }
+        else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); select(i, true); }
+      });
+    });
+
+    var start = tiers.findIndex(function (t) { return t.classList.contains('is-selected'); });
+    select(start === -1 ? 0 : start, false);
+  }
+
   var ac = null;
   function boot(restoreTab) {
     if (ac) ac.abort();
@@ -533,6 +578,7 @@
     initLangSwap(signal);
     tidyLanguageUrl();
     initNavIcons();
+    initTiers(signal);
     initTabGrow(signal);
   }
 

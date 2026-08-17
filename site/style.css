@@ -362,8 +362,20 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   color: var(--ink-3);
 }
 .tier p { font-size: 0.93rem; color: var(--ink-2); }
-.tier.is-free { background: var(--sun-soft); }
-.tier.is-free .tier-name { color: var(--sun); }
+/* The highlight belongs to whichever tier is selected, not to the free one
+   permanently. Free simply starts selected, in the markup, so it looks right before
+   any script runs. */
+.tier.is-selected { background: var(--sun-soft); }
+.tier.is-selected .tier-name { color: var(--sun); }
+
+/* Only once the script has made them selectable: no pointer cursor on cards that
+   cannot be clicked. */
+.tiers.is-live .tier { cursor: pointer; transition: background-color 160ms ease; }
+.tiers.is-live .tier:hover:not(.is-selected) {
+  background: color-mix(in srgb, var(--sun-soft) 45%, var(--surface));
+}
+.tiers.is-live .tier:focus-visible { outline: 2px solid var(--focus); outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .tiers.is-live .tier { transition: none; } }
 
 /* ---------- asks ---------- */
 
