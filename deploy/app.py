@@ -209,13 +209,15 @@ def render_page(relative: str) -> Response:
     )
 _hits: dict[str, deque] = {}
 
-# ccdc.blaha.io is canonical. The GitHub Pages copy is a mirror whose form
-# posts here cross-origin, so it needs an explicit allowance. Everything else
-# gets no CORS header and is blocked by the browser.
+# ccdc.blaha.io is canonical and serves the form itself, so it needs no allowance
+# of its own; the entry is kept because the pre-rename alias below is a genuine
+# cross-origin case. Everything else gets no CORS header and is blocked by the
+# browser. The nelsonblaha.github.io entry is gone with GitHub Pages: nothing is
+# served from there any more, and an allowance for an origin we no longer control
+# the content of is worth exactly nothing to us and something to an attacker.
 CORS_ORIGINS = {
     "https://ccdc.blaha.io",
     "https://epcdc.blaha.io",  # pre-rename alias; drop when nothing points at it
-    "https://nelsonblaha.github.io",
 }
 
 

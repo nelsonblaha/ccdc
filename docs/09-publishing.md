@@ -43,9 +43,11 @@ email addresses.
 
 ### Why the form posts to an absolute URL
 
-`https://ccdc.blaha.io/api/signup`, not a relative path, so the GitHub Pages
-mirror's form works too. `deploy/app.py` allows CORS from exactly two origins
-(`ccdc.blaha.io`, `nelsonblaha.github.io`) and nothing else.
+`https://ccdc.blaha.io/api/signup`, not a relative path. This began as a way to
+let a GitHub Pages mirror's form work; Pages is now disabled and the absolute URL
+is kept because it also lets a local copy of `site/` post to the real endpoint
+while working on the page. `deploy/app.py` allows CORS from `ccdc.blaha.io` and
+the pre-rename `epcdc.blaha.io`, and nothing else.
 
 Consequence worth knowing: the form **will not submit from a Claude artifact
 preview**, whose CSP blocks all external requests. Artifacts are for reviewing
@@ -109,16 +111,21 @@ the harder question, then move to B once the docs have been reread with a public
 audience in mind. B is the more on-message answer and probably where this ends
 up — but it should happen because it was chosen, not because Pages needed it.
 
-## Enabling Pages once the repo is public
+## Pages: disabled, deliberately
+
+GitHub Pages was disabled on 2026-08-17 and `.github/workflows/pages.yml` deleted.
+The site is self-hosted at `ccdc.blaha.io` from `deploy/`, which is the version
+with the signup endpoint; a Pages copy could only ever be a read-only shadow of it
+with a form pointing back here, and two URLs for one page is a way to have a stale
+one. `site/` remains plain static files, so Pages can be turned back on in a few
+minutes if that ever becomes useful:
 
 ```bash
-gh api -X POST repos/nelsonblaha/ccdc/pages \
-  -f 'build_type=workflow'
-gh workflow run pages.yml --repo nelsonblaha/ccdc
+gh api -X POST repos/nelsonblaha/ccdc/pages -f 'build_type=workflow'
 ```
 
-Then the site is at `https://nelsonblaha.github.io/ccdc/`. A custom domain
-(`ccdc.org` or similar) needs a `CNAME` file in `site/` and a DNS record.
+The next home is expected to be a domain of its own on the new server rather than
+`github.io`.
 
 ## Editing rules
 
