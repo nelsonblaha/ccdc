@@ -94,13 +94,21 @@ body {
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
 
 h1 {
-  /* Must fit on one line at every width. The headline measures 22.694px of width
-     per 1px of font-size in this face, so the size is derived from the space
-     actually available rather than guessed. */
-  white-space: nowrap;
-  font-size: min(2.85rem, calc((min(68rem, 100vw) - 3rem) / var(--h1-ratio)));
+  /* Narrow screens: wrap, and keep the display size. Fitting 39 characters on one
+     line at 390px would mean a 15px headline, smaller than body text. */
+  font-size: clamp(2rem, 7vw, 2.85rem);
   line-height: 1.04;
   letter-spacing: -0.035em;
+}
+
+/* Wide enough for one line at a display size: the headline measures --h1-ratio px
+   of width per 1px of font-size in this face, measured in the browser, so the size
+   comes from the space actually available rather than a guess. */
+@media (min-width: 62rem) {
+  h1 {
+    white-space: nowrap;
+    font-size: min(2.85rem, calc((min(68rem, 100vw) - 3rem) / var(--h1-ratio)));
+  }
 }
 
 h2 {
