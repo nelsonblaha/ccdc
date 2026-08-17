@@ -547,6 +547,11 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
 
 .panel:focus-visible { outline: none; }
 
+/* The panels also carry .stack-lg, whose `display: flex` beats the UA's
+   `[hidden] { display: none }`. Without this the hidden attribute toggles
+   correctly and changes nothing on screen. Specificity 0-1-1 beats 0-1-0. */
+.panel[hidden] { display: none; }
+
 /* Stacked (no-JS) panels need their own separators; tabbed ones must not have
    them, so the rule is scoped to the un-enhanced container. */
 .tabs:not(.js-tabs) .panel + .panel {
