@@ -743,8 +743,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
      whatever is left over, so the labels spread across the available width.
      `auto` rather than `0` so WHY does not get as much room as WHY HERE. */
   .sectionnav {
-    /* room at the right end for the language flags, which are pinned there */
-    padding-right: 4.75rem;
+    /* room at the right end for the language flags, which are pinned there,
+       including their own padding so they never crowd the last nav item */
+    padding-right: 5.5rem;
   }
   .sectionnav a {
     flex: 1 1 auto;
@@ -775,12 +776,15 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     right: 0;
     z-index: 51;
     height: var(--stick-top, 2.6rem);
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 0.4rem;
+    gap: 0.5rem;
     margin-bottom: 0;
-    padding: 0 0.7rem;
+    /* At least the breathing room a tab gets, and a bit more at the screen edge
+       so the control is not pinned flush against it. */
+    padding: 0.65rem 0.9rem;
     background: var(--surface);
     border-bottom: 1px solid var(--rule);
   }
