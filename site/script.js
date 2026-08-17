@@ -236,8 +236,14 @@
     if (!nav) return;
     function measure() {
       var stuck = getComputedStyle(nav).position === 'sticky';
+      var box = nav.getBoundingClientRect();
       document.documentElement.style.setProperty(
-        '--stick-top', stuck ? nav.getBoundingClientRect().height + 'px' : '0px');
+        '--stick-top', stuck ? box.height + 'px' : '0px');
+      // The join tag sits under the rail and centres itself in the space below it,
+      // which needs the rail's own size. Published for CSS rather than positioned
+      // from here, so the tag keeps working if this never runs.
+      document.documentElement.style.setProperty('--rail-h', box.height + 'px');
+      document.documentElement.style.setProperty('--rail-w', box.width + 'px');
     }
     measure();
     window.addEventListener('resize', measure, { signal: signal });
@@ -401,19 +407,6 @@
     }, { signal: signal });
   }
 
-  /* ---- the rail's mark returns to the top ----
-     A real #top anchor, so it works with scripting off. With JS it scrolls smoothly
-     and leaves no hash behind, matching how the modal cleans up after itself. */
-  function initBrand() {
-    var brand = document.querySelector('.sectionnav a.nav-brand');
-    if (!brand) return;
-    brand.addEventListener('click', function (e) {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
-      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-    });
-  }
 
   var ac = null;
   function boot(restoreTab) {
@@ -428,7 +421,6 @@
     initSpy(signal);
     initLangDock(signal);
     initLangSwap(signal);
-    initBrand();
   }
 
   boot();

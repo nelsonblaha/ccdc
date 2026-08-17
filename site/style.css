@@ -739,10 +739,16 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
 @media (min-width: 84rem) {
   .joininline { display: none; }
+  /* Under the rail, in the left column, centred in the space between the bottom
+     of the menu and the bottom of the window. That midpoint is 75vh plus a
+     quarter of the rail's height, which CSS cannot know on its own, so the
+     script measures the rail into --rail-h and --rail-w. The fallbacks are close
+     enough that a scripting failure still puts it somewhere sensible. */
   .jointag {
     position: fixed;
-    right: 0;
-    top: 50%;
+    left: 2rem;
+    width: var(--rail-w, 8rem);
+    top: calc(75vh + var(--rail-h, 12rem) / 4);
     transform: translateY(-50%);
     z-index: 90;
     display: flex;
@@ -753,8 +759,7 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
     background: var(--surface);
     color: var(--ink-3);
     border: 1px solid var(--rule);
-    border-right: 0;
-    border-radius: 0.4rem 0 0 0.4rem;
+    border-radius: 0.4rem;
     font-family: var(--font-display);
     font-size: 0.56rem;
     line-height: 1.1;
@@ -1065,37 +1070,15 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
 @media (min-width: 84rem) {
   .nav-top {
     display: flex;
-    /* centre rather than baseline: the flag is much larger than the mark, and a
-       shared baseline drags one of them out of place */
     align-items: center;
+    /* The mark is gone, so the flags are the whole dock and centre over the list
+       rather than sitting beside a title. */
+    justify-content: center;
     gap: 0.75rem;
     position: relative;
     padding-bottom: 0.9rem;
   }
 
-  /* Element-qualified for the same reason as the flags: `.sectionnav a` is (0,2,0)
-     and would otherwise override the accent colour and the weight. */
-  .sectionnav a.nav-brand {
-    display: block;
-    text-decoration: none;
-    border-bottom: 0;
-    /* Vertical padding for a comfortable target, cancelled by an equal negative
-       margin so the mark sits exactly where the non-clickable span did. No
-       horizontal padding: a negative side margin would eat the 0.75rem gap that
-       keeps the flags clear of the text. */
-    padding: 0.4rem 0;
-    margin: -0.4rem 0;
-    font-family: var(--font-display);
-    /* Same size and tracking as the nav labels; the accent colour and a heavier
-       weight mark it as the name rather than a sixth destination. */
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.13em;
-    color: var(--sun);
-  }
-
-  .sectionnav a.nav-brand:hover { filter: brightness(1.15); }
 
   .nav-lang {
     display: flex;
