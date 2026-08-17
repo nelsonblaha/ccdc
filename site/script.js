@@ -591,12 +591,21 @@
     requestAnimationFrame(step);
   }
 
-  /* Where a section should come to rest: its top against the sticky offset, not
-     against its scroll-margin. On desktop that is the exact position at which the
-     reason tabs consider themselves pinned and grow, so the growth happens as the
-     scroll finishes rather than a pixel later or not at all. */
+  /* Where a section should come to rest.
+     
+     Against the sticky offset rather than the scroll-margin, and measured from the
+     section's own sticky bar when it has one. The reasons section carries the tab
+     bar, and the section's top sits above it by the section's padding: scrolling to
+     the section left that padding as blank space under the nav, and the tabs only
+     snapped flush when you touched a tab, because switching tabs scrolls to the tab
+     bar rather than to the section.
+     
+     It is also what makes the tabs enlarge on arrival. That growth is keyed on the
+     tab bar's own position, not the section's, so an earlier claim here that the
+     section's top would trigger it was simply wrong. */
   function restingTopFor(el) {
-    var y = 0, n = el;
+    var pin = el.querySelector('#reason-tabs') || el;
+    var y = 0, n = pin;
     while (n) { y += n.offsetTop; n = n.offsetParent; }
     return y - stickTopPx();
   }
