@@ -239,11 +239,10 @@
       var box = nav.getBoundingClientRect();
       document.documentElement.style.setProperty(
         '--stick-top', stuck ? box.height + 'px' : '0px');
-      // The join tag sits under the rail and centres itself in the space below it,
-      // which needs the rail's own size. Published for CSS rather than positioned
-      // from here, so the tag keeps working if this never runs.
+      // The join tag centres itself in the space below the rail, which needs the
+      // rail's height. Published for CSS rather than positioned from here, so the
+      // tag keeps working if this never runs.
       document.documentElement.style.setProperty('--rail-h', box.height + 'px');
-      document.documentElement.style.setProperty('--rail-w', box.width + 'px');
     }
     measure();
     window.addEventListener('resize', measure, { signal: signal });
