@@ -727,3 +727,34 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .hero > .wrap { padding-top: 1.4rem; padding-bottom: 2.75rem; }
   .langbar { margin-bottom: 1.4rem; }
 }
+
+/* ---------- narrow-screen nav and tabs: squish, don't scroll away ----------
+   Exactly one of the two labels is in the DOM's accessibility tree at a time,
+   so a screen reader never hears both. */
+
+.nav-short { display: none; }
+
+@media (max-width: 52rem) {
+  .nav-long { display: none; }
+  .nav-short { display: inline; }
+
+  /* Compress rather than overflow: shorter labels, tighter tracking, less
+     padding, and permission to shrink. overflow-x stays as a safety net so a
+     very narrow viewport can still reach the last item. */
+  .sectionnav a {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0.65rem 0.45rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+
+  .tab {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+  }
+  .tab:first-child { padding-left: 0; }
+}
