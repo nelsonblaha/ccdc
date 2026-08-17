@@ -853,6 +853,10 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
     text-decoration: none;
     transition: border-color 140ms ease, color 140ms ease;
   }
+  /* On its own the word carries the tab, so it takes the size the number would
+     have had rather than sitting small in an empty box. */
+  .jointag .jt-bare { font-size: 0.72rem; letter-spacing: 0.08em; }
+
   .jt-n {
     font-size: 1.2rem;
     font-weight: 700;
