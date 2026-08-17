@@ -191,7 +191,7 @@
     // tabs never leaves you reading from the middle of a panel.
     function scrollToContent() {
       var y = wrap.getBoundingClientRect().top + window.scrollY - stickTop();
-      window.scrollTo({ top: Math.max(0, y), behavior: reduced() ? 'auto' : 'smooth' });
+      glide(Math.max(0, y));
     }
     function select(i, focus, scroll) {
       tabs.forEach(function (t, j) {
@@ -433,7 +433,7 @@
     var home = document.querySelector('.nav-home');
     if (home) {
       home.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+        glide(0);
       });
     }
     var copy = document.querySelector('.nav-copy');
@@ -563,6 +563,67 @@
     select(start === -1 ? 0 : start, false);
   }
 
+  /* ---- one scroll animation for every button that moves the page ----
+     easeInOutQuint: slow at both ends, very fast through the middle. That is the
+     shape asked for, and it is the usual choice for exactly this reason — the ends
+     tell you the page moved and where it settled, the middle refuses to waste your
+     time. The browser's own "smooth" is a gentler curve over a longer, distance
+     dependent duration, which reads as sluggish for a one-section hop.
+
+     Duration scales a little with distance but stays inside a narrow band, so a
+     jump to the next section and a jump to the footer feel like the same gesture. */
+  function easeInOutQuint(t) {
+    return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+  }
+
+  function stickTopPx() {
+    return parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--stick-top')) || 0;
+  }
+
+  function glide(to) {
+    var from = window.scrollY;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var target = Math.max(0, Math.min(to, max));
+    var dist = target - from;
+    if (reduced() || Math.abs(dist) < 2) { window.scrollTo({ top: target, behavior: 'auto' }); return; }
+    var ms = Math.max(280, Math.min(520, 240 + Math.abs(dist) * 0.22));
+    var t0 = null;
+    function step(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / ms);
+      window.scrollTo(0, from + dist * easeInOutQuint(p));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* Where a section should come to rest: its top against the sticky offset, not
+     against its scroll-margin. On desktop that is the exact position at which the
+     reason tabs consider themselves pinned and grow, so the growth happens as the
+     scroll finishes rather than a pixel later or not at all. */
+  function restingTopFor(el) {
+    var y = 0, n = el;
+    while (n) { y += n.offsetTop; n = n.offsetParent; }
+    return y - stickTopPx();
+  }
+
+  function initSectionLinks(signal) {
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var el = document.getElementById(id);
+      // Only section links. #signup belongs to the modal, and citation links rely
+      // on :target, which does not survive an intercepted click.
+      if (!el || !el.hasAttribute('data-section')) return;
+      a.addEventListener('click', function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        glide(restingTopFor(el));
+      });
+    });
+  }
+
   var ac = null;
   function boot(restoreTab) {
     if (ac) ac.abort();
@@ -579,6 +640,7 @@
     tidyLanguageUrl();
     initNavIcons();
     initTiers(signal);
+    initSectionLinks(signal);
     initTabGrow(signal);
   }
 
