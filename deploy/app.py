@@ -628,14 +628,15 @@ def signup_state() -> dict:
 FOUNDER_OFFSET = 1
 
 JOIN_WORDS = {
-    "en": {"lead": "join", "one": "other", "many": "others", "bare": "join"},
-    "es": {"lead": "\u00fanete a", "one": "persona", "many": "personas", "bare": "\u00fanete"},
+    "en": {"lead": "join", "one": "other", "many": "others"},
+    "es": {"lead": "\u00fanete a", "one": "persona", "many": "personas"},
 }
 
-# Below this the invitation is just the word. A small number is worse than no
-# number: "join 2 others" tells a reader the list is nearly empty at the moment
-# they are deciding whether to be on it. The count starts pulling its weight once
-# it reads as a crowd rather than as an admission.
+# Below this the invitation is not shown at all. A small number is worse than no
+# number: "join 2 others" tells a reader the list is nearly empty at the moment they
+# are deciding whether to be on it. The administrator still sees it at any count,
+# because for them it is not social proof, it is the notification and the way to the
+# list.
 JOIN_SHOW_COUNT_ABOVE = 16
 
 
@@ -659,9 +660,10 @@ def join_markup(lang: str) -> tuple[str, str]:
     # discrepancy.
     total = st["total"] + FOUNDER_OFFSET
     w = JOIN_WORDS.get(lang, JOIN_WORDS["en"])
-    show_count = total > JOIN_SHOW_COUNT_ABOVE
     unit = w["one"] if total == 1 else w["many"]
     admin = is_admin()
+    if total <= JOIN_SHOW_COUNT_ABOVE and not admin:
+        return "", ""
     # The lit state is only ever visible to the administrator: a visitor has no
     # watermark, so their tag is never in it.
     lit = " is-new" if admin and st["active"] else ""
@@ -669,8 +671,6 @@ def join_markup(lang: str) -> tuple[str, str]:
         f'<span class="jt-lead">{w["lead"]}</span>'
         f'<span class="jt-n">{total}</span>'
         f'<span class="jt-unit">{unit}</span>'
-        if show_count
-        else f'<span class="jt-lead jt-bare">{w["bare"]}</span>'
     )
     tag = (
         f'<a class="jointag{lit}{" is-admin" if admin else ""}" '
@@ -680,7 +680,7 @@ def join_markup(lang: str) -> tuple[str, str]:
     # nested in an anchor is invalid and behaves unpredictably. The administrator
     # keeps a route to the list through the edge tab, which .is-admin reveals at
     # phone widths where it is otherwise hidden.
-    text = f'{w["lead"]} <b>{total}</b> {unit}' if show_count else w["bare"]
+    text = f'{w["lead"]} <b>{total}</b> {unit}'
     inline = f'<span class="joininline">{text}</span>'
     return tag, inline
 
