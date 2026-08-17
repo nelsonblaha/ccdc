@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY deploy/app.py /app/app.py
 COPY site /app/site
 
-# Runs unprivileged. The signup file lives on a mounted volume owned by this uid.
+# Never runs as root. docker-compose.yml overrides this with the host uid that
+# owns the data volume; this is the fallback for anyone running the image bare.
 RUN adduser -D -u 10001 epcdc
 USER epcdc
 

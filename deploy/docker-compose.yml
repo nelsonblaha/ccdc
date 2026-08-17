@@ -16,6 +16,10 @@ services:
       dockerfile: deploy/Dockerfile
     container_name: epcdc
     restart: unless-stopped
+    # Run as ben so signups.jsonl is owned by ben and readable over plain SSH.
+    # The image's own unprivileged user would write files root/ben cannot read
+    # without sudo, which breaks the documented "just read the file" workflow.
+    user: "1000:1000"
     networks:
       - infra-net
     environment:
