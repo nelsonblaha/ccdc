@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# never commit these — this repo will be shared
+*secret*
+*credential*
+*.pem
+*.key
+service-account*.json
