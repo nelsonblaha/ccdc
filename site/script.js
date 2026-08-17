@@ -250,4 +250,50 @@
 
     targets.forEach(function (t) { io.observe(t); });
   })();
+  /* ---- dock the language switcher into the rail once the hero's own switcher has
+         scrolled away, and hand the accessible control over with it ---- */
+  (function () {
+    var rail = document.querySelector('.sectionnav');
+    var docked = rail && rail.querySelector('.nav-lang');
+    var hero = document.querySelector('.hero .langbar');
+    if (!rail || !docked || !hero) return;
+    var wide = window.matchMedia('(min-width: 84rem)');
+    var on = null, queued = false;
+
+    function apply() {
+      queued = false;
+      var next = hero.getBoundingClientRect().bottom < 0;
+      if (next === on) return;
+      on = next;
+      rail.classList.toggle('has-lang', next);
+      // Only one of the two switchers is exposed at a time, so a screen reader
+      // never meets two language controls.
+      if (wide.matches) {
+        docked.setAttribute('aria-hidden', next ? 'false' : 'true');
+        hero.setAttribute('aria-hidden', next ? 'true' : 'false');
+        docked.querySelectorAll('a').forEach(function (a) {
+          if (next) { a.removeAttribute('tabindex'); } else { a.setAttribute('tabindex', '-1'); }
+        });
+      }
+    }
+
+    function onScroll() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    wide.addEventListener('change', function () {
+      // Leaving desktop hands the accessible control back to the hero.
+      if (!wide.matches) {
+        docked.setAttribute('aria-hidden', 'true');
+        hero.setAttribute('aria-hidden', 'false');
+      }
+      on = null;
+      apply();
+    });
+    apply();
+  })();
 })();

@@ -886,3 +886,56 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 /* The Spanish headline is 48 characters against 39 in English, so it needs more
    width per point of font-size to stay on one line inside the same column. */
 html[lang="es"] { --h1-ratio: 28.1; }
+
+/* ---------- rail brand and docked language control ----------
+   Desktop only: the mobile bar already carries the flags pinned at its right end,
+   and a brand there would crowd five nav labels. The language block starts
+   collapsed and expands when the hero's own switcher scrolls out of view, which
+   pushes the section links down. */
+
+.nav-brand, .nav-lang { display: none; }
+
+@media (min-width: 84rem) {
+  .nav-brand {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    padding-bottom: 0.9rem;
+  }
+
+  .nav-lang {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    font-family: var(--font-display);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    max-height: 0;
+    margin-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-4px);
+    transition: max-height 220ms ease, opacity 170ms ease,
+                transform 220ms ease, margin-bottom 220ms ease;
+  }
+  .sectionnav.has-lang .nav-lang {
+    max-height: 2.5rem;
+    margin-bottom: 0.9rem;
+    opacity: 1;
+    transform: none;
+  }
+  .nav-lang a, .nav-lang span { text-decoration: none; }
+  .nav-lang a { color: var(--ink-3); }
+  .nav-lang a:hover { color: var(--sun); }
+  .nav-lang [aria-current] { color: var(--ink); font-weight: 600; }
+  .nav-lang .sep { color: var(--rule); letter-spacing: 0; }
+  .nav-lang .flag { font-size: 1.05em; letter-spacing: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-lang { transition: none; }
+}
