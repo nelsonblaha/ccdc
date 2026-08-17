@@ -10,6 +10,7 @@ HTTP endpoint that returns stored contact details, on purpose.
 """
 
 import fcntl
+import hashlib
 import json
 import os
 import re
@@ -34,7 +35,43 @@ EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s.]+\.[^@\s]+$")
 PHONE_RE = re.compile(r"^\+?[0-9][0-9\-.() ]{6,19}$")
 HELP_CHOICES = {"updates", "board", "legal", "technical", "spread"}
 
+# --------------------------------------------------------------------------
+# Asset versioning. style.css and script.js are shared by both language pages,
+# so a returning visitor would otherwise run new HTML against a cached old
+# stylesheet until max-age expired. The HTML is served no-cache and its asset
+# references are rewritten to include a content hash, which makes the assets
+# safely immutable and any change visible immediately.
+# --------------------------------------------------------------------------
+
+VERSIONED_ASSETS = ("style.css", "script.js")
+
+
+def _asset_versions() -> dict[str, str]:
+    out = {}
+    for name in VERSIONED_ASSETS:
+        path = SITE_DIR / name
+        if path.exists():
+            out[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:10]
+    return out
+
+
 app = Flask(__name__, static_folder=None)
+ASSET_VERSIONS = _asset_versions()
+
+
+def render_page(relative: str) -> Response:
+    html = (SITE_DIR / relative).read_text(encoding="utf-8")
+    for name, digest in ASSET_VERSIONS.items():
+        for prefix in ("", "../"):
+            for attr in ("href", "src"):
+                html = html.replace(
+                    f'{attr}="{prefix}{name}"', f'{attr}="{prefix}{name}?v={digest}"'
+                )
+    return Response(
+        html,
+        mimetype="text/html",
+        headers={"Cache-Control": "no-cache, must-revalidate"},
+    )
 _hits: dict[str, deque] = {}
 
 # ccdc.blaha.io is canonical. The GitHub Pages copy is a mirror whose form
@@ -245,12 +282,12 @@ def healthz():
 
 @app.get("/")
 def index():
-    return send_from_directory(SITE_DIR, "index.html")
+    return render_page("index.html")
 
 
 @app.get("/es/")
 def index_es():
-    return send_from_directory(SITE_DIR / "es", "index.html")
+    return render_page("es/index.html")
 
 
 @app.get("/es")
@@ -260,7 +297,16 @@ def index_es_bare():
 
 @app.get("/<path:path>")
 def static_files(path: str):
-    return send_from_directory(SITE_DIR, path)
+    resp = send_from_directory(SITE_DIR, path)
+    if path in VERSIONED_ASSETS:
+        # Immutable only when addressed by content hash; otherwise revalidate so
+        # the GitHub Pages mirror and any bare link cannot pin a stale copy.
+        resp.headers["Cache-Control"] = (
+            "public, max-age=31536000, immutable"
+            if request.args.get("v")
+            else "no-cache, must-revalidate"
+        )
+    return resp
 
 
 def _plain_page(title: str, body: str, lang: str = "en") -> str:
