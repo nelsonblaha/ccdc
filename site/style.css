@@ -932,6 +932,8 @@ html[lang="es"] { --h1-ratio: 28.1; }
     transform: none;
   }
   .nav-lang a, .nav-lang span { text-decoration: none; }
+  /* The rail copy sets its own gap: flag then a two-letter code. */
+  .nav-lang a, .nav-lang > span { display: inline-flex; align-items: baseline; gap: 0.3rem; }
   .nav-lang a { color: var(--ink-3); }
   .nav-lang a:hover { color: var(--sun); }
   .nav-lang [aria-current] { color: var(--ink); font-weight: 600; }
