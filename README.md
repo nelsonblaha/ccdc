@@ -62,6 +62,18 @@ custom layer that handles:
 | [04 — MVP architecture](docs/04-mvp-architecture.md) | What to build, in what order |
 | [05 — Governance](docs/05-governance.md) | Getting from "a website I set up" to a real nonprofit: entity choice, the charity-vs-cooperative fork, board, voting members, dues, and what actually makes it trustworthy |
 | [06 — Open questions](docs/06-open-questions.md) | Everything that needs a human decision or an external answer |
+| [07 — Roadmap](docs/07-roadmap.md) | Twelve steps from paperwork to owning hardware, with the detail behind each |
+| [08 — Beyond AI](docs/08-beyond-ai.md) | Why AI is the wedge and not the point: the shared-server argument, and the organizations already doing this |
+| [09 — Publishing](docs/09-publishing.md) | How `site/` gets deployed, and the public-repo decision |
+
+## The public pitch
+
+`site/index.html` is the advertisement — a single self-contained page, no build
+step. It's what you send people. Everything in `docs/` is the evidence behind
+it, which is the whole point: the claims on the site are checkable against the
+research in this repo.
+
+Signup form: <https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform>
 
 `tools/cost_model.py` is a runnable version of the cost model in doc 03 — change
 the assumptions at the top and re-run rather than trusting the numbers in prose.

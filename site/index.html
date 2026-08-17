@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Paso Community Data Center</title>
+<meta name="description" content="A proposal for a nonprofit, community-governed AI service in El Paso — what it would cost, how it would be run, and what doesn't exist yet.">
+<style>
+/* ---------------------------------------------------------------
+   Palette: desert haze ground (cool, violet-biased) against a
+   marigold sun accent. Agave green marks figures we can verify;
+   ocotillo red marks figures that should worry you.
+   Type: monospace display + data (this is an organization whose
+   product is published numbers), humanist sans for reading.
+   --------------------------------------------------------------- */
+:root {
+  --ground:   #ECEDF1;
+  --surface:  #FFFFFF;
+  --sunk:     #E2E4EA;
+  --ink:      #15171E;
+  --ink-2:    #4C5164;
+  --ink-3:    #767C90;
+  --rule:     #D2D5DE;
+  --sun:      #C77503;
+  --sun-soft: #F6E4C4;
+  --agave:    #1C6555;
+  --ocotillo: #A93227;
+  --focus:    #2C5CC5;
+
+  --font-display: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --measure: 34rem;
+  --wide: 60rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:   #101219;
+    --surface:  #181B23;
+    --sunk:     #1E222C;
+    --ink:      #E9EBF1;
+    --ink-2:    #A2A8BC;
+    --ink-3:    #767C90;
+    --rule:     #2B2F3B;
+    --sun:      #F0A32C;
+    --sun-soft: #3A2C13;
+    --agave:    #46A891;
+    --ocotillo: #E4776A;
+    --focus:    #7CA0F0;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground:   #101219;
+  --surface:  #181B23;
+  --sunk:     #1E222C;
+  --ink:      #E9EBF1;
+  --ink-2:    #A2A8BC;
+  --ink-3:    #767C90;
+  --rule:     #2B2F3B;
+  --sun:      #F0A32C;
+  --sun-soft: #3A2C13;
+  --agave:    #46A891;
+  --ocotillo: #E4776A;
+  --focus:    #7CA0F0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.col { max-width: var(--measure); }
+
+/* ---------- type ---------- */
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
+
+h1 {
+  font-size: clamp(2rem, 6.2vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+
+a { color: inherit; text-decoration-color: var(--ink-3); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--sun); }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.lede { font-size: 1.15rem; color: var(--ink-2); }
+
+.fine { font-size: 0.86rem; color: var(--ink-3); line-height: 1.55; }
+
+strong { font-weight: 650; color: var(--ink); }
+
+.num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- structure ---------- */
+
+section { border-top: 1px solid var(--rule); }
+section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+
+.stack { display: flex; flex-direction: column; gap: 1.25rem; }
+.stack-lg { display: flex; flex-direction: column; gap: 2.5rem; }
+.stack-sm { display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* ---------- hero ---------- */
+
+.hero { border-top: none; background: var(--surface); }
+.hero > .wrap { padding-top: 5rem; padding-bottom: 4rem; }
+
+.hero-in { display: flex; flex-direction: column; gap: 1.75rem; max-width: 44rem; }
+
+.sunline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.sunline::before {
+  content: "";
+  width: 2.5rem;
+  height: 2px;
+  background: var(--sun);
+  transform: translateY(-0.25em);
+  flex: none;
+}
+
+/* ---------- buttons ---------- */
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 0.85rem 1.4rem;
+  background: var(--sun);
+  color: #FFF8EC;
+  border: 1px solid var(--sun);
+  text-decoration: none;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+:root[data-theme="dark"] .btn { color: #1A1204; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn { color: #1A1204; }
+}
+
+.btn-quiet {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.btn-quiet:hover { border-color: var(--sun); filter: none; }
+
+/* ---------- data blocks ---------- */
+
+.meter { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.bar-row { display: grid; grid-template-columns: 1fr; gap: 0.35rem; }
+
+.bar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.bar-val { font-family: var(--font-display); font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+
+.bar-track { height: 0.7rem; background: var(--sunk); overflow: hidden; }
+
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--ink-3);
+  transition: width 900ms cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+.bar-fill.is-alert { background: var(--ocotillo); }
+.bar-fill.is-sun { background: var(--sun); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill { transition: none; }
+  .btn { transition: none; }
+}
+
+.ledger { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.ledger th, .ledger td { text-align: left; padding: 0.65rem 0.9rem 0.65rem 0; border-bottom: 1px solid var(--rule); }
+.ledger th {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.ledger td.n { text-align: right; font-family: var(--font-display); font-variant-numeric: tabular-nums; padding-right: 0; white-space: nowrap; }
+.ledger tr.total td { border-bottom: none; border-top: 2px solid var(--ink); font-weight: 700; padding-top: 0.8rem; }
+.ledger .muted { color: var(--ink-3); }
+.scroll-x { overflow-x: auto; }
+
+/* ---------- tier cards ---------- */
+
+.tiers { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+@media (min-width: 44rem) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+
+.tier { background: var(--surface); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.tier-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; }
+.tier-price .per { font-size: 0.8rem; color: var(--ink-3); font-weight: 400; letter-spacing: 0; }
+.tier-name {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.tier p { font-size: 0.93rem; color: var(--ink-2); }
+.tier.is-free { background: var(--sun-soft); }
+.tier.is-free .tier-name { color: var(--sun); }
+
+/* ---------- asks ---------- */
+
+.asks { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+.ask {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.ask-n { font-family: var(--font-display); font-size: 0.8rem; color: var(--sun); font-variant-numeric: tabular-nums; padding-top: 0.28rem; }
+.ask p { font-size: 0.95rem; color: var(--ink-2); margin-top: 0.15rem; }
+
+/* ---------- callout ---------- */
+
+.callout {
+  border-left: 3px solid var(--sun);
+  padding: 0.35rem 0 0.35rem 1.4rem;
+  font-size: 1.05rem;
+}
+
+.quote { border-left: 3px solid var(--rule); padding: 0.35rem 0 0.35rem 1.4rem; }
+.quote p { font-size: 1.02rem; }
+.quote cite { display: block; margin-top: 0.6rem; font-style: normal; font-size: 0.84rem; color: var(--ink-3); }
+
+.honest { background: var(--surface); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+  color: var(--agave);
+}
+.tag.is-none { color: var(--ocotillo); }
+
+.ul { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.ul li { color: var(--ink-2); }
+.ul li strong { color: var(--ink); }
+
+/* ---------- services ---------- */
+
+.svc { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+@media (min-width: 40rem) { .svc { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 58rem) { .svc { grid-template-columns: repeat(3, 1fr); } }
+
+.svc-item { background: var(--surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.2rem; }
+.svc-item b { font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+.svc-item span { font-size: 0.85rem; color: var(--ink-3); }
+
+/* ---------- roadmap ---------- */
+
+.acts { display: flex; flex-direction: column; gap: 3rem; }
+
+.act-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 0.25rem;
+}
+.act-head h3 { font-size: 1.15rem; }
+.act-head .act-when {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.phase {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  gap: 1rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.phase-n {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+  color: var(--ink-3);
+  padding-top: 0.3rem;
+}
+.phase-body { display: flex; flex-direction: column; gap: 0.3rem; }
+.phase-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.7rem; }
+.phase-title h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.phase p { font-size: 0.93rem; color: var(--ink-2); }
+
+.chip {
+  font-family: var(--font-display);
+  font-size: 0.63rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.chip.now { color: var(--sun); border-color: var(--sun); }
+.chip.next { color: var(--agave); border-color: var(--agave); }
+
+footer { border-top: 1px solid var(--rule); background: var(--sunk); }
+footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
+.srcs { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.84rem; }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-in">
+      <p class="sunline">A proposal &middot; El Paso, Texas</p>
+      <h1>A data center El&nbsp;Paso actually owns.</h1>
+      <p class="lede">Meta is building a $10&nbsp;billion AI data center in Northeast El Paso. This is a proposal for a much smaller one that belongs to the city instead — a nonprofit AI service, governed by a board El&nbsp;Pasoans elect, that publishes every number it would rather keep quiet.</p>
+      <div class="cta-row">
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform">Get updates &rarr;</a>
+        <a class="btn btn-quiet" href="#what-doesnt-exist">What doesn't exist yet</a>
+      </div>
+      <p class="fine">No entity. No board. No service running. Nothing to buy and nothing to donate to. Signing up gets you email and nothing else.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ WHY ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Why now</p>
+      <h2>El Paso gets more than 300 sunny days a year. The plan on the table is 813 gas generators.</h2>
+      <p>In October 2025 Meta announced a $1.5&nbsp;billion AI data center in Northeast El Paso, later expanded to a $10&nbsp;billion project. The company committed publicly to matching 100% of the facility's electricity with clean and renewable energy, including on-site solar.</p>
+      <p>El Paso Electric's regulatory filings tell a different story about how the power actually arrives. The filings say large-scale solar and battery storage could <em>theoretically</em> supply the data center, but that such an installation would require <strong>thousands of acres adjacent to the site which are not available</strong>. The utility has instead sought a noncompetitive contract to stack <strong>813 modular natural gas generators</strong> to power it.</p>
+    </div>
+
+    <div class="col">
+      <div class="quote">
+        <p>&ldquo;The company has made public commitments to power their project with renewable energy sources including on-site solar generation, and I think they need to be held to those commitments.&rdquo;</p>
+        <cite>Chris Canales, El Paso City Council</cite>
+      </div>
+    </div>
+
+    <div class="col stack">
+      <h3>And the water</h3>
+      <p>Meta's supply agreement with El Paso Water permits an average of <strong>750,000 gallons of potable water per day</strong>, rising to a permitted average of <strong>1.5 million gallons per day</strong> once the campus is fully built out — more than the Marathon Petroleum refinery in South-Central El Paso bought from El Paso Water last year.</p>
+    </div>
+
+    <div class="meter col" id="meter">
+      <div class="bar-row">
+        <div class="bar-head"><span>Meta &mdash; permitted average, initial</span><span class="bar-val">750,000 gal/day</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="50"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-head"><span>Marathon refinery &mdash; actual average, last year</span><span class="bar-val">1,100,000 gal/day</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="73"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-head"><span>Meta &mdash; permitted average, full build-out</span><span class="bar-val">1,500,000 gal/day</span></div>
+        <div class="bar-track"><div class="bar-fill is-alert" data-w="100"></div></div>
+      </div>
+    </div>
+
+    <div class="col stack">
+      <p class="fine">In fairness, and because getting this right matters: Meta says the facility uses a closed-loop, liquid-cooled system that recirculates the same water, will use <em>zero</em> water for the majority of the year, and will consume water at a rate comparable to a typical West Texas golf course. Those are the company's figures. The permitted maximums above are what the agreement allows.</p>
+      <div class="callout">
+        <p>We are not here to litigate whether Meta keeps its word. We are here to build something where <strong>you don't have to take anyone's word for it.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">The proposal</p>
+      <h2>A nonprofit AI service, owned by nobody and governed by El&nbsp;Paso.</h2>
+      <p>Not a rival to Meta's facility. Something much smaller and completely different in kind: the same sort of AI assistant people pay $20 a month for — chat, document analysis, research, writing help — run by a Texas nonprofit whose board is <strong>elected by El&nbsp;Paso residents</strong> and whose books are open.</p>
+      <p>The founding proposal would put a few commitments beyond the reach of a future board acting alone: <strong>your conversations are never used to train anything</strong>, the finances are published in full, and the electricity and water behind the service are reported honestly — including the parts we're estimating and the years we fall short.</p>
+    </div>
+
+    <div class="col stack-sm">
+      <h3>How access would work</h3>
+      <p class="fine">Proposed starting point. A founding board would set the final structure — this is a direction, not a price list.</p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier is-free">
+        <p class="tier-name">Anyone with an El Paso ID</p>
+        <p class="tier-price">Free<span class="per"> &mdash; a real allowance, not a trial</span></p>
+        <p>The proposal includes a minimum level of free access for any El Paso resident who wants it. This is the point of the organization, not a marketing funnel.</p>
+      </div>
+      <div class="tier">
+        <p class="tier-name">Supporter</p>
+        <p class="tier-price">~$5<span class="per">/month</span></p>
+        <p>More capacity, at roughly what it costs us to provide. A quarter of the commercial price.</p>
+      </div>
+      <div class="tier">
+        <p class="tier-name">Sustainer</p>
+        <p class="tier-price">~$15<span class="per">/month</span></p>
+        <p>Still below the commercial alternative. The surplus pays for everyone on the free tier.</p>
+      </div>
+      <div class="tier">
+        <p class="tier-name">Voting member</p>
+        <p class="tier-price">Flat dues<span class="per"> &mdash; waived on request</span></p>
+        <p>Buys a vote for the board, a seat at the annual meeting, and the right to inspect the books. <strong>It does not buy compute.</strong> You don't have to subscribe to vote, or vote to subscribe.</p>
+      </div>
+    </div>
+
+    <div class="col">
+      <p class="fine">Dues waived on request, no questions asked. If governance costs $30, the organization is governed by people who have $30.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY A SERVER ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Why this is worth doing now</p>
+      <h2>People have been self-hosting for twenty years. AI is the first thing that made chipping in together worth the trouble.</h2>
+      <p>There is already a large movement of people running their own software instead of renting it from five companies — Nextcloud instead of Google Drive, Mastodon instead of X, Matrix instead of Discord, Jellyfin instead of Netflix, Immich instead of Google Photos. It works. It's mature. Millions of people do it.</p>
+      <p>And going in on a shared server together was never quite worth the hassle. Any one of those services runs happily on a cheap virtual machine or an old desktop in a closet. Once you add the cost of <em>organizing</em> — agreeing on who administers it, who pays, who's accountable when it breaks — pooling money cost more than it saved. So mostly people didn't.</p>
+      <div class="callout">
+        <p><strong>Serious AI is the first self-hosted service where the hardware is genuinely expensive and genuinely lumpy.</strong> You cannot run it on a Raspberry Pi in a closet. For the first time, pooling is obviously worth it.</p>
+      </div>
+      <p>Here's the part that makes this a data center and not a chatbot: once the hard thing exists — the machine, the organization, the board, the billing, the person on call — <strong>every additional service costs almost nothing to add.</strong> The expensive part was never the software. It was the trust and the coordination, and those are one-time costs.</p>
+      <p>So the AI is the reason to finally do it. It isn't the point.</p>
+    </div>
+
+    <div class="col stack-sm">
+      <h3>What else one shared machine could run</h3>
+      <p class="fine">Candidates, not commitments. Members would decide what's worth running and in what order.</p>
+    </div>
+
+    <div class="svc">
+      <div class="svc-item"><b>Nextcloud</b><span>Files, calendar, contacts, documents</span></div>
+      <div class="svc-item"><b>Matrix</b><span>Group chat, in place of Discord or Slack</span></div>
+      <div class="svc-item"><b>Mastodon</b><span>A local social feed nobody sells ads against</span></div>
+      <div class="svc-item"><b>Immich</b><span>Photo backup, in place of Google Photos</span></div>
+      <div class="svc-item"><b>Jitsi</b><span>Video calls without a seat license</span></div>
+      <div class="svc-item"><b>SearXNG</b><span>Web search with no tracking and no ads</span></div>
+      <div class="svc-item"><b>Email &amp; lists</b><span>For local nonprofits and neighborhood groups</span></div>
+      <div class="svc-item"><b>Web hosting</b><span>For El Paso organizations that can't afford it</span></div>
+      <div class="svc-item"><b>Backups</b><span>Somewhere other than a company in Seattle</span></div>
+    </div>
+
+    <div class="col stack">
+      <h3>This has been done before</h3>
+      <p><strong>May First Movement Technology</strong> is a US nonprofit membership cooperative where members pay dues, collectively own the equipment, and use it for hosting, email, and Nextcloud accounts. <strong>CHATONS</strong> is a French-founded collective of more than seventy small, ethical, transparent hosts offering exactly these services as an alternative to the big five. And the closest local ancestor is older than any of it: <strong>rural electric cooperatives</strong>, formed because the utilities wouldn't serve people the market found inconvenient.</p>
+      <p>None of this is a novel idea. What would be new is doing it in El&nbsp;Paso, on purpose, in the middle of an argument about who gets to build data centers here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COST ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">The whole budget</p>
+      <h2>Here is the entire first year, in public, before anyone has given us a dollar.</h2>
+      <p>Most of this is cheaper than people expect. One modest server runs the software; the real expense is the AI itself, billed by the word. Modeled at <strong>200 members</strong> at ordinary usage:</p>
+    </div>
+
+    <div class="col scroll-x">
+      <table class="ledger">
+        <thead>
+          <tr><th>Line item</th><th class="n">Per month</th><th class="n">Per year</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Server, storage, bandwidth</td><td class="n">$65</td><td class="n">$780</td></tr>
+          <tr><td>AI usage &mdash; 200 members &times; ~$1.07</td><td class="n">$214</td><td class="n">$2,565</td></tr>
+          <tr><td>Domain, email, monitoring</td><td class="n">$15</td><td class="n">$180</td></tr>
+          <tr><td class="muted">Google's nonprofit cloud credit</td><td class="n muted">&mdash;</td><td class="n muted">up to &minus;$10,000</td></tr>
+          <tr class="total"><td>Projected first-year cost</td><td class="n">$294</td><td class="n">$3,525</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col stack">
+      <p>For comparison, a single ChatGPT Plus subscription is <span class="num">$20</span> a month — <span class="num">$240</span> a year for one person. The projected budget above serves two hundred.</p>
+      <p>The largest line item in year one isn't technical at all. It's the lawyer who writes bylaws strong enough that a future board can't quietly walk away from the promises in them.</p>
+      <p class="fine">Every figure here comes from published vendor pricing and a cost model you can run yourself. When the numbers change, this page changes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">The roadmap</p>
+      <h2>Twelve steps, in order, so you can hold us to them.</h2>
+      <p>Published in advance and on purpose. A plan you can only read after the fact isn't a plan, it's a press release.</p>
+    </div>
+
+    <div class="acts">
+
+      <div>
+        <div class="act-head">
+          <h3>Act I &mdash; Exist</h3>
+          <span class="act-when">Before anything else</span>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">01</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Find out if anyone wants this</h4><span class="chip now">Now</span></div>
+            <p>A list of El Pasoans who'd use it. If that list stays short, this shouldn't exist, and we'll say so instead of pushing ahead.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">02</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Recruit three founding directors</h4><span class="chip now">Now</span></div>
+            <p>Texas requires at least three. The board is the product here — people are being asked to trust this <em>because of who sits on it</em>. At least one should be someone willing to vote against the founder in public.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">03</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>File the certificate of formation</h4><span class="chip next">Next</span></div>
+            <p>Form 202 with the Texas Secretary of State — $25. It names the purpose, whether there are voting members, and where the assets go if the organization ever dissolves. Those three lines are the mission lock, and they're hard to change later on purpose.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">04</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Adopt bylaws that bind us</h4><span class="chip next">Next</span></div>
+            <p>A supermajority of the <em>membership</em> — not just the board — required to change the core commitments. A date certain for the first member election. No permanent founder seat. Written while the founder still controls the process, which is the only moment it means anything.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="act-head">
+          <h3>Act II &mdash; Serve</h3>
+          <span class="act-when">The first year</span>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">05</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Find a fiscal sponsor</h4><span class="chip">Bridge</span></div>
+            <p>An existing charity that can accept tax-deductible donations on the project's behalf while the IRS application is pending. It also means someone else's bookkeeper is watching the money from day one.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">06</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Turn the service on</h4><span class="chip">Build</span></div>
+            <p>One server, open-source software, free access for El&nbsp;Paso residents, paid tiers below cost. Metered from the first day so a generous promise can't quietly bankrupt us — running out of money because we didn't measure it is exactly the failure this organization exists to be the opposite of.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">07</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Become tax-exempt</h4><span class="chip">Paperwork</span></div>
+            <p>IRS Form 1023 — the long form, not the short one, because the short one is an attestation nobody checks and we'd rather be checked. Then Texas franchise and sales tax exemption, the nonprofit payment-processing rate, and Google's nonprofit cloud credits.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">08</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Hand over the keys</h4><span class="chip">The point</span></div>
+            <p>First member election. Board seated by vote rather than by appointment. Any special founder role expires on the schedule written in step 04. First annual report and tax return published the day they're filed.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="act-head">
+          <h3>Act III &mdash; Grow into the name</h3>
+          <span class="act-when">Year two and beyond</span>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">09</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>One machine, many services</h4><span class="chip">Members decide</span></div>
+            <p>Files, chat, photos, video calls, email for local nonprofits. The machine and the organization already exist by this point; adding a service is nearly free. Members vote on what's worth running and in what order.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">10</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Decide out loud what we won't do</h4><span class="chip">Ongoing</span></div>
+            <p>Which AI models we're willing to buy and from whom. How long conversations are kept. Whose money we take. What we refuse to host. These are genuinely hard and reasonable people disagree — so the deliberation gets published, not just the verdict.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">11</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Own the hardware, here</h4><span class="chip">The name</span></div>
+            <p>Local machines in El&nbsp;Paso with a published water and power budget, sized honestly and reported against every year — including the years we miss. Until then we rent, and we say so.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <span class="phase-n">12</span>
+          <div class="phase-body">
+            <div class="phase-title"><h4>Find allies and build something bigger</h4><span class="chip">The horizon</span></div>
+            <p>One city's nonprofit can't out-build a hyperscaler. A network of them, pooling purchasing and operations with cooperative hosts, municipal broadband projects, and other community data centers, can start to make the case that data centers could be built <em>better</em> — and demonstrate it rather than demand it.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ HONESTY ============ -->
+<section class="honest" id="what-doesnt-exist">
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">What doesn't exist yet</p>
+      <h2>An organization built on somebody else's unkept promises should be careful about making its own.</h2>
+      <p>So, plainly, as of today:</p>
+      <ul class="ul">
+        <li><span class="tag is-none">None</span> &nbsp;<strong>There is no legal entity.</strong> No corporation has been formed.</li>
+        <li><span class="tag is-none">None</span> &nbsp;<strong>There is no board.</strong> Three directors are required and none have been recruited.</li>
+        <li><span class="tag is-none">None</span> &nbsp;<strong>There is no tax exemption.</strong> Nothing given to this project is tax-deductible, because there is nothing to give to.</li>
+        <li><span class="tag is-none">None</span> &nbsp;<strong>There is no service running.</strong> Not in beta, not in private preview. It has not been built.</li>
+        <li><span class="tag">Done</span> &nbsp;<strong>The research is finished.</strong> What it would cost, what software it runs on, how it would have to be structured legally, and what could go wrong.</li>
+      </ul>
+    </div>
+
+    <div class="col stack">
+      <h3>Also worth saying out loud</h3>
+      <p>The name says <em>data center</em>, and on day one this would not own one. Running our own AI hardware costs more and delivers worse results than buying capacity until there are thousands of members — so at the start, this would be a nonprofit renting from the same large companies El&nbsp;Paso is arguing with, under local governance and with the receipts published.</p>
+      <p>That's a real limitation and it belongs on the front page rather than in a footnote. It's also why steps <strong>09</strong> and <strong>11</strong> exist: the machine that earns the name is the one running files and chat and photos and backups for the whole city, and eventually sitting in El&nbsp;Paso. Until it does, we rent, and we say so every year — <strong>including the years we miss the milestone.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASK ============ -->
+<section>
+  <div class="wrap stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">What would actually help</p>
+      <h2>This needs about six people before it needs money.</h2>
+    </div>
+
+    <div class="col asks">
+      <div class="ask">
+        <span class="ask-n">01</span>
+        <div>
+          <h3>Add your email</h3>
+          <p>The single most useful thing. A list of El Pasoans who want this is the argument for forming it, and it costs you nothing.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <span class="ask-n">02</span>
+        <div>
+          <h3>Be a founding director &mdash; especially if you'll disagree</h3>
+          <p>Texas requires at least three. A founder plus two friends is legally sufficient and worth nothing. The most valuable person here is one who will vote against the founder in public.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <span class="ask-n">03</span>
+        <div>
+          <h3>Know Texas nonprofit law?</h3>
+          <p>The bylaws are the product. Getting the mission lock, the member voting rules, and the conflict-of-interest policy right is the difference between a real institution and a website.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <span class="ask-n">04</span>
+        <div>
+          <h3>Tell one person</h3>
+          <p>Preferably someone who was in the room for the council hearings, or who has been paying the water bill and reading the news and getting angry about it.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <span class="ask-n">05</span>
+        <div>
+          <h3>Hold off on the money</h3>
+          <p>Donations aren't being accepted, because there's no entity to accept them and no exemption to make them deductible. When that changes, this page will say so.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col stack">
+      <div class="cta-row">
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform">Sign up for updates &rarr;</a>
+      </div>
+      <p class="fine">Email or phone, and nothing else. No donations requested, now or on the confirmation page.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap col stack">
+    <p class="eyebrow">Sources</p>
+    <div class="srcs">
+      <a href="https://elpasomatters.org/2025/10/15/meta-el-paso-texas-data-center-water-electricity-borderplex-alliance/">El Paso Matters &mdash; $1.5B announcement</a>
+      <a href="https://elpasomatters.org/2026/03/29/meta-data-center-el-paso-10-billion-expansion-water-gas-electricity-usage/">El Paso Matters &mdash; El Paso Electric filings</a>
+      <a href="https://www.texastribune.org/2026/01/26/texas-el-paso-meta-data-center-natural-gas-power-plant/">Texas Tribune &mdash; natural gas plan</a>
+      <a href="https://insideclimatenews.org/news/21012026/meta-data-center-in-sunny-el-paso-will-rely-on-natural-gas/">Inside Climate News</a>
+      <a href="https://cbs4local.com/newsletter-daily/meta-touts-10b-el-paso-data-center-water-and-grid-pledges-as-council-weighs-incentives">CBS4 &mdash; water and grid pledges</a>
+    </div>
+    <p class="fine">This page is a proposal published by a private individual. It is not affiliated with, endorsed by, or speaking for the City of El&nbsp;Paso, El&nbsp;Paso Water, El&nbsp;Paso Electric, or Meta. Figures attributed to Meta are the company's own public statements. Cost figures are modeled from published vendor pricing and will change.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var bars = document.querySelectorAll('.bar-fill');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function fill(el) { el.style.width = el.getAttribute('data-w') + '%'; }
+  if (reduce || !('IntersectionObserver' in window)) {
+    bars.forEach(fill);
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      setTimeout(function () { fill(el); }, Array.prototype.indexOf.call(bars, el) * 130);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+  bars.forEach(function (b) { io.observe(b); });
+})();
+</script>
+
+</body>
+</html>
