@@ -124,12 +124,17 @@ minutes if that ever becomes useful:
 gh api -X POST repos/nelsonblaha/ccdc/pages -f 'build_type=workflow'
 ```
 
-The next home is expected to be a domain of its own on the new server rather than
-`github.io`. Candidates are `chucodc.org` and `chucodata.org` (doc 06, item 9).
-`ccdc.blaha.io` is a personal hostname and is fine for a proposal nobody has
-joined yet; it is not where a nonprofit that takes dues should live, and the
-admin session in `deploy/app.py` was built so that moving is a matter of setting
-a new secret rather than rewriting anything.
+`chucodata.org` was registered on 2026-08-17 and is now the canonical home. It sits
+in the same Cloudflare account as `blaha.io`, proxied, with the apex and `www`
+pointing at the same origin nginx-proxy already answers on. `ccdc.blaha.io` and
+`epcdc.blaha.io` 301 to it, path and query preserved, controlled by
+`CCDC_CANONICAL_REDIRECT` in the deploy environment.
+
+Two things that redirect deliberately does not touch. `/api/` is exempt, because a
+POST through a 301 is downgraded to GET by browsers and a reader holding an older
+copy of the page would have their signup silently dropped rather than redirected;
+those origins stay in `CORS_ORIGINS` for the same reason. `/healthz` is exempt
+because Docker calls it with a bare host header.
 
 ## Editing rules
 

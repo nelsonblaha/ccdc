@@ -28,7 +28,7 @@
     }
   };
 
-  var ENDPOINT = 'https://ccdc.blaha.io/api/signup';
+  var ENDPOINT = 'https://chucodata.org/api/signup';
   function T() { return STRINGS[document.documentElement.lang] || STRINGS.en; }
   function reduced() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
 

@@ -233,8 +233,13 @@ _hits: dict[str, deque] = {}
 # served from there any more, and an allowance for an origin we no longer control
 # the content of is worth exactly nothing to us and something to an attacker.
 CORS_ORIGINS = {
+    "https://chucodata.org",
+    "https://www.chucodata.org",
+    # Kept so a page a reader already had open can still post after the move. The
+    # redirect deliberately exempts /api/, so those posts arrive here rather than
+    # being turned into a GET by a 301.
     "https://ccdc.blaha.io",
-    "https://epcdc.blaha.io",  # pre-rename alias; drop when nothing points at it
+    "https://epcdc.blaha.io",
 }
 
 
