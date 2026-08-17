@@ -25,9 +25,12 @@ services:
     environment:
       # ccdc.blaha.io is canonical; epcdc.blaha.io is kept so links shared
       # before the rename still resolve. Drop the alias once nothing points at it.
-      - VIRTUAL_HOST=ccdc.blaha.io,epcdc.blaha.io
+      # chucodata.org is the intended permanent home (doc 06, item 9). Added before
+      # DNS propagates on purpose: the vhost is inert until something resolves here,
+      # and this way the site answers the moment it does.
+      - VIRTUAL_HOST=ccdc.blaha.io,epcdc.blaha.io,chucodata.org,www.chucodata.org
       - VIRTUAL_PORT=8100
-      - LETSENCRYPT_HOST=ccdc.blaha.io,epcdc.blaha.io
+      - LETSENCRYPT_HOST=ccdc.blaha.io,epcdc.blaha.io,chucodata.org,www.chucodata.org
       - LETSENCRYPT_EMAIL=nelson.blaha@gmail.com
     # Admin credentials live in deploy/.env on the host, which is gitignored.
     # This repo is public: a password hash in git is an invitation to crack it
