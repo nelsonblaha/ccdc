@@ -724,8 +724,9 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
    of text rather than crowding either edge. */
 
 @media (max-width: 52rem) {
-  .hero > .wrap { padding-top: 1.4rem; padding-bottom: 2.75rem; }
-  .langbar { margin-bottom: 1.4rem; }
+  /* The switcher is pinned in the sticky bar now, so the hero does not reserve
+     vertical space for it. */
+  .hero > .wrap { padding-top: 1.6rem; padding-bottom: 2.75rem; }
 }
 
 /* ---------- narrow-screen nav and tabs: squish, don't scroll away ----------
@@ -738,25 +739,51 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .nav-long { display: none; }
   .nav-short { display: inline; }
 
-  /* Compress rather than overflow: shorter labels, tighter tracking, less
-     padding, and permission to shrink. overflow-x stays as a safety net so a
-     very narrow viewport can still reach the last item. */
+  /* Fill the bar rather than clustering left: size to content, then grow into
+     whatever is left over, so the labels spread across the available width.
+     `auto` rather than `0` so WHY does not get as much room as WHY HERE. */
+  .sectionnav {
+    /* room at the right end for the language flags, which are pinned there */
+    padding-right: 4.75rem;
+  }
   .sectionnav a {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
-    padding: 0.65rem 0.45rem;
+    text-align: center;
+    padding: 0.65rem 0.3rem;
     font-size: 0.62rem;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
   }
 
   .tab {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
-    padding: 0.7rem 0.5rem;
+    text-align: center;
+    padding: 0.7rem 0.35rem;
     font-size: 0.66rem;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
   }
-  .tab:first-child { padding-left: 0; }
+  .tab:first-child { padding-left: 0.35rem; }
+
+  /* The switcher moves up into the sticky bar, right-aligned. Fixed rather than
+     re-parented, so there is still exactly one language control in the DOM.
+     Height tracks --stick-top, which JS measures from the nav itself, so the two
+     line up exactly. */
+  .langbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 51;
+    height: var(--stick-top, 2.6rem);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-bottom: 0;
+    padding: 0 0.7rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+  }
 }
 
 /* ---------- hero satellite figure ----------
