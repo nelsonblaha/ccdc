@@ -86,7 +86,10 @@ drift. It's what you send people. Everything in `docs/` is the evidence behind
 it, which is the whole point: the claims on the site are checkable against the
 research in this repo.
 
-Signup form: <https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNMDb3yvZg5OyNvlqQu_T3Doxkw/viewform>
+Live at <https://ccdc.blaha.io/> (Spanish: <https://ccdc.blaha.io/es/>), and
+<https://ccdc.blaha.io/#signup> opens it with the signup form already up. The form
+is ours: it posts to `deploy/app.py`, which appends to a JSONL file on the host.
+No Google Form, no third-party form service, nothing that sees the list but us.
 
 `tools/cost_model.py` is a runnable version of the cost model in doc 03 — change
 the assumptions at the top and re-run rather than trusting the numbers in prose.
