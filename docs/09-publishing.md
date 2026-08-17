@@ -3,7 +3,26 @@
 `site/index.html` is the public advertisement — a single self-contained file,
 no build step, no dependencies, no external requests.
 
-## Decision needed: GitHub Pages requires a public repo
+## Decision made (2026-08-16): this repo is public
+
+Option B below was chosen deliberately. The research, the budget, the open
+questions, and the analysis of how this project could fail — including how a
+founder-controlled board fails the independence test — are all public alongside
+the pitch.
+
+That is the point. An organization whose argument is "don't take our word for
+it" should not keep its own risk assessment private. Anyone evaluating whether
+to join, donate, or serve on the board can read exactly what we know and what we
+don't.
+
+The consequence to hold onto: **these documents are now written for a public
+audience.** They address the founder directly in places because that is who
+they were drafted for, and that's fine — but new material should assume a
+skeptical outside reader, not an internal one.
+
+The options as they were weighed:
+
+## Background: GitHub Pages requires a public repo
 
 `.github/workflows/pages.yml` deploys `site/` to GitHub Pages. It will not run
 until two things are true:

@@ -78,6 +78,21 @@ Signup form: <https://docs.google.com/forms/d/e/1FAIpQLSff0rCCyxWvrcFeuTxaHyQrNM
 `tools/cost_model.py` is a runnable version of the cost model in doc 03 — change
 the assumptions at the top and re-run rather than trusting the numbers in prose.
 
+## Why this is all public
+
+Including the parts that aren't flattering. `docs/05` works through how a
+founder-controlled board fails an independence test and what it would take to
+pay the founder defensibly. `docs/06` is a list of everything still unresolved.
+`docs/03` is the entire budget.
+
+An organization whose pitch is *don't take our word for it* has no business
+keeping its own risk assessment private. If you're deciding whether to join,
+donate, or serve on the board, you should be able to read exactly what we know
+and what we don't.
+
+These documents were drafted for the founder and address the reader as "you" in
+places. Read them as working notes, not marketing.
+
 ## Sourcing convention
 
 Because this repo will be shown to prospective board members and donors, every
