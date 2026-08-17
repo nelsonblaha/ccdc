@@ -1539,3 +1539,23 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
 }
 .copied-toast.is-on { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .copied-toast { transition: none; } }
+
+/* ---------- phone: the top bar is not a scroll container ----------
+   Reported: in Facebook's in-app browser on Android the top of the sticky bar is
+   clipped while scrolling.
+
+   .sectionnav is sticky and also carries overflow-x: auto, from when the labels
+   were expected to scroll sideways. Setting one axis to auto makes the other
+   compute to auto as well, so the bar became its own vertical scrollport: any
+   content even slightly taller than the bar can sit scrolled out of view at the
+   top, and in-app browsers, which resize the viewport as their chrome collapses,
+   are where that shows up.
+
+   The labels have fitted on one row since they were shortened, so nothing needs to
+   scroll here. flex-wrap stays as the fallback for a device narrow enough to defeat
+   even the short forms: wrapping to two rows is a better failure than clipping. */
+@media (max-width: 52rem) {
+  .sectionnav {
+    overflow: visible;
+  }
+}
