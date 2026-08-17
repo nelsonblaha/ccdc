@@ -716,3 +716,14 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
    the tablist is sticky, and wrapping it would shrink its containing block and
    kill the stickiness. */
 .tabs-label { margin-bottom: -1.9rem; }
+
+/* ---------- mobile hero spacing ----------
+   5rem of hero padding is generous on a phone, especially under the sticky
+   section nav. Tighten it, and give the language switcher equal space above and
+   below so it reads as centred in the band between the top and the first line
+   of text rather than crowding either edge. */
+
+@media (max-width: 52rem) {
+  .hero > .wrap { padding-top: 1.4rem; padding-bottom: 2.75rem; }
+  .langbar { margin-bottom: 1.4rem; }
+}
