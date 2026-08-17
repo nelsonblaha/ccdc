@@ -113,7 +113,7 @@ app = create_app(
         # is the notification and the way to the list.
         show_count_above=16,
         # CHUCODATA_SECRET_KEY, CHUCODATA_ADMIN_HASH_FILE, CHUCODATA_CANONICAL_REDIRECT.
-        env_prefix="CCDC",
+        env_prefix="CHUCODATA",
         # Unchanged across the extraction on purpose: a new cookie name would sign
         # out every device that is already signed in.
         session_cookie_name="ccdc_admin",
