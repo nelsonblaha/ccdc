@@ -1019,6 +1019,12 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
      clears it with room rather than by a pixel. */
   .hero .cta-row > .btn { padding-left: 1.1rem; padding-right: 1.1rem; }
 
+  /* The bar carries the mark at these widths, and it is on screen the whole time.
+     A second one in the headline is the same mark twice, so the headline gives it
+     up rather than the navigation. Above this width the bar shows the link icon at
+     rest and only swaps to the star once scrolled, so the two never compete. */
+  .hero-star { display: none; }
+
   /* Fill the bar rather than clustering left: size to content, then grow into
      whatever is left over, so the labels spread across the available width.
      `auto` rather than `0` so WHY does not get as much room as WHY HERE.
