@@ -430,7 +430,71 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 .form-msg.ok { border-color: var(--agave); color: var(--agave); }
 .form-msg.err { border-color: var(--ocotillo); color: var(--ocotillo); }
 
-.form-card button { align-self: flex-start; cursor: pointer; font: inherit; }
+.form-card button { cursor: pointer; font: inherit; }
+
+/* ---------- signup modal ---------- */
+
+.modal { display: none; position: fixed; inset: 0; z-index: 100; }
+/* :target is the no-JS path; .is-open is the scripted one. Single rule for both
+   so nothing later has to override an earlier display value. */
+.modal:target, .modal.is-open { display: grid; place-items: center; padding: 1rem; }
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 18, 0.55);
+  backdrop-filter: blur(2px);
+  display: block;
+}
+
+.modal-card {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  max-width: 34rem;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  box-shadow: 0 18px 50px rgba(10, 12, 18, 0.28);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-card .form-card { border: 0; padding: 0; background: transparent; }
+
+.modal-close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 0.25rem 0.4rem;
+}
+.modal-close:hover { color: var(--sun); }
+
+/* The Cancel button reuses .modal-close for behaviour, not for the × styling. */
+.modal-card .cta-row .modal-close {
+  position: static;
+  font-size: 0.92rem;
+  padding: 0.85rem 1.4rem;
+  color: var(--ink);
+}
+
+body.modal-open { overflow: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal:target .modal-card, .modal.is-open .modal-card { animation: modal-in 160ms ease-out; }
+  @keyframes modal-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+}
 
 footer { border-top: 1px solid var(--rule); background: var(--sunk); }
 footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
@@ -820,48 +884,67 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
       </div>
     </div>
 
-    <div class="col stack" id="signup">
-      <h3>Add your name</h3>
-      <form class="form-card" method="post" action="https://epcdc.blaha.io/api/signup">
-        <div class="field">
-          <label for="contact">Email or phone <span aria-hidden="true">*</span></label>
-          <input type="text" id="contact" name="contact" required autocomplete="email" placeholder="you@example.com">
-          <p class="hint">Used to email you about this project. Nothing else, ever &mdash; not sold, not shared, not handed to an advertiser.</p>
-        </div>
-
-        <div class="field">
-          <label for="name">Name <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
-          <input type="text" id="name" name="name" autocomplete="name">
-        </div>
-
-        <fieldset class="checks">
-          <legend>I might be able to help with</legend>
-          <label class="check"><input type="checkbox" name="help" value="updates" checked> Nothing &mdash; just keep me posted</label>
-          <label class="check"><input type="checkbox" name="help" value="board"> Serving as a founding director</label>
-          <label class="check"><input type="checkbox" name="help" value="legal"> Texas nonprofit law, bylaws, or filings</label>
-          <label class="check"><input type="checkbox" name="help" value="technical"> Running servers or writing software</label>
-          <label class="check"><input type="checkbox" name="help" value="spread"> Telling people about it</label>
-        </fieldset>
-
-        <div class="field">
-          <label for="note">Anything you want to say <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
-          <textarea id="note" name="note" rows="3"></textarea>
-        </div>
-
-        <div class="hp" aria-hidden="true">
-          <label for="website">Leave this empty</label>
-          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
-        </div>
-        <input type="hidden" name="t" id="t" value="">
-
-        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
-        <button class="btn" type="submit">Sign me up &rarr;</button>
-      </form>
+    <div class="col stack">
+      <div class="cta-row">
+        <a class="btn" href="#signup">Add your name &rarr;</a>
+      </div>
       <p class="fine">This form is ours. It posts to our own server and writes to a file we control &mdash; no Google Forms, no Mailchimp, no analytics, no trackers, no cookies. It's a small thing, and it's the entire argument in miniature: <a href="https://github.com/nelsonblaha/epcdc/blob/main/deploy/app.py">you can read the code that receives it</a>.</p>
       <p class="fine">No donations requested, now or on the confirmation page. There is nothing to donate to yet.</p>
     </div>
   </div>
 </section>
+
+<!-- ============ SIGNUP MODAL ============
+     Opens from either "Add your name"/"Get updates" button. The :target rule is
+     the no-JS backbone — the buttons are real anchors to #signup, so the form is
+     reachable and submittable with scripting off. JS upgrades it to a proper
+     modal: focus trap, Esc, backdrop click, scroll lock, focus restored to the
+     trigger, and no hash left in the URL. -->
+<div class="modal" id="signup" role="dialog" aria-modal="true" aria-labelledby="signup-title">
+  <a class="modal-scrim" href="#" tabindex="-1" aria-hidden="true"></a>
+  <div class="modal-card">
+    <a class="modal-close" href="#" aria-label="Close">&times;</a>
+    <h3 id="signup-title">Add your name</h3>
+    <form class="form-card" method="post" action="https://epcdc.blaha.io/api/signup">
+      <div class="field">
+        <label for="contact">Email or phone <span aria-hidden="true">*</span></label>
+        <input type="text" id="contact" name="contact" required autocomplete="email" placeholder="you@example.com">
+        <p class="hint">Used to email you about this project. Nothing else, ever &mdash; not sold, not shared, not handed to an advertiser.</p>
+      </div>
+
+      <div class="field">
+        <label for="name">Name <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="text" id="name" name="name" autocomplete="name">
+      </div>
+
+      <fieldset class="checks">
+        <legend>I might be able to help with</legend>
+        <label class="check"><input type="checkbox" name="help" value="updates" checked> Nothing &mdash; just keep me posted</label>
+        <label class="check"><input type="checkbox" name="help" value="board"> Serving as a founding director</label>
+        <label class="check"><input type="checkbox" name="help" value="legal"> Texas nonprofit law, bylaws, or filings</label>
+        <label class="check"><input type="checkbox" name="help" value="technical"> Running servers or writing software</label>
+        <label class="check"><input type="checkbox" name="help" value="spread"> Telling people about it</label>
+      </fieldset>
+
+      <div class="field">
+        <label for="note">Anything you want to say <span class="hint" style="text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="note" name="note" rows="3"></textarea>
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="website">Leave this empty</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <input type="hidden" name="t" id="t" value="">
+
+      <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+      <div class="cta-row">
+        <button class="btn" type="submit">Sign me up &rarr;</button>
+        <a class="btn btn-quiet modal-close" href="#">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- ============ FOOTER ============ -->
 <footer>
@@ -898,6 +981,67 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
   bars.forEach(function (b) { io.observe(b); });
 })();
 
+/* Signup modal. Without JS the anchors still work via :target — this adds the
+   parts CSS can't: focus trap, Esc, scroll lock, focus restored to the trigger,
+   and no leftover #signup in the URL. */
+(function () {
+  var modal = document.getElementById('signup');
+  if (!modal) return;
+  var card = modal.querySelector('.modal-card');
+  var lastTrigger = null;
+
+  function focusables() {
+    return Array.prototype.filter.call(
+      card.querySelectorAll('a[href], button, input:not([type="hidden"]), textarea, [tabindex]:not([tabindex="-1"])'),
+      function (el) { return el.offsetParent !== null && !el.disabled; }
+    );
+  }
+
+  function open(trigger) {
+    lastTrigger = trigger || null;
+    modal.classList.add('is-open');
+    document.body.classList.add('modal-open');
+    var first = card.querySelector('#contact');
+    if (first) first.focus();
+  }
+
+  function close() {
+    modal.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    // :target would keep it open even after the class is gone.
+    if (location.hash === '#signup') {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+  }
+
+  document.querySelectorAll('a[href="#signup"]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); open(a); });
+  });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target.closest('.modal-close') || e.target.classList.contains('modal-scrim')) {
+      e.preventDefault();
+      close();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!modal.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key !== 'Tab') return;
+    var f = focusables();
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  // Someone arriving on a shared /#signup link gets the scripted modal, not the
+  // bare :target one.
+  if (location.hash === '#signup') open(null);
+})();
+
 /* Signup: posts via fetch for an inline result. Without JS the form still
    submits normally to /api/signup and lands on the /thanks page. */
 (function () {
@@ -931,6 +1075,8 @@ footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
           form.reset();
           say("You're on the list. We'll write when there's something real to report.", 'ok');
           btn.textContent = 'Signed up';
+          var cancel = form.querySelector('.modal-close');
+          if (cancel) cancel.textContent = 'Close';
           return;
         }
         say(res.d.error || 'That did not go through. Try again in a moment.', 'err');
