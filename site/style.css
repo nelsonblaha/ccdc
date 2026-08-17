@@ -1439,65 +1439,76 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
 }
 
 
-/* ---------- phone: the bottom bar takes the flags too ----------
-   Appended deliberately at the end of the sheet. These override rules that appear
-   earlier in the phone block, and this stylesheet has already produced three bugs
-   from equal-specificity rules losing on position.
+/* ---------- phone: a footer bar ----------
+   Appended at the end of the sheet on purpose: these override rules earlier in the
+   phone block, and equal-specificity rules losing on position has caused several
+   bugs in this file.
 
-   The flags leave the top bar, which frees about 100px there and lets the labels
-   grow to a readable size. Two fixed elements share the bar rather than one: CSS
-   cannot reparent the flags into .nav-social, so .nav-social paints the bar across
-   the full width and the flags sit over its right end. Both take the same bottom
-   padding, so they agree on the baseline. */
+   Two fixed elements, not one, because CSS cannot move the flags into .nav-social.
+   .nav-social paints the bar the full width and the flags sit over its right end. The
+   trick to making that look like one bar is that both share a box model exactly: the
+   same bottom padding, the same item size, so their contents land on one line. The
+   flags also give up the negative vertical margins they use in the top bar, which is
+   what was pushing them out of alignment here. */
 @media (max-width: 52rem) {
-  .sectionnav .nav-social {
+  .sectionnav .nav-social,
+  .sectionnav .nav-lang {
     position: fixed;
-    left: 0;
-    right: 0;
     bottom: 0;
-    z-index: 60;
     display: flex;
     align-items: center;
+    gap: 0.4rem;
+    padding-top: 0.3rem;
+    padding-bottom: max(0.3rem, env(safe-area-inset-bottom));
+  }
+  .sectionnav .nav-social {
+    left: 0;
+    right: 0;
+    z-index: 60;
     justify-content: flex-start;
-    gap: 1.4rem;
-    padding: 0.25rem 0.9rem;
-    padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
     background: var(--surface);
     border-top: 1px solid var(--rule);
   }
-  .sectionnav .nav-social .nav-icon { margin-left: 0; }
-
   .sectionnav .nav-lang {
-    position: fixed;
-    right: 0.9rem;
-    bottom: 0;
     left: auto;
+    right: 0.85rem;
     z-index: 61;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
     order: 0;
     margin: 0;
-    padding: 0.25rem 0;
-    padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+    padding-left: 0;
+    padding-right: 0;
     opacity: 1;
     transform: none;
     pointer-events: auto;
   }
 
-  /* Bigger, now that there is room: the labels were at 0.62rem because the flags
-     were sharing their row. */
+  /* One size for everything in the bar, icons and flags alike. */
+  .sectionnav .nav-social .nav-icon,
+  .sectionnav .nav-lang .nav-flag {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .sectionnav .nav-lang .nav-flag { font-size: 1.35rem; }
+  .sectionnav .nav-social .nav-icon svg { width: 1.3rem; height: 1.3rem; }
+
+  /* The top bar keeps its own, slightly larger mark and its bigger labels. */
   .sectionnav a:not(.nav-flag):not(.nav-icon) {
     font-size: 0.7rem;
     letter-spacing: 0.07em;
     padding: 0.7rem 0.36rem;
   }
-  /* The mark grows with them rather than staying small beside larger text, and the
-     button stays a comfortable tap target without the glyph shouting. */
-  .sectionnav .nav-icon { width: 2.7rem; height: 2.7rem; }
-  .sectionnav .nav-icon svg { width: 1.35rem; height: 1.35rem; }
+  .sectionnav .nav-home { width: 2.7rem; height: 2.7rem; }
+  .sectionnav .nav-home svg { width: 1.35rem; height: 1.35rem; }
 
-  body { padding-bottom: 3.6rem; }
+  body { padding-bottom: 3.5rem; }
 }
 
 /* The rail's quiet confirmation that a section link copied itself. Nothing marks the
