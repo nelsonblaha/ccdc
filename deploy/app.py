@@ -45,6 +45,56 @@ HELP_CHOICES = {"updates", "board", "legal", "technical", "spread"}
 
 VERSIONED_ASSETS = ("style.css", "script.js")
 
+# --------------------------------------------------------------------------
+# Language selection.
+#
+# "/" adapts to Accept-Language exactly once: if the visitor has never chosen a
+# language, and their browser prefers Spanish over English, they are redirected to
+# /es/. Everything else is deterministic.
+#
+# Why a redirect here when switching is otherwise done in place: on first load
+# there is no scroll position to preserve, so the redirect costs nothing the
+# in-place swap was built to protect, and it avoids showing a Spanish speaker a
+# page of English before JavaScript can replace it. Doing this client-side would
+# either flash the wrong language or require a blocking script in <head>.
+#
+# Why the redirect is this narrow:
+#   - "/es/" NEVER redirects, so a shared Spanish link always lands on Spanish.
+#   - "/" with a `lang` cookie never redirects either. Asking for the English URL
+#     after having made a choice gets English. That also makes the no-JS path
+#     loop-free: clicking EN on /es/ navigates to "/" and stays there.
+#   - The cookie is written only by the client, when the reader actually switches.
+#     Its single job is to mean "stop guessing for me", in either direction.
+# --------------------------------------------------------------------------
+
+CHOICE_COOKIE = "lang"
+
+
+def prefers_spanish(header: str) -> bool:
+    """True when Accept-Language ranks Spanish above English.
+
+    Absent or unparseable headers mean no preference, which means no redirect.
+    """
+    best = {}
+    for part in (header or "").split(","):
+        piece = part.strip()
+        if not piece:
+            continue
+        tag, _, params = piece.partition(";")
+        tag = tag.strip().lower()
+        quality = 1.0
+        for param in params.split(";"):
+            key, _, value = param.partition("=")
+            if key.strip() == "q":
+                try:
+                    quality = float(value)
+                except ValueError:
+                    quality = 0.0
+        primary = tag.split("-")[0]
+        if primary in ("es", "en"):
+            best[primary] = max(best.get(primary, 0.0), quality)
+    return best.get("es", 0.0) > best.get("en", 0.0)
+
 
 def _asset_versions() -> dict[str, str]:
     out = {}
@@ -282,7 +332,18 @@ def healthz():
 
 @app.get("/")
 def index():
-    return render_page("index.html")
+    if request.cookies.get(CHOICE_COOKIE) is None and prefers_spanish(
+        request.headers.get("Accept-Language", "")
+    ):
+        resp = redirect("/es/", code=302)
+        resp.headers["Vary"] = "Accept-Language, Cookie"
+        resp.headers["Cache-Control"] = "no-cache, must-revalidate"
+        return resp
+    resp = render_page("index.html")
+    # The response depends on both, so a cache must not serve one visitor's
+    # variant to another.
+    resp.headers["Vary"] = "Accept-Language, Cookie"
+    return resp
 
 
 @app.get("/es/")

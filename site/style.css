@@ -842,6 +842,11 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
   .sectionnav a:not(.nav-flag) { order: 1; }
+  .sectionnav .nav-flag.is-current {
+    outline: 1px solid var(--sun);
+    outline-offset: -0.3rem;
+    cursor: default;
+  }
   .sectionnav a.nav-flag,
   .sectionnav span.nav-flag {
     display: inline-block;
@@ -989,9 +994,15 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
   }
   /* Both flags are always shown so the control reads as a language switcher. The
      one you are already reading is full strength; the other is muted until hover. */
-  .sectionnav .nav-flag.is-current { filter: none; opacity: 1; cursor: default; }
-  .sectionnav a.nav-flag { filter: saturate(0.35); opacity: 0.75; }
-  .sectionnav a.nav-flag:hover { filter: none; opacity: 1; }
+  /* Both flags stay full colour; the one you are reading gets a hairline box.
+     Drawn with outline and a negative offset so it hugs the glyph rather than the
+     45px hit area, and so it costs no layout. */
+  .sectionnav .nav-flag.is-current {
+    outline: 1px solid var(--sun);
+    outline-offset: -0.34rem;
+    cursor: default;
+  }
+  .sectionnav a.nav-flag:hover { filter: brightness(1.08); }
 }
 
 @media (prefers-reduced-motion: reduce) {
