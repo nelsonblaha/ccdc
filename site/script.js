@@ -155,4 +155,71 @@
         });
     });
   })();
+  /* ---- reason tabs ----
+     The panels are all visible and stacked without JS, and the tablist is hidden
+     by CSS because it would do nothing. Adding .js-tabs opts into the collapsed
+     presentation, so no content is ever hidden from a reader who has no JS. */
+  (function () {
+    var wrap = document.getElementById('reason-tabs');
+    if (!wrap) return;
+    var tabs = Array.prototype.slice.call(wrap.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+    if (!tabs.length || panels.indexOf(null) !== -1) return;
+
+    function select(i, focus) {
+      tabs.forEach(function (t, j) {
+        t.setAttribute('aria-selected', String(j === i));
+        t.setAttribute('tabindex', j === i ? '0' : '-1');
+        panels[j].hidden = j !== i;
+      });
+      if (focus) tabs[i].focus();
+    }
+
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(i, false); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true); return; }
+        if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+        if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
+      });
+    });
+
+    wrap.classList.add('js-tabs');
+    select(0, false);
+
+    // A link to a specific reason should open that reason, not scroll past it.
+    var deep = tabs.map(function (t) { return '#' + t.getAttribute('aria-controls'); }).indexOf(location.hash);
+    if (deep !== -1) select(deep, false);
+  })();
+
+  /* ---- section nav: mark the section currently in view ---- */
+  (function () {
+    var nav = document.querySelector('.sectionnav');
+    if (!nav || !('IntersectionObserver' in window)) return;
+    var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+    var byId = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) byId[el.id] = a;
+    });
+    var targets = Object.keys(byId).map(function (id) { return document.getElementById(id); });
+    if (!targets.length) return;
+
+    function mark(a) {
+      links.forEach(function (l) { l.removeAttribute('aria-current'); });
+      if (a) a.setAttribute('aria-current', 'true');
+    }
+
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      // Topmost intersecting section wins, so scrolling reads in document order.
+      var best = null;
+      targets.forEach(function (t) { if (!best && visible[t.id] > 0) best = t; });
+      mark(best ? byId[best.id] : null);
+    }, { rootMargin: '-25% 0px -60% 0px', threshold: [0, 0.01] });
+
+    targets.forEach(function (t) { io.observe(t); });
+  })();
 })();

@@ -513,3 +513,132 @@ body.modal-open { overflow: hidden; }
 footer { border-top: 1px solid var(--rule); background: var(--sunk); }
 footer > .wrap { padding-top: 3rem; padding-bottom: 4rem; }
 .srcs { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.84rem; }
+
+/* ---------- reason tabs ----------
+   Progressive enhancement: with no JS every panel is visible and stacked, and
+   the tablist is hidden because it would do nothing. JS adds .js-tabs, which
+   collapses them into real ARIA tabs. The content is always in the DOM. */
+
+.tabs { display: flex; flex-direction: column; gap: 2.5rem; }
+
+.tablist {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rule);
+  /* four labels do not fit on a phone; scroll rather than wrap or shrink */
+  scrollbar-width: none;
+}
+.tablist::-webkit-scrollbar { display: none; }
+
+.tabs:not(.js-tabs) .tablist { display: none; }
+
+.tab {
+  flex: none;
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0.75rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--ink-3);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab:first-child { padding-left: 0; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--sun); }
+
+.panel:focus-visible { outline: none; }
+
+/* Stacked (no-JS) panels need their own separators; tabbed ones must not have
+   them, so the rule is scoped to the un-enhanced container. */
+.tabs:not(.js-tabs) .panel + .panel {
+  border-top: 1px solid var(--rule);
+  padding-top: 2.5rem;
+}
+
+/* ---------- section nav ----------
+   One nav element, two presentations. Narrow screens get a sticky scrolling
+   strip; wide screens get a fixed rail on the left edge, which only appears once
+   the viewport is wide enough to hold it beside the 60rem column. Plain anchors
+   throughout, so it works with scripting off — JS only marks the current entry. */
+
+.sectionnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+}
+.sectionnav::-webkit-scrollbar { display: none; }
+
+.sectionnav a {
+  flex: none;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.sectionnav a:hover { color: var(--ink); }
+.sectionnav a[aria-current] { color: var(--ink); border-bottom-color: var(--sun); }
+
+/* The sticky strip would otherwise sit on top of the heading you jumped to. */
+section[id], header[id] { scroll-margin-top: 3.25rem; }
+
+@media (min-width: 84rem) {
+  .sectionnav {
+    position: fixed;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
+    flex-direction: column;
+    gap: 0.15rem;
+    overflow: visible;
+    background: none;
+    border-bottom: 0;
+    max-width: 10rem;
+  }
+  .sectionnav a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.3rem 0;
+    border-bottom: 0;
+    margin-bottom: 0;
+    white-space: normal;
+  }
+  /* A tick per entry — the same gauge language as the water bars. */
+  .sectionnav a::before {
+    content: "";
+    flex: none;
+    width: 0.85rem;
+    height: 2px;
+    background: var(--rule);
+    transition: width 140ms ease, background-color 140ms ease;
+  }
+  .sectionnav a:hover::before { background: var(--ink-3); }
+  .sectionnav a[aria-current] { border-bottom: 0; }
+  .sectionnav a[aria-current]::before { width: 1.7rem; background: var(--sun); }
+
+  section[id], header[id] { scroll-margin-top: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionnav a::before { transition: none; }
+}

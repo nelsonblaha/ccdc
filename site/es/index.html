@@ -12,6 +12,15 @@
 </head>
 <body>
 
+<!-- ============ SECTION NAV ============ -->
+<nav class="sectionnav" aria-label="Secciones">
+  <a href="#razones">Por qu&eacute;</a>
+  <a href="#propuesta">La propuesta</a>
+  <a href="#frontera">Los dos lados</a>
+  <a href="#hoja-de-ruta">Hoja de ruta</a>
+  <a href="#ayudar">C&oacute;mo ayudar</a>
+</nav>
+
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
@@ -26,7 +35,6 @@
       <p class="lede">Meta est&aacute; construyendo un centro de datos de inteligencia artificial de 10&nbsp;mil millones de d&oacute;lares en el noreste de El&nbsp;Paso. Esta es una propuesta para uno mucho m&aacute;s peque&ntilde;o que pertenezca a quienes vivimos aqu&iacute;, gobernado por una junta directiva que eligen sus propios socios.</p>
       <div class="cta-row">
         <a class="btn" href="#signup">Recibir novedades &rarr;</a>
-        <a class="btn btn-quiet" href="#lo-que-no-existe">Lo que todav&iacute;a no existe</a>
         <a class="btn btn-quiet" href="https://github.com/nelsonblaha/ccdc">Ver el c&oacute;digo y la investigaci&oacute;n &rarr;</a>
       </div>
       <p class="fine">No hay organizaci&oacute;n legal. No hay junta directiva. No hay servicio funcionando. No hay nada que comprar ni nada a qu&eacute; donar. Registrarte solo te trae correos, nada m&aacute;s.</p>
@@ -34,11 +42,31 @@
   </div>
 </header>
 
-<!-- ============ WHY ============ -->
-<section>
+<!-- ============ REASONS (TABS) ============ -->
+<section id="razones">
   <div class="wrap stack-lg">
     <div class="col stack">
-      <p class="eyebrow">Por qu&eacute; ahora</p>
+      <p class="eyebrow">Cuatro razones</p>
+      <h2>Hay cuatro argumentos distintos para esto, y el agua es solo uno.</h2>
+      <p>Cualquiera de ellos por s&iacute; solo es discutible. Juntos describen un hueco que nada de lo que hay hoy llena.</p>
+    </div>
+
+    <div class="callout">
+      <p>No estamos aqu&iacute; para debatir si Meta cumple su palabra, sino para construir algo donde <strong>no tengas que confiar en la palabra de nadie.</strong></p>
+      <p>Lo investigamos, y resulta que los servicios de inteligencia artificial &eacute;ticos son f&aacute;ciles de construir por cuenta propia, con la ayuda indispensable de la comunidad de c&oacute;digo abierto. Tambi&eacute;n nos dimos cuenta de que no tiene que ser perfecto desde el primer d&iacute;a para ser m&aacute;s prometedor que las alternativas.</p>
+    </div>
+
+    <div class="tabs" id="reason-tabs">
+      <div class="tablist" role="tablist" aria-label="Razones">
+        <button class="tab" role="tab" id="tab-env" aria-controls="panel-env" aria-selected="true">Medio ambiente</button>
+        <button class="tab" role="tab" id="tab-privacy" aria-controls="panel-privacy" aria-selected="false">Privacidad</button>
+        <button class="tab" role="tab" id="tab-own" aria-controls="panel-own" aria-selected="false">Propiedad</button>
+        <button class="tab" role="tab" id="tab-svc" aria-controls="panel-svc" aria-selected="false">Servicios</button>
+      </div>
+
+      <div class="panel stack-lg" role="tabpanel" id="panel-env" aria-labelledby="tab-env" tabindex="0">
+    <div class="col stack">
+      <p class="eyebrow">Medio ambiente</p>
       <h2>El Paso tiene m&aacute;s de 300 d&iacute;as de sol al a&ntilde;o. El plan sobre la mesa son 813 generadores de gas.</h2>
       <p>En octubre de 2025 Meta anunci&oacute; un centro de datos de inteligencia artificial de 1,500&nbsp;millones de d&oacute;lares en el noreste de El&nbsp;Paso, ampliado despu&eacute;s a un proyecto de 10&nbsp;mil millones. La empresa se comprometi&oacute; p&uacute;blicamente a igualar el 100% del consumo el&eacute;ctrico de la instalaci&oacute;n con energ&iacute;a limpia y renovable, incluyendo generaci&oacute;n solar en el sitio.</p>
       <p>Los expedientes regulatorios de El Paso Electric cuentan otra historia sobre c&oacute;mo llegar&iacute;a esa electricidad en la pr&aacute;ctica. Los documentos dicen que la energ&iacute;a solar a gran escala con bater&iacute;as <em>en teor&iacute;a</em> podr&iacute;a abastecer el centro de datos, pero que una instalaci&oacute;n as&iacute; requerir&iacute;a <strong>miles de acres junto al sitio que no est&aacute;n disponibles</strong>. En su lugar, la empresa el&eacute;ctrica busc&oacute; un contrato sin licitaci&oacute;n para apilar <strong>813 generadores modulares de gas natural</strong>.</p>
@@ -73,16 +101,115 @@
 
     <div class="col stack">
       <p class="fine">En justicia, y porque aqu&iacute; importa ser exactos: Meta dice que la instalaci&oacute;n usa un sistema cerrado de enfriamiento por l&iacute;quido que recircula la misma agua, que no consumir&aacute; <em>nada</em> de agua durante la mayor parte del a&ntilde;o y que su consumo ser&aacute; comparable al de un campo de golf t&iacute;pico del oeste de Texas. Esas son las cifras de la empresa. Los m&aacute;ximos de arriba son lo que el convenio autoriza.</p>
+    </div>
+      </div>
+
+      <div class="panel stack-lg" role="tabpanel" id="panel-privacy" aria-labelledby="tab-privacy" tabindex="0">
+    <div class="col stack">
+      <p class="eyebrow">Privacidad</p>
+      <h2>Todo lo que escribes en un asistente de IA es un documento sobre ti, en manos de alguien m&aacute;s.</h2>
+      <p>En la pr&aacute;ctica no son conversaciones: son registros. Los asistentes comerciales guardan lo que les env&iacute;as, y varios lo usan para entrenar modelos futuros a menos que encuentres la casilla que dice lo contrario. Algunos mandan una muestra a personas para revisi&oacute;n. Todo eso es material que un juez puede pedir. No es un esc&aacute;ndalo; es el dise&ntilde;o normal de un producto cuya econom&iacute;a exige que tus datos le sirvan a la empresa.</p>
+      <p>La gente escribe en estas herramientas cosas que no pondr&iacute;a en un correo: la duda de salud antes de la cita m&eacute;dica, la pregunta migratoria, la carta al casero, la idea de negocio. Tratar eso como telemetr&iacute;a com&uacute;n es una decisi&oacute;n, y es una que una organizaci&oacute;n gobernada por sus socios no tiene motivo para tomar.</p>
+    </div>
+
+    <div class="col stack">
+      <h3>A qu&eacute; nos comprometer&iacute;amos</h3>
+      <ul class="ul">
+        <li><strong>Tus conversaciones nunca se usan para entrenar nada.</strong> Ni nuestro ni de nadie.</li>
+        <li><strong>Un plazo de retenci&oacute;n declarado, con borrado que de verdad borra</strong>, y un bot&oacute;n de eliminar que funciona.</li>
+        <li><strong>Sin rastreadores, sin anal&iacute;ticas, sin cookies de publicidad.</strong> No como pol&iacute;tica revisable, sino como algo que no est&aacute; construido.</li>
+        <li><strong>Decimos qui&eacute;n es el proveedor del modelo y enlazamos sus t&eacute;rminos</strong>, para que compares lo que afirmamos con lo que ellos prometen.</li>
+      </ul>
+      <p>Y la raz&oacute;n para creerlo es estructural, no sentimental: estos compromisos van en los documentos fundacionales con el umbral de modificaci&oacute;n m&aacute;s alto, as&iacute; que cambiar uno exige mayor&iacute;a calificada de la junta directiva y deja un registro p&uacute;blico permanente. <a href="https://github.com/nelsonblaha/ccdc/blob/main/GOVERNED.md">El mecanismo est&aacute; escrito</a> desde antes de que haya algo que proteger.</p>
+      <p class="fine">La versi&oacute;n peque&ntilde;a de esto ya es cierta: el formulario de esta p&aacute;gina env&iacute;a a nuestro propio servidor y escribe en un archivo que controlamos. Sin Google Forms, sin Mailchimp, sin anal&iacute;ticas, sin cookies. Es una cosa m&iacute;nima, y es el argumento entero en miniatura.</p>
+    </div>
+
+    <div class="col stack">
+      <h3>El l&iacute;mite, dicho con claridad</h3>
+      <p>Al principio rentamos capacidad de c&oacute;mputo a un proveedor de nube grande, as&iacute; que tu texto pasa por su infraestructura bajo su contrato. <strong>Podemos obligarnos por completo a nosotros mismos y a ellos solo por acuerdo.</strong> Quien afirme otra cosa mientras renta est&aacute; exagerando.</p>
+      <p>Lo que s&iacute; podemos hacer es publicar qu&eacute; proveedor es, con qu&eacute; t&eacute;rminos, y cambiarlo si esos t&eacute;rminos cambian. Eso es m&aacute;s d&eacute;bil que ser dueños de la m&aacute;quina, y por eso ser dueños de la m&aacute;quina est&aacute; en la lista.</p>
+    </div>
+      </div>
+
+      <div class="panel stack-lg" role="tabpanel" id="panel-own" aria-labelledby="tab-own" tabindex="0">
+    <div class="col stack">
+      <p class="eyebrow">Propiedad</p>
+      <h2>La pregunta no es si se construye IA aqu&iacute;. Es de qui&eacute;n acaba siendo.</h2>
+      <p>Diez mil millones de d&oacute;lares construyen un centro de datos que pertenece a sus accionistas. El presupuesto de abajo construye un a&ntilde;o de uno que pertenece a quienes lo usan. No son dos ofertas para el mismo trabajo: son respuestas a preguntas distintas, y solo una de las dos se est&aacute; haciendo en voz alta ahora mismo.</p>
+      <p>Cuando pagas 20 d&oacute;lares al mes por un asistente, ese dinero sale de la ciudad y llega a quien tiene las acciones. Cuando pagas 5 aqu&iacute;, paga el acceso gratuito de alguien m&aacute;s, y el excedente se queda en el valle. La misma transacci&oacute;n, en direcci&oacute;n contraria.</p>
+      <p>Pero lo que de verdad distingue esto no es el precio. <strong>No hay acciones que tener.</strong> Una organizaci&oacute;n sin fines de lucro no tiene dueños, as&iacute; que no hay a qui&eacute;n comprarle su parte, ni adquisici&oacute;n, ni salida a bolsa, ni inversionista que tarde o temprano necesite un rendimiento mayor de lo que la comunidad puede pagar. Si se disuelve, los documentos fundacionales mandan lo que quede a otra organizaci&oacute;n sin fines de lucro: nunca al fundador, nunca a un socio. Eso no es una promesa que alguien haga sobre una empresa nueva, porque una empresa nueva no puede hacerla.</p>
+      <p>Nada de esto exige creer nada en particular sobre los multimillonarios. Solo exige notar que la infraestructura de la que depende la gente suele terminar en manos de quien puede comprarla, y que la excepci&oacute;n es cuando la gente se organiza antes de que eso pase. Las cooperativas el&eacute;ctricas, las cajas populares y las sociedades mutualistas de agua existen justamente por eso.</p>
+    </div>
+
+    <div class="col stack">
+      <h3>Cu&aacute;nto cuesta en realidad</h3>
+      <p>M&aacute;s barato de lo que la gente supone. Un servidor modesto corre el software; el gasto real es la IA misma, cobrada por palabra. Calculado con <strong>200 socios</strong> y uso ordinario, y publicado antes de que nadie nos haya dado un peso:</p>
+    </div>
+
+    <div class="col scroll-x">
+      <table class="ledger">
+        <thead>
+          <tr><th>Concepto</th><th class="n">Al mes</th><th class="n">Al a&ntilde;o</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Servidor, almacenamiento, ancho de banda</td><td class="n">$65</td><td class="n">$780</td></tr>
+          <tr><td>Uso de IA &mdash; 200 socios &times; ~$1.07</td><td class="n">$214</td><td class="n">$2,565</td></tr>
+          <tr><td>Dominio, correo, monitoreo</td><td class="n">$15</td><td class="n">$180</td></tr>
+          <tr><td class="muted">Cr&eacute;dito de nube de Google para organizaciones sin fines de lucro</td><td class="n muted">&mdash;</td><td class="n muted">hasta &minus;$10,000</td></tr>
+          <tr class="total"><td>Costo proyectado del primer a&ntilde;o</td><td class="n">$294</td><td class="n">$3,525</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col stack">
+      <p>Para comparar: una sola suscripci&oacute;n a ChatGPT Plus cuesta <span class="num">$20</span> al mes, <span class="num">$240</span> al a&ntilde;o para una persona. El presupuesto de arriba alcanza para doscientas.</p>
+      <p>El rengl&oacute;n m&aacute;s grande del primer a&ntilde;o no es t&eacute;cnico en absoluto. Es el abogado que redacte estatutos lo bastante firmes para que una junta directiva futura no pueda desentenderse en silencio de las promesas que contienen.</p>
+      <p class="fine">Cada cifra de aqu&iacute; viene de precios publicados por los proveedores y de un modelo de costos que t&uacute; mismo puedes correr. Cuando los n&uacute;meros cambien, esta p&aacute;gina cambia.</p>
+    </div>
+      </div>
+
+      <div class="panel stack-lg" role="tabpanel" id="panel-svc" aria-labelledby="tab-svc" tabindex="0">
+    <div class="col stack">
+      <p class="eyebrow">Servicios</p>
+      <h2>Hace veinte a&ntilde;os que hay gente alojando sus propios servicios. La IA es lo primero que hizo que valiera la pena juntar la cooperaci&oacute;n.</h2>
+      <p>Ya existe un movimiento grande de personas que operan su propio software en lugar de rentarlo a cinco empresas: Nextcloud en vez de Google Drive, Mastodon en vez de X, Matrix en vez de Discord, Jellyfin en vez de Netflix, Immich en vez de Google Photos. Funciona. Est&aacute; maduro. Lo hacen millones de personas.</p>
+      <p>Y juntarse para pagar un servidor compartido nunca acababa de valer la molestia. Cualquiera de esos servicios corre sin problema en una m&aacute;quina virtual barata o en una computadora vieja en un clóset. En cuanto le sumas el costo de <em>organizarse</em> &mdash;acordar qui&eacute;n lo administra, qui&eacute;n paga, qui&eacute;n responde cuando se cae&mdash; juntar el dinero costaba m&aacute;s de lo que ahorraba. As&iacute; que en general no se hac&iacute;a.</p>
       <div class="callout">
-        <p>No estamos aqu&iacute; para debatir si Meta cumple su palabra, sino para construir algo donde <strong>no tengas que confiar en la palabra de nadie.</strong></p>
-        <p>Lo investigamos, y resulta que los servicios de inteligencia artificial &eacute;ticos son f&aacute;ciles de construir por cuenta propia, con la ayuda indispensable de la comunidad de c&oacute;digo abierto. Tambi&eacute;n nos dimos cuenta de que no tiene que ser perfecto desde el primer d&iacute;a para ser m&aacute;s prometedor que las alternativas.</p>
+        <p><strong>La IA seria es el primer servicio autoalojado donde el equipo es de verdad caro y de verdad indivisible.</strong> No lo puedes correr en una Raspberry Pi en el clóset. Por primera vez, juntarse vale la pena de manera obvia.</p>
+      </div>
+      <p>Y aqu&iacute; est&aacute; la parte que hace de esto un centro de datos y no un chatbot: una vez que existe lo dif&iacute;cil &mdash;la m&aacute;quina, la organizaci&oacute;n, la junta directiva, la facturaci&oacute;n, la persona de guardia&mdash; <strong>cada servicio adicional cuesta casi nada.</strong> Lo caro nunca fue el software. Fue la confianza y la coordinaci&oacute;n, y esos son costos que se pagan una sola vez.</p>
+      <p>As&iacute; que la IA es la raz&oacute;n para hacerlo por fin. No es el objetivo.</p>
+    </div>
+
+    <div class="col stack-sm">
+      <h3>Qu&eacute; m&aacute;s podr&iacute;a correr una sola m&aacute;quina compartida</h3>
+      <p class="fine">Candidatos, no compromisos. Los socios decidir&iacute;an qu&eacute; vale la pena operar y en qu&eacute; orden.</p>
+    </div>
+
+    <div class="svc">
+      <div class="svc-item"><b>Nextcloud</b><span>Archivos, calendario, contactos, documentos</span></div>
+      <div class="svc-item"><b>Matrix</b><span>Chat de grupo, en lugar de Discord o Slack</span></div>
+      <div class="svc-item"><b>Mastodon</b><span>Una red social local sin publicidad encima</span></div>
+      <div class="svc-item"><b>Immich</b><span>Respaldo de fotos, en lugar de Google Photos</span></div>
+      <div class="svc-item"><b>Jitsi</b><span>Videollamadas sin licencia por usuario</span></div>
+      <div class="svc-item"><b>SearXNG</b><span>B&uacute;squeda web sin rastreo ni anuncios</span></div>
+      <div class="svc-item"><b>Correo y listas</b><span>Para organizaciones y grupos vecinales</span></div>
+      <div class="svc-item"><b>Alojamiento web</b><span>Para organizaciones locales que no pueden pagarlo</span></div>
+      <div class="svc-item"><b>Respaldos</b><span>En otro lugar que no sea una empresa en Seattle</span></div>
+    </div>
+
+    <div class="col stack">
+      <h3>Esto ya se ha hecho antes</h3>
+      <p><strong>May First Movement Technology</strong> es una cooperativa estadounidense sin fines de lucro donde los socios pagan cuotas, son dueños colectivos del equipo y lo usan para alojamiento, correo y cuentas de Nextcloud. <strong>CHATONS</strong> es un colectivo de origen franc&eacute;s con m&aacute;s de setenta peque&ntilde;os proveedores &eacute;ticos y transparentes que ofrecen exactamente estos servicios como alternativa a los cinco grandes. Y el antepasado m&aacute;s cercano es m&aacute;s viejo que todo eso: las <strong>cooperativas el&eacute;ctricas rurales</strong>, formadas porque las compa&ntilde;&iacute;as no quer&iacute;an dar servicio a gente que al mercado le parec&iacute;a inconveniente.</p>
+      <p>Nada de esto es una idea novedosa. Lo nuevo ser&iacute;a hacerlo aqu&iacute;, en El&nbsp;Paso y Ju&aacute;rez, a prop&oacute;sito, en medio de una discusi&oacute;n sobre qui&eacute;n tiene derecho a construir centros de datos en este valle.</p>
+    </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============ WHAT ============ -->
-<section>
+<section id="propuesta">
   <div class="wrap stack-lg">
     <div class="col stack">
       <p class="eyebrow">La propuesta</p>
@@ -127,7 +254,7 @@
 </section>
 
 <!-- ============ BINATIONAL ============ -->
-<section>
+<section id="frontera">
   <div class="wrap stack-lg">
     <div class="col stack">
       <p class="eyebrow">Los dos lados del r&iacute;o</p>
@@ -145,85 +272,24 @@
   </div>
 </section>
 
-<!-- ============ WHY A SERVER ============ -->
-<section>
+<!-- ============ STATUS + ROADMAP ============ -->
+<section class="honest" id="hoja-de-ruta">
   <div class="wrap stack-lg">
     <div class="col stack">
-      <p class="eyebrow">Por qu&eacute; vale la pena hacerlo ahora</p>
-      <h2>Hace veinte a&ntilde;os que hay gente alojando sus propios servicios. La IA es lo primero que hizo que valiera la pena juntar la cooperaci&oacute;n.</h2>
-      <p>Ya existe un movimiento grande de personas que operan su propio software en lugar de rentarlo a cinco empresas: Nextcloud en vez de Google Drive, Mastodon en vez de X, Matrix en vez de Discord, Jellyfin en vez de Netflix, Immich en vez de Google Photos. Funciona. Est&aacute; maduro. Lo hacen millones de personas.</p>
-      <p>Y juntarse para pagar un servidor compartido nunca acababa de valer la molestia. Cualquiera de esos servicios corre sin problema en una m&aacute;quina virtual barata o en una computadora vieja en un clóset. En cuanto le sumas el costo de <em>organizarse</em> &mdash;acordar qui&eacute;n lo administra, qui&eacute;n paga, qui&eacute;n responde cuando se cae&mdash; juntar el dinero costaba m&aacute;s de lo que ahorraba. As&iacute; que en general no se hac&iacute;a.</p>
-      <div class="callout">
-        <p><strong>La IA seria es el primer servicio autoalojado donde el equipo es de verdad caro y de verdad indivisible.</strong> No lo puedes correr en una Raspberry Pi en el clóset. Por primera vez, juntarse vale la pena de manera obvia.</p>
-      </div>
-      <p>Y aqu&iacute; est&aacute; la parte que hace de esto un centro de datos y no un chatbot: una vez que existe lo dif&iacute;cil &mdash;la m&aacute;quina, la organizaci&oacute;n, la junta directiva, la facturaci&oacute;n, la persona de guardia&mdash; <strong>cada servicio adicional cuesta casi nada.</strong> Lo caro nunca fue el software. Fue la confianza y la coordinaci&oacute;n, y esos son costos que se pagan una sola vez.</p>
-      <p>As&iacute; que la IA es la raz&oacute;n para hacerlo por fin. No es el objetivo.</p>
+      <p class="eyebrow">Hoja de ruta</p>
+      <h2>Aqu&iacute; todav&iacute;a no hay nada construido. Este es el orden en que se construye.</h2>
+      <p>Una organizaci&oacute;n construida sobre las promesas incumplidas de otros deber&iacute;a tener cuidado con las propias, as&iacute; que el estado y el plan van en el mismo lugar, donde la distancia entre los dos se ve. Al d&iacute;a de hoy:</p>
+      <ul class="ul">
+        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay organizaci&oacute;n legal.</strong> No se ha constituido ninguna asociaci&oacute;n.</li>
+        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay junta directiva.</strong> Se necesitan tres directores y no se ha reclutado a ninguno.</li>
+        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay exenci&oacute;n de impuestos.</strong> Nada de lo que se d&eacute; a este proyecto es deducible, porque no hay a qu&eacute; d&aacute;rselo.</li>
+        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay servicio funcionando.</strong> Ni en prueba ni en versi&oacute;n privada. No se ha construido.</li>
+        <li><span class="tag">Hecho</span> &nbsp;<strong>La investigaci&oacute;n est&aacute; terminada.</strong> Cu&aacute;nto costar&iacute;a, con qu&eacute; software funciona, c&oacute;mo tendr&iacute;a que estructurarse legalmente y qu&eacute; puede salir mal.</li>
+      </ul>
     </div>
-
-    <div class="col stack-sm">
-      <h3>Qu&eacute; m&aacute;s podr&iacute;a correr una sola m&aacute;quina compartida</h3>
-      <p class="fine">Candidatos, no compromisos. Los socios decidir&iacute;an qu&eacute; vale la pena operar y en qu&eacute; orden.</p>
-    </div>
-
-    <div class="svc">
-      <div class="svc-item"><b>Nextcloud</b><span>Archivos, calendario, contactos, documentos</span></div>
-      <div class="svc-item"><b>Matrix</b><span>Chat de grupo, en lugar de Discord o Slack</span></div>
-      <div class="svc-item"><b>Mastodon</b><span>Una red social local sin publicidad encima</span></div>
-      <div class="svc-item"><b>Immich</b><span>Respaldo de fotos, en lugar de Google Photos</span></div>
-      <div class="svc-item"><b>Jitsi</b><span>Videollamadas sin licencia por usuario</span></div>
-      <div class="svc-item"><b>SearXNG</b><span>B&uacute;squeda web sin rastreo ni anuncios</span></div>
-      <div class="svc-item"><b>Correo y listas</b><span>Para organizaciones y grupos vecinales</span></div>
-      <div class="svc-item"><b>Alojamiento web</b><span>Para organizaciones locales que no pueden pagarlo</span></div>
-      <div class="svc-item"><b>Respaldos</b><span>En otro lugar que no sea una empresa en Seattle</span></div>
-    </div>
-
     <div class="col stack">
-      <h3>Esto ya se ha hecho antes</h3>
-      <p><strong>May First Movement Technology</strong> es una cooperativa estadounidense sin fines de lucro donde los socios pagan cuotas, son dueños colectivos del equipo y lo usan para alojamiento, correo y cuentas de Nextcloud. <strong>CHATONS</strong> es un colectivo de origen franc&eacute;s con m&aacute;s de setenta peque&ntilde;os proveedores &eacute;ticos y transparentes que ofrecen exactamente estos servicios como alternativa a los cinco grandes. Y el antepasado m&aacute;s cercano es m&aacute;s viejo que todo eso: las <strong>cooperativas el&eacute;ctricas rurales</strong>, formadas porque las compa&ntilde;&iacute;as no quer&iacute;an dar servicio a gente que al mercado le parec&iacute;a inconveniente.</p>
-      <p>Nada de esto es una idea novedosa. Lo nuevo ser&iacute;a hacerlo aqu&iacute;, en El&nbsp;Paso y Ju&aacute;rez, a prop&oacute;sito, en medio de una discusi&oacute;n sobre qui&eacute;n tiene derecho a construir centros de datos en este valle.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ COST ============ -->
-<section>
-  <div class="wrap stack-lg">
-    <div class="col stack">
-      <p class="eyebrow">El presupuesto completo</p>
-      <h2>Aqu&iacute; est&aacute; todo el primer a&ntilde;o, en p&uacute;blico, antes de que nadie nos haya dado un peso.</h2>
-      <p>Casi todo es m&aacute;s barato de lo que la gente supone. Un servidor modesto corre el software; el gasto real es la IA misma, cobrada por palabra. Calculado con <strong>200 socios</strong> y uso ordinario:</p>
-    </div>
-
-    <div class="col scroll-x">
-      <table class="ledger">
-        <thead>
-          <tr><th>Concepto</th><th class="n">Al mes</th><th class="n">Al a&ntilde;o</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Servidor, almacenamiento, ancho de banda</td><td class="n">$65</td><td class="n">$780</td></tr>
-          <tr><td>Uso de IA &mdash; 200 socios &times; ~$1.07</td><td class="n">$214</td><td class="n">$2,565</td></tr>
-          <tr><td>Dominio, correo, monitoreo</td><td class="n">$15</td><td class="n">$180</td></tr>
-          <tr><td class="muted">Cr&eacute;dito de nube de Google para organizaciones sin fines de lucro</td><td class="n muted">&mdash;</td><td class="n muted">hasta &minus;$10,000</td></tr>
-          <tr class="total"><td>Costo proyectado del primer a&ntilde;o</td><td class="n">$294</td><td class="n">$3,525</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col stack">
-      <p>Para comparar: una sola suscripci&oacute;n a ChatGPT Plus cuesta <span class="num">$20</span> al mes, <span class="num">$240</span> al a&ntilde;o para una persona. El presupuesto de arriba alcanza para doscientas.</p>
-      <p>El rengl&oacute;n m&aacute;s grande del primer a&ntilde;o no es t&eacute;cnico en absoluto. Es el abogado que redacte estatutos lo bastante firmes para que una junta directiva futura no pueda desentenderse en silencio de las promesas que contienen.</p>
-      <p class="fine">Cada cifra de aqu&iacute; viene de precios publicados por los proveedores y de un modelo de costos que t&uacute; mismo puedes correr. Cuando los n&uacute;meros cambien, esta p&aacute;gina cambia.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ROADMAP ============ -->
-<section>
-  <div class="wrap stack-lg">
-    <div class="col stack">
-      <p class="eyebrow">La hoja de ruta</p>
-      <h2>Doce pasos, en orden, para que nos los puedas exigir.</h2>
-      <p>Publicados por adelantado y a prop&oacute;sito. Un plan que solo se puede leer despu&eacute;s de los hechos no es un plan, es un bolet&iacute;n de prensa.</p>
+      <h3>Los doce pasos</h3>
+      <p>Publicados por adelantado y a prop&oacute;sito, para que nos los puedas exigir. Un plan que solo se puede leer despu&eacute;s de los hechos no es un plan, es un bolet&iacute;n de prensa.</p>
     </div>
 
     <div class="acts">
@@ -346,24 +412,6 @@
       </div>
 
     </div>
-  </div>
-</section>
-
-<!-- ============ HONESTY ============ -->
-<section class="honest" id="lo-que-no-existe">
-  <div class="wrap stack-lg">
-    <div class="col stack">
-      <p class="eyebrow">Lo que todav&iacute;a no existe</p>
-      <h2>Una organizaci&oacute;n construida sobre las promesas incumplidas de otros deber&iacute;a tener cuidado con las propias.</h2>
-      <p>As&iacute; que, con claridad, al d&iacute;a de hoy:</p>
-      <ul class="ul">
-        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay organizaci&oacute;n legal.</strong> No se ha constituido ninguna asociaci&oacute;n.</li>
-        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay junta directiva.</strong> Se necesitan tres directores y no se ha reclutado a ninguno.</li>
-        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay exenci&oacute;n de impuestos.</strong> Nada de lo que se d&eacute; a este proyecto es deducible, porque no hay a qu&eacute; d&aacute;rselo.</li>
-        <li><span class="tag is-none">Nada</span> &nbsp;<strong>No hay servicio funcionando.</strong> Ni en prueba ni en versi&oacute;n privada. No se ha construido.</li>
-        <li><span class="tag">Hecho</span> &nbsp;<strong>La investigaci&oacute;n est&aacute; terminada.</strong> Cu&aacute;nto costar&iacute;a, con qu&eacute; software funciona, c&oacute;mo tendr&iacute;a que estructurarse legalmente y qu&eacute; puede salir mal.</li>
-      </ul>
-    </div>
 
     <div class="col stack">
       <h3>Tambi&eacute;n vale decirlo en voz alta</h3>
@@ -374,7 +422,7 @@
 </section>
 
 <!-- ============ ASK ============ -->
-<section>
+<section id="ayudar">
   <div class="wrap stack-lg">
     <div class="col stack">
       <p class="eyebrow">Qu&eacute; ayudar&iacute;a de verdad</p>
