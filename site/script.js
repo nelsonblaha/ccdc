@@ -233,7 +233,10 @@
   function initSpy(signal) {
     var nav = document.querySelector('.sectionnav');
     if (!nav || !('IntersectionObserver' in window)) return;
-    var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+    // Excludes the mark: it points at the hero, which is not an entry in the list.
+    // Left in, it became the first spy target and took aria-current at the top of
+    // the page, so no section entry was ever marked there.
+    var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]:not(.nav-brand)'));
     var byId = {};
     links.forEach(function (a) {
       var el = document.getElementById(a.getAttribute('href').slice(1));

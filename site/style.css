@@ -669,7 +669,10 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.3rem 0;
+    /* Was 0.3rem, which gave 28.6px boxes separated by 2.4px. The boundary with the
+       entry above then sat about 10px over the label's glyphs, so a click aimed just
+       high of a word selected the section above it. */
+    padding: 0.55rem 0;
     border-bottom: 0;
     margin-bottom: 0;
     white-space: normal;
