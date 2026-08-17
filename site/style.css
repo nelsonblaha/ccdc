@@ -1158,15 +1158,14 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 @media (min-width: 62rem) {
   .hero > .wrap {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 21rem;
+    /* Three columns now: the star's track is a real width rather than auto, because
+       a square sized from its own stretched height is circular for an auto track and
+       the browser resolves that to zero. */
+    grid-template-columns: clamp(5.5rem, 11vw, 10rem) minmax(0, 1fr) 21rem;
     column-gap: 2.75rem;
     row-gap: 1.75rem;
     align-items: start;
   }
-  /* The star's track is a real width rather than auto. A square sized from its own
-     stretched height is circular for an auto track, and the browser resolves that
-     to zero: the column appeared, empty, and the mark never drew. */
-  grid-template-columns: clamp(5.5rem, 11vw, 10rem) minmax(0, 1fr) 21rem;
   /* Spans the three text rows and centres in them. Literally matching the text's
      height would make the square as wide as the text is tall, which on a full hero
      is about 300px of the reading column. */
