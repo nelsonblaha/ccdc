@@ -47,7 +47,32 @@ SEEN_FILE = DATA_DIR / "admin_seen.json"
 # Secrets come from the environment only. Both empty is a valid state and means
 # "no admin here": the routes disappear and no session can be minted.
 SECRET_KEY = os.environ.get("CCDC_SECRET_KEY", "")
-ADMIN_PASSWORD_HASH = os.environ.get("CCDC_ADMIN_PASSWORD_HASH", "")
+ADMIN_HASH_FILE = Path(
+    os.environ.get("CCDC_ADMIN_HASH_FILE", str(DATA_DIR / "admin_password_hash"))
+)
+
+
+def _read_admin_hash() -> str:
+    """The password hash, from a file first.
+
+    Not from the environment by preference, for a reason worth recording: a
+    Werkzeug hash contains '$' as its field separator, and Docker Compose
+    interpolates $VAR inside a project .env file. That silently removed the salt
+    from the middle of the hash, so the value the container saw was well-formed,
+    non-empty, and wrong, and every correct password was rejected. A file also
+    keeps the hash out of `docker inspect` and out of the process environment.
+
+    The environment variable still works for deployments that are not Compose,
+    but it must not contain an unescaped '$'.
+    """
+    try:
+        from_file = ADMIN_HASH_FILE.read_text(encoding="utf-8").strip()
+    except OSError:
+        from_file = ""
+    return from_file or os.environ.get("CCDC_ADMIN_PASSWORD_HASH", "").strip()
+
+
+ADMIN_PASSWORD_HASH = _read_admin_hash()
 
 # Login is the one password field on the site, so it gets its own, tighter
 # budget than the signup form.
