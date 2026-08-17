@@ -1163,12 +1163,15 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
     row-gap: 1.75rem;
     align-items: start;
   }
-  grid-template-columns: auto minmax(0, 1fr) 21rem;
-  /* Spans the three text rows and is square, so "as tall as the text" also sets its
-     width. Capped, because an unbounded square would eat the column it stands
-     beside once the hero gets tall. */
-  .hero-star   { grid-row: 2 / span 3; grid-column: 1; align-self: stretch;
-                 aspect-ratio: 1; max-width: 13rem; }
+  /* The star's track is a real width rather than auto. A square sized from its own
+     stretched height is circular for an auto track, and the browser resolves that
+     to zero: the column appeared, empty, and the mark never drew. */
+  grid-template-columns: clamp(5.5rem, 11vw, 10rem) minmax(0, 1fr) 21rem;
+  /* Spans the three text rows and centres in them. Literally matching the text's
+     height would make the square as wide as the text is tall, which on a full hero
+     is about 300px of the reading column. */
+  .hero-star   { grid-row: 2 / span 3; grid-column: 1; align-self: center;
+                 aspect-ratio: 1; width: 100%; }
   .langbar     { grid-row: 1; grid-column: 1 / -1; }
   /* Full width so the headline has the whole hero to fit on one line — the 44rem
      reading cap applies to the paragraphs, not to the headline, or the text
