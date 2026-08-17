@@ -25,9 +25,6 @@ that does not ask you to take its word: a service whose numbers are published
 rather than promised, run by a board you can name, meet, and remove.
 
 The water and the air are shared with Juárez, so the response is binational too.
-An organization arguing for local accountability over a shared aquifer, which
-drew its own line at the river, would be making a weaker version of its own
-case.
 
 The premise is local control and verifiable ethics, not price. This will almost
 certainly never beat OpenAI on cost per token. It can beat them on:
