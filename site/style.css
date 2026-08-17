@@ -867,11 +867,10 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
   .sectionnav a:not(.nav-flag):not(.nav-brand) { order: 1; }
-  .sectionnav .nav-flag.is-current {
-    outline: 1px solid var(--sun);
-    outline-offset: -0.45rem;
-    cursor: default;
-  }
+  /* No box on the current language here. The two flags read as a switcher on their
+     own, and the page's own text says which language you are in. The rail keeps its
+     box, where the flags sit beside the mark with no surrounding text to say it. */
+  .sectionnav .nav-flag.is-current { cursor: default; }
   .sectionnav a.nav-flag,
   .sectionnav span.nav-flag {
     display: inline-block;
