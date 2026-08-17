@@ -335,6 +335,13 @@
     } catch (e) { /* cookies disabled: the server falls back to Accept-Language */ }
   }
 
+  /* What the address bar should show for a given URL. The language lives in the
+     cookie, not the path, so that anything copied from the bar is neutral. */
+  function neutralPath(url) {
+    var u = new URL(url, location.href);
+    return u.pathname.replace(/^\/es\/?$/, '/') + u.search + u.hash;
+  }
+
   function currentAnchor() {
     var secs = Array.prototype.slice.call(document.querySelectorAll('[data-section]'));
     for (var i = secs.length - 1; i >= 0; i--) {
@@ -372,11 +379,21 @@
         document.documentElement.lang = lang;
         document.title = doc.title;
         rememberChoice(lang);
-        if (push) history.pushState({ ccdc: lang }, '', url);
+        if (push) history.pushState({ ccdc: lang }, '', neutralPath(url));
         boot(tab);
         restoreAnchor(anchor);
       })
       .catch(function () { window.location.href = url; });
+  }
+
+  /* A shared /es/ link should still show Spanish, so honour it by writing the
+     choice to the cookie, then replace the address so the reader does not go on to
+     hand /es/ to someone whose browser would rather have English. The cookie is
+     what survives a reload, which is why it has to be set before the URL changes. */
+  function tidyLanguageUrl() {
+    if (!/^\/es\/?$/.test(location.pathname)) return;
+    rememberChoice(document.documentElement.lang || 'es');
+    history.replaceState(history.state, '', neutralPath(location.href));
   }
 
   function initLangSwap(signal) {
@@ -510,6 +527,7 @@
     initSpy(signal);
     initLangDock(signal);
     initLangSwap(signal);
+    tidyLanguageUrl();
     initNavIcons();
     initTabGrow(signal);
   }

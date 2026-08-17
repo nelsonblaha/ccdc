@@ -469,18 +469,28 @@ def healthz():
 
 @app.get("/")
 def index():
-    if request.cookies.get(CHOICE_COOKIE) is None and prefers_spanish(
-        request.headers.get("Accept-Language", "")
-    ):
-        resp = redirect("/es/", code=302)
-        resp.headers["Vary"] = "Accept-Language, Cookie"
-        resp.headers["Cache-Control"] = "no-cache, must-revalidate"
-        return resp
-    resp = render_page("index.html")
-    # The response depends on both, so a cache must not serve one visitor's
-    # variant to another.
-    resp.headers["Vary"] = "Accept-Language, Cookie"
-    return resp
+    """Serves whichever language fits, at one address.
+
+    It used to redirect a Spanish-preferring browser to /es/, which put the
+    language into the address bar and therefore into every link anyone copied from
+    it. In a metro where the sender's language says nothing about the recipient's,
+    that is the wrong thing to hand around: a shared /es/ forces Spanish on whoever
+    opens it. Now "/" negotiates and stays "/", so what gets pasted into a group
+    chat lets each reader's own browser decide.
+
+    /es/ still serves Spanish at its own URL, so it remains indexable and remains
+    available to anyone who wants to send Spanish deliberately.
+    """
+    chosen = request.cookies.get(CHOICE_COOKIE)
+    if chosen in MESSAGES:
+        lang = chosen
+    elif prefers_spanish(request.headers.get("Accept-Language", "")):
+        lang = "es"
+    else:
+        lang = "en"
+    # render_page sets Vary: Accept-Language, Cookie, which this depends on twice
+    # over: a cache must never serve one visitor's language to another.
+    return render_page("es/index.html" if lang == "es" else "index.html")
 
 
 @app.get("/es/")
