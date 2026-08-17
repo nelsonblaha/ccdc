@@ -914,8 +914,14 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
   /* The third call to action takes a line of its own, so "Get updates" and "Why"
      stay together on the first one. Left to wrap naturally the three would break
-     wherever the widths happened to land, and in Spanish that is mid-pair. */
+     wherever the widths happened to land. */
   .hero .cta-row > .btn:last-child { flex-basis: 100%; }
+
+  /* Measured: the Spanish pair needs 356.1px against 347px of line on a 353px
+     phone, so it broke mid-pair while English fit with 78px to spare. Trimming
+     the horizontal padding here returns 19.2px across the two buttons, which
+     clears it with room rather than by a pixel. */
+  .hero .cta-row > .btn { padding-left: 1.1rem; padding-right: 1.1rem; }
 
   /* Fill the bar rather than clustering left: size to content, then grow into
      whatever is left over, so the labels spread across the available width.
