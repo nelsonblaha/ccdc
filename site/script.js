@@ -166,31 +166,59 @@
     var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
     if (!tabs.length || panels.indexOf(null) !== -1) return;
 
-    function select(i, focus) {
+    function stickTop() {
+      var v = getComputedStyle(document.documentElement).getPropertyValue('--stick-top');
+      return parseFloat(v) || 0;
+    }
+
+    // Put the newly revealed panel directly under the sticky tab bar, so
+    // switching tabs never leaves you reading from the middle of a panel.
+    function scrollToContent() {
+      var y = wrap.getBoundingClientRect().top + window.scrollY - stickTop();
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    function select(i, focus, scroll) {
       tabs.forEach(function (t, j) {
         t.setAttribute('aria-selected', String(j === i));
         t.setAttribute('tabindex', j === i ? '0' : '-1');
         panels[j].hidden = j !== i;
       });
       if (focus) tabs[i].focus();
+      if (scroll) scrollToContent();
     }
 
     tabs.forEach(function (t, i) {
-      t.addEventListener('click', function () { select(i, false); });
+      t.addEventListener('click', function () { select(i, false, true); });
       t.addEventListener('keydown', function (e) {
         var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-        if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true); return; }
-        if (e.key === 'Home') { e.preventDefault(); select(0, true); }
-        if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
+        if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true, true); return; }
+        if (e.key === 'Home') { e.preventDefault(); select(0, true, true); }
+        if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true, true); }
       });
     });
 
     wrap.classList.add('js-tabs');
-    select(0, false);
+    select(0, false, false);
 
     // A link to a specific reason should open that reason, not scroll past it.
     var deep = tabs.map(function (t) { return '#' + t.getAttribute('aria-controls'); }).indexOf(location.hash);
-    if (deep !== -1) select(deep, false);
+    if (deep !== -1) select(deep, false, true);
+  })();
+
+  /* ---- keep --stick-top honest: the sticky tablist sits under the section nav
+         only while that nav is itself stuck to the top ---- */
+  (function () {
+    var nav = document.querySelector('.sectionnav');
+    if (!nav) return;
+    function measure() {
+      var stuck = getComputedStyle(nav).position === 'sticky';
+      document.documentElement.style.setProperty(
+        '--stick-top', stuck ? nav.getBoundingClientRect().height + 'px' : '0px');
+    }
+    measure();
+    window.addEventListener('resize', measure);
   })();
 
   /* ---- section nav: mark the section currently in view ---- */
