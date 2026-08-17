@@ -70,6 +70,7 @@
     }
     function open(trigger) {
       lastTrigger = trigger || null;
+      modal.classList.remove('is-closed');
       modal.classList.add('is-open');
       document.body.classList.add('modal-open');
       var first = card.querySelector('#contact');
@@ -77,6 +78,11 @@
     }
     function close() {
       modal.classList.remove('is-open');
+      // Also defeat :target. Clearing the hash below is not enough on its own:
+      // Chrome keeps matching :target after a History API URL change, so a modal
+      // opened by a #signup link or a shared /#signup URL could not be closed by
+      // the scrim, the X or Cancel.
+      modal.classList.add('is-closed');
       document.body.classList.remove('modal-open');
       if (location.hash === '#signup') {
         history.replaceState(null, '', location.pathname + location.search);

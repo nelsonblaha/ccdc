@@ -741,7 +741,7 @@ def admin():
     table = (
         '<div class="scroll"><table><thead><tr>'
         "<th>When (UTC)</th><th>Contact</th><th>Name</th><th>Offered to help</th>"
-        "<th>Note</th><th>Read</th>"
+        "<th>Note</th><th>Filled in</th>"
         "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
         if rows
         else '<p class="empty">No signups yet.</p>'

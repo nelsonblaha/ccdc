@@ -492,8 +492,17 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 
 .modal { display: none; position: fixed; inset: 0; z-index: 100; }
 /* :target is the no-JS path; .is-open is the scripted one. Single rule for both
-   so nothing later has to override an earlier display value. */
-.modal:target, .modal.is-open { display: grid; place-items: center; padding: 1rem; }
+   so nothing later has to override an earlier display value.
+
+   .is-closed exists because clearing the hash cannot close a :target-opened
+   modal. Measured on the live page: after history.replaceState removed the
+   fragment, the element still matched :target and still computed to display:grid,
+   because Chrome does not re-evaluate :target for History API URL changes. The
+   script adds this class on close and removes it on open, so the scripted state
+   always wins over the URL. With no script it is never added and :target behaves
+   exactly as before. */
+.modal:target:not(.is-closed),
+.modal.is-open { display: grid; place-items: center; padding: 1rem; }
 
 .modal-scrim {
   position: absolute;
@@ -937,6 +946,18 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
        bar height in the unwrapped case. */
     padding-block: 0.5rem;
   }
+  /* Phase chips go above the title, not below it. On one line the chip reads as a
+     right-hand annotation to the heading; wrapped underneath it reads as a label
+     for the paragraph that follows, which is the wrong thing. column-reverse puts
+     it back on top without reordering the markup, so it is still announced after
+     the heading it qualifies. Applied to every chip, not just the coloured Now and
+     Next: a mix of positions would look like a mistake. */
+  .phase-title {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
   /* Alternating fills so each label's extent is readable. Once the labels grow to
      fill the row there is only 0.3rem between one word and the next, and they ran
      together. --sunk is the existing subtle alternate surface, so this holds up in
