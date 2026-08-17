@@ -969,7 +969,6 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
    2.5rem rhythm and let it sit just above the bar. It cannot live inside .tabs:
    the tablist is sticky, and wrapping it would shrink its containing block and
    kill the stickiness. */
-.tabs-label { margin-bottom: -1.9rem; }
 
 /* ---------- mobile hero spacing ----------
    5rem of hero padding is generous on a phone, especially under the sticky
