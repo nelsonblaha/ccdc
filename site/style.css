@@ -193,6 +193,7 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   font-family: var(--font-display);
   font-size: 0.92rem;
   font-weight: 600;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   padding: 0.85rem 1.4rem;
   background: var(--sun);
@@ -442,7 +443,7 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 .form-msg.ok { border-color: var(--agave); color: var(--agave); }
 .form-msg.err { border-color: var(--ocotillo); color: var(--ocotillo); }
 
-.form-card button { cursor: pointer; font: inherit; }
+.form-card button { cursor: pointer; }
 
 /* ---------- signup modal ---------- */
 
@@ -489,14 +490,6 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   padding: 0.25rem 0.4rem;
 }
 .modal-close:hover { color: var(--sun); }
-
-/* The Cancel button reuses .modal-close for behaviour, not for the × styling. */
-.modal-card .cta-row .modal-close {
-  position: static;
-  font-size: 0.92rem;
-  padding: 0.85rem 1.4rem;
-  color: var(--ink);
-}
 
 body.modal-open { overflow: hidden; }
 

@@ -87,7 +87,7 @@
     });
 
     modal.addEventListener('click', function (e) {
-      if (e.target.closest('.modal-close') || e.target.classList.contains('modal-scrim')) {
+      if (e.target.closest('.modal-close, [data-modal-close]') || e.target.classList.contains('modal-scrim')) {
         e.preventDefault();
         close();
       }
@@ -140,7 +140,7 @@
             form.reset();
             say(T.ok, 'ok');
             btn.textContent = T.signedUp;
-            var cancel = form.querySelector('.modal-close');
+            var cancel = form.querySelector('[data-modal-close]');
             if (cancel) cancel.textContent = T.close;
             return;
           }
