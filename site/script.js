@@ -236,13 +236,8 @@
     if (!nav) return;
     function measure() {
       var stuck = getComputedStyle(nav).position === 'sticky';
-      var box = nav.getBoundingClientRect();
       document.documentElement.style.setProperty(
-        '--stick-top', stuck ? box.height + 'px' : '0px');
-      // The join tag centres itself in the space below the rail, which needs the
-      // rail's height. Published for CSS rather than positioned from here, so the
-      // tag keeps working if this never runs.
-      document.documentElement.style.setProperty('--rail-h', box.height + 'px');
+        '--stick-top', stuck ? nav.getBoundingClientRect().height + 'px' : '0px');
     }
     measure();
     window.addEventListener('resize', measure, { signal: signal });

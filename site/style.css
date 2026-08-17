@@ -739,16 +739,10 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
 @media (min-width: 84rem) {
   .joininline { display: none; }
-  /* The same tab as before, mirrored to the left edge: flush against the window,
-     open on the side it touches, rounded on the side it does not. Only the
-     vertical placement is new, centred in the space between the bottom of the menu
-     and the bottom of the window. That midpoint is 75vh plus a quarter of the
-     rail's height, which CSS cannot know on its own, so initStickTop measures it
-     into --rail-h; the fallback keeps it sensible if that never runs. */
   .jointag {
     position: fixed;
-    left: 0;
-    top: calc(75vh + var(--rail-h, 12rem) / 4);
+    right: 0;
+    top: 50%;
     transform: translateY(-50%);
     z-index: 90;
     display: flex;
@@ -759,8 +753,8 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
     background: var(--surface);
     color: var(--ink-3);
     border: 1px solid var(--rule);
-    border-left: 0;
-    border-radius: 0 0.4rem 0.4rem 0;
+    border-right: 0;
+    border-radius: 0.4rem 0 0 0.4rem;
     font-family: var(--font-display);
     font-size: 0.56rem;
     line-height: 1.1;
