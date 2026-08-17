@@ -521,6 +521,61 @@ def index_es_bare():
     return redirect("/es/", code=301)
 
 
+# --------------------------------------------------------------------------
+# Section URLs.
+#
+# /why serves the home page already scrolled to that section. The slugs are the
+# rail's own labels, hyphen-spaced, in both languages, so a Spanish reader can share
+# /hoja-de-ruta and an English one /roadmap and both land in the same place in
+# whichever language the reader's own browser asks for.
+#
+# The value is the data-section key rather than an element id, because the ids differ
+# per language (#roadmap, #hoja-de-ruta) while the key does not.
+#
+# The client scrolls and then replaces the address with "/", so what gets copied out
+# of the bar afterwards is the neutral link, for the same reason /es/ is not what the
+# copy button hands out.
+# --------------------------------------------------------------------------
+
+SECTION_SLUGS = {
+    "why": "why",
+    "the-proposal": "proposal",
+    "roadmap": "roadmap",
+    "why-here": "border",
+    "how-to-help": "help",
+    "por-que": "why",
+    "la-propuesta": "proposal",
+    "hoja-de-ruta": "roadmap",
+    "por-que-aqui": "border",
+    "como-ayudar": "help",
+}
+
+
+def _section_page(section: str):
+    resp = index()
+    # Injected into the served HTML rather than passed as a fragment: a fragment
+    # would sit in the address bar and be shared, which is what this avoids.
+    resp.set_data(
+        resp.get_data(as_text=True).replace(
+            "<body>", f'<body data-scroll-to="{section}">', 1
+        )
+    )
+    return resp
+
+
+for _slug, _section in SECTION_SLUGS.items():
+    app.add_url_rule(
+        f"/{_slug}",
+        endpoint=f"section_{_slug}",
+        view_func=(lambda section=_section: _section_page(section)),
+    )
+    app.add_url_rule(
+        f"/{_slug}/",
+        endpoint=f"section_{_slug}_slash",
+        view_func=(lambda slug=_slug: redirect(f"/{slug}", code=301)),
+    )
+
+
 @app.get("/<path:path>")
 def static_files(path: str):
     resp = send_from_directory(SITE_DIR, path)

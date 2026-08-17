@@ -619,9 +619,55 @@
       a.addEventListener('click', function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
         e.preventDefault();
+        // Already here: nothing to scroll to, so the click copies this section's
+        // address instead. Undocumented on purpose — no hint, no tooltip — but it
+        // confirms afterwards, since an action with no feedback is indistinguishable
+        // from a dead click.
+        if (a.hasAttribute('aria-current') && a.dataset.slug) {
+          copyText(location.origin + '/' + a.dataset.slug, function () {
+            a.classList.add('is-copied');
+            clearTimeout(a._copyTimer);
+            a._copyTimer = setTimeout(function () { a.classList.remove('is-copied'); }, 1200);
+          });
+          return;
+        }
         glide(restingTopFor(el));
       });
     });
+  }
+
+  /* ---- clipboard, shared by the link icon and the rail ---- */
+  function copyText(text, ok) {
+    function legacy() {
+      var box = document.createElement('textarea');
+      box.value = text;
+      box.setAttribute('readonly', '');
+      box.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(box);
+      box.select();
+      var done = false;
+      try { done = document.execCommand('copy'); } catch (e) { done = false; }
+      box.remove();
+      return done;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, function () { if (legacy()) ok(); });
+      return;
+    }
+    if (legacy()) ok();
+  }
+
+  /* ---- arriving at /why and friends ----
+     The server marks the body with the section to open. Scroll without animation,
+     because the reader did not press anything, then replace the address with "/" so
+     what they copy out of the bar afterwards is the neutral link. */
+  function initArrival() {
+    var key = document.body.getAttribute('data-scroll-to');
+    if (!key) return;
+    document.body.removeAttribute('data-scroll-to');
+    var el = document.querySelector('[data-section="' + key + '"]');
+    if (el) window.scrollTo({ top: Math.max(0, restingTopFor(el)), behavior: 'auto' });
+    history.replaceState(history.state, '', location.pathname.replace(/^\/[^/]+$/, '/') + location.search);
   }
 
   var ac = null;
@@ -641,6 +687,7 @@
     initNavIcons();
     initTiers(signal);
     initSectionLinks(signal);
+    initArrival();
     initTabGrow(signal);
   }
 
