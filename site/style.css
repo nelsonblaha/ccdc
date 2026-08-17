@@ -1238,6 +1238,18 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+/* The mark replaces the drawn house. It carries its own dark ground, so it is
+   rounded like an app icon rather than sitting as a hard square among outline
+   glyphs, and it fills more of its button than a stroke icon would, since a solid
+   tile reads heavier at the same size. */
+.nav-logo {
+  width: 88%;
+  height: 88%;
+  border-radius: 22%;
+  display: block;
+}
+.nav-icon:hover .nav-logo { filter: brightness(1.12); }
+
 .nav-icon:hover { color: var(--ink); }
 .nav-icon.is-copied { color: var(--agave); }
 @media (prefers-reduced-motion: reduce) { .nav-icon { transition: none; } }
