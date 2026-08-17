@@ -5,8 +5,12 @@ JSONL file on disk. Deliberately small: no database, no third-party form
 service, no analytics, no trackers. Replacing a Google Form with forty lines of
 our own code is the whole thesis of the organization in miniature.
 
-Signups land in $CCDC_DATA/signups.jsonl. Read them over SSH; there is no
-HTTP endpoint that returns stored contact details, on purpose.
+Signups land in $CCDC_DATA/signups.jsonl and can always be read over SSH.
+There is also one authenticated HTTP view of them at /admin, gated by a
+password whose hash lives only in the deploy environment. Without both
+CCDC_SECRET_KEY and CCDC_ADMIN_PASSWORD_HASH set, that route and its login
+page 404 and the page carries no admin markup at all, so a copy of this repo
+run by anyone else exposes nothing.
 """
 
 import fcntl
@@ -18,11 +22,37 @@ import time
 from collections import deque
 from pathlib import Path
 
-from flask import Flask, Response, jsonify, redirect, request, send_from_directory
+from datetime import timedelta
+
+from flask import (
+    Flask,
+    Response,
+    jsonify,
+    redirect,
+    request,
+    send_from_directory,
+    session,
+)
+from markupsafe import escape
+from werkzeug.security import check_password_hash
 
 SITE_DIR = Path(os.environ.get("CCDC_SITE", "/app/site"))
 DATA_DIR = Path(os.environ.get("CCDC_DATA", "/data"))
 SIGNUP_FILE = DATA_DIR / "signups.jsonl"
+# Watermark for the admin tag: what had been seen the last time the list was
+# opened. Kept beside the data rather than in the cookie so the tag is right on
+# a device that has never seen it.
+SEEN_FILE = DATA_DIR / "admin_seen.json"
+
+# Secrets come from the environment only. Both empty is a valid state and means
+# "no admin here": the routes disappear and no session can be minted.
+SECRET_KEY = os.environ.get("CCDC_SECRET_KEY", "")
+ADMIN_PASSWORD_HASH = os.environ.get("CCDC_ADMIN_PASSWORD_HASH", "")
+
+# Login is the one password field on the site, so it gets its own, tighter
+# budget than the signup form.
+LOGIN_MAX = 8
+LOGIN_WINDOW = 900
 
 # Rate limit: per-IP sliding window. Generous for humans, useless for scripts.
 RATE_MAX = 5
@@ -108,6 +138,25 @@ def _asset_versions() -> dict[str, str]:
 app = Flask(__name__, static_folder=None)
 ASSET_VERSIONS = _asset_versions()
 
+# A random key when none is configured: unforgeable, and unusable, which is what
+# "no admin" should mean. Sessions are a signed cookie, so there is no store.
+app.secret_key = SECRET_KEY or os.urandom(32)
+app.config.update(
+    SESSION_COOKIE_NAME="ccdc_admin",
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    PERMANENT_SESSION_LIFETIME=timedelta(days=365),
+)
+
+
+def admin_enabled() -> bool:
+    return bool(SECRET_KEY and ADMIN_PASSWORD_HASH)
+
+
+def is_admin() -> bool:
+    return admin_enabled() and session.get("admin") is True
+
 
 def render_page(relative: str) -> Response:
     html = (SITE_DIR / relative).read_text(encoding="utf-8")
@@ -117,10 +166,21 @@ def render_page(relative: str) -> Response:
                 html = html.replace(
                     f'{attr}="{prefix}{name}"', f'{attr}="{prefix}{name}?v={digest}"'
                 )
+    # The tag is added to the markup rather than hidden with CSS, so a reader who
+    # is not signed in receives no trace of it: not the element, not the count,
+    # not the stylesheet rules.
+    if is_admin():
+        html = html.replace("</body>", admin_tag_html() + "</body>", 1)
     return Response(
         html,
         mimetype="text/html",
-        headers={"Cache-Control": "no-cache, must-revalidate"},
+        headers={
+            "Cache-Control": "no-cache, must-revalidate",
+            # Cookie is load-bearing twice over: the language choice and now the
+            # admin variant. A shared cache must never hand one visitor's copy to
+            # another.
+            "Vary": "Accept-Language, Cookie",
+        },
     )
 _hits: dict[str, deque] = {}
 
@@ -139,7 +199,13 @@ def cors(resp):
     origin = request.headers.get("Origin")
     if origin in CORS_ORIGINS:
         resp.headers["Access-Control-Allow-Origin"] = origin
-        resp.headers["Vary"] = "Origin"
+        # Append: assigning here used to discard the Accept-Language and Cookie
+        # that the page responses set, which with an admin variant in play would
+        # have been a cache-poisoning bug rather than a cosmetic one.
+        existing = [v.strip() for v in resp.headers.get("Vary", "").split(",") if v.strip()]
+        if "Origin" not in existing:
+            existing.append("Origin")
+        resp.headers["Vary"] = ", ".join(existing)
         resp.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return resp
 
@@ -369,6 +435,290 @@ def static_files(path: str):
         )
     return resp
 
+
+
+# --------------------------------------------------------------------------
+# Admin: one password, one signed cookie, one list view.
+#
+# Deliberately self-contained. Nothing here knows or cares that the site is
+# currently served from a blaha.io hostname: the cookie is scoped to whatever
+# host served the page, so moving to another domain means setting a new secret
+# and signing in once. The throwaway part of this is the smallest part.
+#
+# The list is the most sensitive thing the box holds. It stays behind a single
+# route that does one thing, with no search, no export and no API.
+# --------------------------------------------------------------------------
+
+_login_hits: dict[str, deque] = {}
+
+
+def login_limited(ip: str) -> bool:
+    now = time.time()
+    q = _login_hits.setdefault(ip, deque())
+    while q and now - q[0] > LOGIN_WINDOW:
+        q.popleft()
+    if len(q) >= LOGIN_MAX:
+        return True
+    q.append(now)
+    if len(_login_hits) > 2000:
+        for k in [k for k, v in _login_hits.items() if not v or now - v[-1] > LOGIN_WINDOW]:
+            _login_hits.pop(k, None)
+    return False
+
+
+def read_signups() -> list[dict]:
+    """Every stored signup, oldest first. Unparseable lines are skipped rather
+    than raising: one bad line should never make the whole list unreadable."""
+    if not SIGNUP_FILE.exists():
+        return []
+    out: list[dict] = []
+    with open(SIGNUP_FILE, encoding="utf-8") as fh:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_SH)
+        try:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(json.loads(line))
+                except ValueError:
+                    continue
+        finally:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    return out
+
+
+def read_seen() -> tuple[str, int]:
+    try:
+        data = json.loads(SEEN_FILE.read_text(encoding="utf-8"))
+        return str(data.get("seen_ts") or ""), int(data.get("seen_count") or 0)
+    except (OSError, ValueError, TypeError):
+        return "", 0
+
+
+def write_seen(ts: str, count: int) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    tmp = SEEN_FILE.with_suffix(".tmp")
+    tmp.write_text(json.dumps({"seen_ts": ts, "seen_count": count}), encoding="utf-8")
+    os.replace(tmp, SEEN_FILE)  # atomic: never a half-written watermark
+    try:
+        os.chmod(SEEN_FILE, 0o600)
+    except OSError:
+        pass
+
+
+def signup_state() -> dict:
+    """Total, how many are new, and whether the tag should be lit.
+
+    Both a timestamp and a count are compared. The count alone would go wrong
+    the first time a junk entry is deleted; the timestamp alone would go wrong
+    for two signups inside the same second, since timestamps are second
+    resolution. Either one moving means there is something unseen.
+    """
+    recs = read_signups()
+    total = len(recs)
+    newest = max((str(r.get("ts") or "") for r in recs), default="")
+    seen_ts, seen_count = read_seen()
+    unseen = max(total - seen_count, 0)
+    active = bool(total) and (total != seen_count or newest > seen_ts)
+    return {"total": total, "unseen": unseen, "active": active, "newest": newest, "records": recs}
+
+
+def admin_tag_html() -> str:
+    st = signup_state()
+    cls = "ccdc-admin-tag" + (" is-new" if st["active"] else "")
+    new_line = (
+        f'<span class="new">+{st["unseen"]}</span>' if st["active"] and st["unseen"] else ""
+    )
+    # Colours come from the site's own custom properties, so the tag follows
+    # light, dark and the un-stamped default without duplicating the palette.
+    # Literal fallbacks cover the case where the stylesheet failed to load.
+    return f'''<style>
+.ccdc-admin-tag{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:90;
+ display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.55rem .4rem;
+ background:var(--surface,#181B23);color:var(--ink-3,#767C90);
+ border:1px solid var(--rule,#2B2F3B);border-right:0;border-radius:.4rem 0 0 .4rem;
+ font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.58rem;
+ letter-spacing:.1em;text-transform:uppercase;text-decoration:none;line-height:1}}
+.ccdc-admin-tag .n{{font-size:.95rem;letter-spacing:0;font-weight:700;
+ color:var(--ink,#E9EBF1)}}
+.ccdc-admin-tag.is-new{{color:var(--sun,#F0A32C);border-color:var(--sun,#F0A32C)}}
+.ccdc-admin-tag.is-new .n,.ccdc-admin-tag .new{{color:var(--sun,#F0A32C)}}
+.ccdc-admin-tag .new{{font-size:.55rem;letter-spacing:0}}
+.ccdc-admin-tag:hover{{border-color:var(--sun,#F0A32C)}}
+@media print{{.ccdc-admin-tag{{display:none}}}}
+</style>
+<a class="{cls}" href="/admin" title="Mailing list">
+<span class="n">{st["total"]}</span><span>list</span>{new_line}</a>'''
+
+
+def _admin_shell(title: str, inner: str) -> str:
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{escape(title)} &middot; CCDC</title>
+<style>
+:root {{ color-scheme: light dark; --bg:#ECEDF1; --fg:#15171E; --dim:#4C5164;
+  --line:#D2D5DE; --card:#FFFFFF; --sun:#C77503; }}
+@media (prefers-color-scheme: dark) {{ :root {{ --bg:#101219; --fg:#E9EBF1;
+  --dim:#A2A8BC; --line:#2B2F3B; --card:#181B23; --sun:#F0A32C; }} }}
+* {{ box-sizing:border-box; }}
+body {{ margin:0; background:var(--bg); color:var(--fg); padding:1.5rem;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }}
+main {{ max-width:60rem; margin:0 auto; display:flex; flex-direction:column; gap:1.25rem; }}
+h1 {{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:1.3rem;
+  letter-spacing:-0.02em; margin:0; }}
+a {{ color:inherit; text-underline-offset:3px; }}
+.row {{ display:flex; gap:1rem; align-items:baseline; flex-wrap:wrap; }}
+.dim {{ color:var(--dim); font-size:.85rem; }}
+label {{ display:block; font-size:.8rem; color:var(--dim); margin-bottom:.35rem;
+  text-transform:uppercase; letter-spacing:.08em; }}
+input[type=password] {{ width:100%; padding:.7rem .8rem; font-size:1rem; color:var(--fg);
+  background:var(--card); border:1px solid var(--line); border-radius:.35rem; }}
+button {{ padding:.7rem 1.1rem; font:inherit; font-weight:600; cursor:pointer;
+  color:#15171E; background:var(--sun); border:0; border-radius:.35rem; }}
+form.inline {{ display:inline; }}
+form.inline button {{ background:none; color:var(--dim); border:1px solid var(--line);
+  font-weight:400; font-size:.85rem; padding:.35rem .7rem; }}
+.err {{ color:#E4776A; font-size:.9rem; }}
+table {{ width:100%; border-collapse:collapse; font-size:.9rem; }}
+th,td {{ text-align:left; padding:.55rem .6rem; border-bottom:1px solid var(--line);
+  vertical-align:top; }}
+th {{ font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--dim);
+  font-weight:600; }}
+td.ts {{ white-space:nowrap; font-variant-numeric:tabular-nums; color:var(--dim);
+  font-size:.82rem; }}
+td.contact {{ font-family:ui-monospace,Menlo,monospace; word-break:break-all; }}
+tr.new td {{ background:color-mix(in srgb, var(--sun) 12%, transparent); }}
+.tags {{ display:flex; flex-wrap:wrap; gap:.25rem; }}
+.tag {{ font-size:.72rem; padding:.1rem .4rem; border:1px solid var(--line);
+  border-radius:.25rem; color:var(--dim); }}
+.scroll {{ overflow-x:auto; }}
+.empty {{ padding:2rem; text-align:center; color:var(--dim); border:1px dashed var(--line);
+  border-radius:.4rem; }}
+</style></head>
+<body><main>{inner}</main></body></html>"""
+
+
+@app.get("/login")
+def login_form():
+    if not admin_enabled():
+        return Response("Not found", status=404, mimetype="text/plain")
+    if is_admin():
+        return redirect("/admin", code=303)
+    return _login_response()
+
+
+def _login_response(error: str = "", status: int = 200) -> Response:
+    msg = f'<p class="err">{escape(error)}</p>' if error else ""
+    body = f"""<h1>Sign in</h1>
+<p class="dim">Administrator access to the mailing list.</p>
+{msg}
+<form method="post" action="/login">
+  <label for="p">Password</label>
+  <input id="p" name="password" type="password" autocomplete="current-password" required>
+  <p><button type="submit">Sign in</button></p>
+</form>
+<p class="dim"><a href="/">&larr; Back to the site</a></p>"""
+    resp = Response(_admin_shell("Sign in", body), status=status, mimetype="text/html")
+    resp.headers["Cache-Control"] = "no-store"
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return resp
+
+
+@app.post("/login")
+def login():
+    if not admin_enabled():
+        return Response("Not found", status=404, mimetype="text/plain")
+    if login_limited(client_ip()):
+        return _login_response("Too many attempts. Try again later.", 429)
+    supplied = (request.form.get("password") or "")
+    # check_password_hash compares in constant time and the failure text is the
+    # same either way, so neither timing nor wording says whether a password
+    # exists to guess at.
+    if not check_password_hash(ADMIN_PASSWORD_HASH, supplied):
+        app.logger.warning("admin login failed from %s", client_ip())
+        return _login_response("That password is not right.", 401)
+    session.clear()
+    session.permanent = True
+    session["admin"] = True
+    app.logger.info("admin signed in from %s", client_ip())
+    return redirect("/admin", code=303)
+
+
+@app.post("/logout")
+def logout():
+    session.clear()
+    return redirect("/", code=303)
+
+
+@app.get("/admin")
+def admin():
+    if not admin_enabled():
+        return Response("Not found", status=404, mimetype="text/plain")
+    if not is_admin():
+        return redirect("/login", code=303)
+
+    st = signup_state()
+    seen_ts, seen_count = read_seen()
+    recs = st["records"]
+    # Newest first, and mark the ones that arrived since the last visit before
+    # the watermark moves.
+    fresh_from = len(recs) - st["unseen"]
+    rows = []
+    for i, r in reversed(list(enumerate(recs))):
+        tags = "".join(f'<span class="tag">{escape(h)}</span>' for h in (r.get("help") or []))
+        rows.append(
+            "<tr{cls}>"
+            '<td class="ts">{ts}</td>'
+            '<td class="contact">{contact}</td>'
+            "<td>{name}</td>"
+            '<td><div class="tags">{tags}</div></td>'
+            "<td>{note}</td>"
+            '<td class="ts">{lang}</td>'
+            "</tr>".format(
+                cls=' class="new"' if i >= fresh_from else "",
+                ts=escape(str(r.get("ts") or "")).replace("T", " ").replace("Z", ""),
+                contact=escape(str(r.get("contact") or "")),
+                name=escape(str(r.get("name") or "")) or '<span class="dim">&mdash;</span>',
+                tags=tags or '<span class="dim">&mdash;</span>',
+                note=escape(str(r.get("note") or "")) or '<span class="dim">&mdash;</span>',
+                lang=escape(str(r.get("lang") or "")),
+            )
+        )
+
+    table = (
+        '<div class="scroll"><table><thead><tr>'
+        "<th>When (UTC)</th><th>Contact</th><th>Name</th><th>Offered to help</th>"
+        "<th>Note</th><th>Read</th>"
+        "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
+        if rows
+        else '<p class="empty">No signups yet.</p>'
+    )
+    since = (
+        f"{st['unseen']} new since you last looked."
+        if st["unseen"]
+        else "Nothing new since you last looked."
+    )
+    body = f"""<div class="row">
+  <h1>Mailing list</h1>
+  <span class="dim">{st['total']} total &middot; {escape(since)}</span>
+  <span style="margin-left:auto">
+    <form class="inline" method="post" action="/logout"><button type="submit">Sign out</button></form>
+  </span>
+</div>
+{table}
+<p class="dim">Stored at {escape(str(SIGNUP_FILE))} on the host, mode 0600, and readable
+over SSH. This page is the only route that returns any of it.</p>
+<p class="dim"><a href="/">&larr; Back to the site</a></p>"""
+
+    # The watermark moves only once the list has actually been rendered.
+    write_seen(st["newest"], st["total"])
+    resp = Response(_admin_shell("Mailing list", body), mimetype="text/html")
+    resp.headers["Cache-Control"] = "no-store"
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return resp
 
 def _plain_page(title: str, body: str, lang: str = "en") -> str:
     m = MESSAGES[lang]

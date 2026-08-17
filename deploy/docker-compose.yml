@@ -29,6 +29,11 @@ services:
       - VIRTUAL_PORT=8100
       - LETSENCRYPT_HOST=ccdc.blaha.io,epcdc.blaha.io
       - LETSENCRYPT_EMAIL=nelson.blaha@gmail.com
+    # Admin credentials live in deploy/.env on the host, which is gitignored.
+    # This repo is public: a password hash in git is an invitation to crack it
+    # offline. Absent the file, /login and /admin 404 and the site is unchanged.
+    env_file:
+      - .env
     volumes:
       # Signups land here. Not in the repo, not in the image, not in a backup
       # that goes to a third party without someone deciding it should.
