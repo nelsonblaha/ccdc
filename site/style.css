@@ -1504,3 +1504,27 @@ html[lang="es"] { --h1-ratio: 29.15; --sun-ratio: 29.3; }
    behaviour beforehand; this only appears after the fact. */
 .sectionnav a.is-copied { color: var(--agave); }
 .sectionnav a.is-copied::before { background: var(--agave); }
+
+/* The copy confirmation. Positioned by script beside whatever was copied; the styling
+   is the page's own small-caps label treatment so it reads as part of the furniture
+   rather than as browser chrome. */
+.copied-toast {
+  position: fixed;
+  z-index: 120;
+  pointer-events: none;
+  padding: 0.32rem 0.55rem;
+  background: var(--surface);
+  color: var(--agave);
+  border: 1px solid var(--agave);
+  border-radius: 0.3rem;
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.copied-toast.is-on { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .copied-toast { transition: none; } }

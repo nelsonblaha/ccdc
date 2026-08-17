@@ -17,7 +17,8 @@
       unreachable: 'Could not reach the server. Try again in a moment.',
       signedUp: 'Signed up',
       tiers: 'Access tiers',
-      close: 'Close'
+      close: 'Close',
+      copied: 'Copied to clipboard'
     },
     es: {
       sending: 'Enviando…',
@@ -26,7 +27,8 @@
       unreachable: 'No se pudo conectar con el servidor. Inténtalo de nuevo en un momento.',
       signedUp: 'Listo',
       tiers: 'Niveles de acceso',
-      close: 'Cerrar'
+      close: 'Cerrar',
+      copied: 'Copiado al portapapeles'
     }
   };
 
@@ -438,22 +440,13 @@
     }
     var copy = document.querySelector('.nav-copy');
     if (!copy) return;
-    var label = copy.getAttribute('aria-label');
-    var copied = copy.getAttribute('data-copied') || 'Copied';
     var timer = null;
 
     function flash() {
       copy.classList.add('is-copied');
-      // The label changes too: a colour change alone says nothing to a screen
-      // reader, and this button's whole feedback is the colour.
-      copy.setAttribute('aria-label', copied);
-      copy.setAttribute('title', copied);
+      copiedToast(copy);
       clearTimeout(timer);
-      timer = setTimeout(function () {
-        copy.classList.remove('is-copied');
-        copy.setAttribute('aria-label', label);
-        copy.setAttribute('title', label);
-      }, 1400);
+      timer = setTimeout(function () { copy.classList.remove('is-copied'); }, 1400);
     }
 
     function legacyCopy(text) {
@@ -626,6 +619,7 @@
         if (a.hasAttribute('aria-current') && a.dataset.slug) {
           copyText(location.origin + '/' + a.dataset.slug, function () {
             a.classList.add('is-copied');
+            copiedToast(a);
             clearTimeout(a._copyTimer);
             a._copyTimer = setTimeout(function () { a.classList.remove('is-copied'); }, 1200);
           });
@@ -634,6 +628,37 @@
         glide(restingTopFor(el));
       });
     });
+  }
+
+  /* ---- the confirmation tooltip ----
+     One element, reused, placed beside whatever was just copied. It is a live region
+     so the confirmation is announced rather than only shown, and pointer-events are
+     off so it can never swallow the next click. It flips to the other side of the
+     element when it would run off the window, which matters for the rail, since that
+     sits against the left edge, and for the phone footer at the bottom. */
+  function copiedToast(nearEl) {
+    var t = document.getElementById('copied-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'copied-toast';
+      t.className = 'copied-toast';
+      t.setAttribute('role', 'status');
+      t.setAttribute('aria-live', 'polite');
+      document.body.appendChild(t);
+    }
+    t.textContent = T().copied;
+    t.classList.add('is-on');
+    var r = nearEl.getBoundingClientRect();
+    var w = t.offsetWidth, h = t.offsetHeight;
+    var left = r.right + 10;
+    var top = r.top + (r.height - h) / 2;
+    if (left + w > window.innerWidth - 8) left = r.left - w - 10;
+    if (left < 8) { left = 8; top = r.top - h - 8; }
+    if (top < 8) top = r.bottom + 8;
+    t.style.left = left + 'px';
+    t.style.top = top + 'px';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function () { t.classList.remove('is-on'); }, 1700);
   }
 
   /* ---- clipboard, shared by the link icon and the rail ---- */
