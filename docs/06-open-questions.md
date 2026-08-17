@@ -5,11 +5,17 @@ external answer; none of them should block Phase 0 (doc 04).
 
 ## Blocking before money changes hands
 
-1. **Charity or cooperative?** Doc 05, "the decision that shapes everything
-   else." Option A (charity-first, membership = governance) is recommended, but
-   this is yours to decide and it determines the entity, the exemption, the
-   deductibility of dues, and access to the $10k Google credit. **Decide before
-   filing Form 202**, because the certificate of formation encodes it.
+1. **Open charitable program, or closed member benefit?** Doc 05, "the decision
+   that shapes everything else." Note this is *not* "can we charge money" —
+   501(c)(3)s charge for services all the time, and related fee income is not
+   even taxed. The fork is whether the beneficiary class is broader than the
+   class of payers, and whether pricing looks charitable or commercial. Option A
+   (open sliding-scale program; membership buys governance) is recommended.
+   **Decide before filing Form 202**, because the certificate encodes it.
+
+   1a. What is the actual **price ladder**? Doc 05 proposes $0 / ~$5 / ~$15
+   against a ~$1–2 cost and a $20 commercial comparable. The free tier has to be
+   real and used, not a demo, or the commerciality analysis gets much harder.
 
 2. **Do the Google for Nonprofits cloud credits apply to Vertex AI inference,
    or only to compute/storage?** Doc 03 treats this as the load-bearing
@@ -29,6 +35,11 @@ external answer; none of them should block Phase 0 (doc 04).
    benefit test, and how to word the quid-pro-quo disclosure on dues.
 6. Long-form 1023 vs 1023-EZ. Doc 05 recommends the long form despite EZ
    eligibility; confirm the extra scrutiny is worth the delay.
+6a. **Founder compensation.** Doc 05, "Can the founder be paid?" — yes, but the
+   rebuttable-presumption procedure needs directors who are independent *in
+   fact*, not just on paper. Moot until there is a budget; the structure that
+   makes it defensible (who is on the comp committee) has to exist first.
+
 7. Terms of service and privacy policy, specifically the "we do not train on
    your conversations" commitment — which needs to be backed by the inference
    provider's contract, not just our own promise.

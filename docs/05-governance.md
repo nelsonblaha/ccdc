@@ -10,31 +10,68 @@
 You wrote: *"I'd imagine voting members pay flat dues and get a flat share of
 the AI output."*
 
-That sentence describes a **cooperative** — a mutual-benefit organization where
-members pay in and get value out in proportion to membership. It is a coherent,
-honorable structure with a long El Paso-relevant pedigree (rural electric
-co-ops were built on exactly this logic). But it is in tension with the other
-thing you want, which is **tax-deductible donations from the public**.
+### First, clear away two things that are *not* the problem
 
-The IRS draws a hard line here:
+**Charging money is not the problem.** A 501(c)(3) may absolutely sell services.
+Hospitals, universities, community health clinics, YMCAs, and NPR member
+stations all charge. Fee income that is **substantially related** to the exempt
+purpose is not even subject to unrelated business income tax **[web]**. The test
+has two routes: services are substantially related if they are **provided
+substantially below cost** *or* **further the exempt purpose** **[web]**.
 
-- **501(c)(3)** requires the organization serve "a public rather than a private
-  interest" **[web]**. Benefits flowing to private individuals must be
-  incidental **both qualitatively** (a byproduct of the public benefit) **and
-  quantitatively** (insubstantial in amount) **[web]**.
-- A **mutual-benefit corporation cannot obtain 501(c)(3) status** **[web]**.
-- The cautionary case is *Korean-American Senior Mutual Association Inc. v.
-  Commissioner*, where members paid dues and received member benefits, and the
-  IRS moved to revoke exemption on the grounds the organization was not operated
-  exclusively for exempt purposes **[web]**.
+**Reinvesting surplus is not the problem either.** The prohibition is on
+*inurement* — value flowing to insiders (directors, officers, founders, their
+families). There are no owners to distribute to, so "profits are only
+reinvested" is not a concession you make to qualify; it is simply what a
+nonprofit is. Nonprofits are allowed to run surpluses and accumulate reserves.
 
-"Members pay $60/year and receive $60/year worth of AI compute" is, on its face,
-a purchase, not a donation. Run naively, it puts the exemption at risk and makes
-the dues non-deductible anyway.
+And a third: **you do not have to check driver's licenses.** A charitable class
+may consist of "all individuals located in a city, county, or state" **[web]**;
+the requirement is that the class be large or indefinite enough that the
+community rather than a pre-selected group benefits **[web]**. El Paso County is
+~865,000 people — plainly large and indefinite. Self-attestation or a ZIP code
+field is fine, and heavy identity verification would actually work *against* you
+by narrowing the class and adding a barrier to the very access you claim to
+provide.
 
-**This is fixable, but it has to be designed in from the start, not retrofitted.**
+### What the problem actually is
 
-### Three ways to resolve it
+Two distinct doctrines, and it is worth keeping them separate:
+
+**1. Private benefit — the *closed loop* is the problem, not the payment.**
+501(c)(3) requires the organization serve "a public rather than a private
+interest" **[web]**; benefits to private individuals must be incidental both
+qualitatively (a byproduct of the public benefit) and quantitatively
+(insubstantial) **[web]**. A **mutual-benefit corporation cannot obtain
+501(c)(3) status** **[web]**, and in *Korean-American Senior Mutual Association
+Inc. v. Commissioner* the IRS moved to revoke exemption where members paid dues
+and received member benefits in return **[web]**.
+
+What triggers this is not "money came in." It is **dues in → compute out,
+members only, in proportion to what you paid.** That is a buyers' club: the
+class of beneficiaries is exactly the class of payers. The fix is not to stop
+charging. The fix is to **open the beneficiary class beyond the payers.**
+
+**2. Commerciality — do you look like a business?** This is the doctrine that
+actually bites organizations doing what we are doing, and it is about the
+aggregate picture rather than any single fact. *Living Faith, Inc. v.
+Commissioner*, 950 F.2d 365 (7th Cir. 1991) denied exemption to a health food
+store because it sold goods and services to the public and was in direct
+competition with for-profit businesses **[web]**. Courts weigh pricing policy
+and the extent of below-cost service, competition with commercial firms,
+commercial marketing, and the presence or absence of donations and volunteer
+labor. A nonexempt purpose "somewhat beyond a de minimis level" is tolerated;
+it simply cannot be **substantial** **[web]**.
+
+Selling AI chat subscriptions at $20/month against ChatGPT is close to the
+center of this doctrine. Selling access at a fraction of cost, subsidized by
+donations, on a sliding scale, to people who cannot buy the commercial product,
+is nowhere near it. **The distance between those two is a pricing policy, and
+it is yours to set.**
+
+**So: charge. Just don't price like a vendor, and don't close the loop.**
+
+### Three ways to structure it
 
 **Option A — Charity first, membership as governance only (recommended).**
 
@@ -53,18 +90,46 @@ payments over $75 where the donor gets goods or services in return.
 This keeps 501(c)(3), keeps deductibility for the donation portion, and keeps
 the public-trust story clean: *anyone in El Paso can use it; members govern it.*
 
-**Option B — 501(c)(6) or (c)(4), and give up deductibility.**
+A concrete pricing ladder that fits inside this, all of it open to any El Paso
+resident rather than to members only:
 
-Structure honestly as a member organization. Dues can be substantial and tied
-directly to compute. Cost: contributions are **not** charitable deductions, you
-lose access to Google for Nonprofits' $10,000 in cloud credits (doc 03) and most
-grant funding, and "donate to us" becomes a much harder pitch.
+| Tier | Price | Why it is defensible |
+|---|---|---|
+| Community | **$0** | Real, usable, and used. This is the charitable program, not a demo. |
+| Supporter | **~$5/mo** | Well below the $20 commercial equivalent and at or near our ~$1–2 cost (doc 03) |
+| Sustainer | **~$15/mo** | Still below commercial; cross-subsidizes the free tier |
+| Voting member | **flat annual dues** | Buys **governance**, not compute |
 
-**Option C — Two entities.** A 501(c)(3) charity plus a member cooperative,
-with an arm's-length services agreement. This is what you would do at scale.
-It is absurd overhead for year one — two sets of books, two boards, transfer
-pricing between them. Note it as the eventual shape if the member side grows,
-and do not build it now.
+Every paid tier is priced below the commercial alternative and the surplus
+visibly funds free access. That is the opposite of the *Living Faith* fact
+pattern, and it is a story you can tell in one sentence at a city council
+meeting.
+
+**Option B — Charge market rate to organizations, and accept (or isolate) the
+tax.** Selling AI seats to local businesses at commercial rates is probably
+*not* substantially related to a digital-equity purpose. That does **not**
+disqualify you. It means that slice is unrelated business income: report on
+Form 990-T and pay corporate tax on it **[web]**. Exemption is only threatened
+if the unrelated activity becomes **substantial** relative to everything else
+**[web]**.
+
+If that revenue grows into something real, the standard move is a **taxable
+subsidiary** — a for-profit LLC or corporation wholly owned by the nonprofit,
+selling at market rate, with profits flowing up to the parent. This is roughly
+the Mozilla structure. It keeps the commercial activity out of the exemption
+analysis entirely and gives the board a clean place to put "we sell AI to
+businesses to fund free AI for everyone else."
+
+**Do not build this in year one.** Note it as the answer to "how do we make real
+money and reinvest it," which is a legitimate thing to want and a solved
+problem.
+
+**Option C — Give up 501(c)(3) and be a cooperative honestly.** If the whole
+point is members-only compute proportional to dues, structure as a co-op or a
+501(c)(6)/(c)(4) and stop pretending. Cost: contributions are **not** charitable
+deductions, you lose Google for Nonprofits' $10,000 in cloud credits (doc 03),
+and you lose most grant funding. Pick this only if the closed member benefit is
+genuinely the point.
 
 **Recommendation: Option A.** It gets the credits, the deductions, the grants,
 and the trust. It requires you to mean it: the free public program has to be
@@ -272,6 +337,94 @@ questions a normal donor would ask.
 **Money.** Separate bank account from day one. No personal reimbursements
 without receipts and board-approved policy. Never pay an organization expense
 from a personal card after Stage 2.
+
+## Can the founder be paid?
+
+**Yes.** Paying a founder to run the organization is ordinary and legal — most
+501(c)(3) executive directors are compensated, and many are founders. The rule
+is not "no salary." The rule is **reasonable compensation for services actually
+rendered**, and the prohibition on *inurement* is about insiders extracting
+value beyond what their work is worth.
+
+But this is the single most attackable fact about the organization, so it is
+worth doing to a standard well above the legal minimum.
+
+### The safe harbor, and how to actually get it
+
+There is a defined procedure — the **rebuttable presumption of
+reasonableness**. Satisfy all three prongs and the compensation is presumed
+reasonable, shifting the burden of proof to the IRS **[web]**:
+
+1. **Approved in advance** by an authorized body composed of individuals with
+   **no conflict of interest** as to the transaction **[web]**
+2. The body **obtained and relied on appropriate comparability data** before
+   deciding **[web]**
+3. The body **adequately and contemporaneously documented** the basis for its
+   determination **[web]**
+
+Practically, for us:
+
+- **Recuse completely.** You are not in the room, not in the vote, and not in
+  the minutes except as the subject. If you are also the treasurer or secretary,
+  that is worse — separate the roles.
+- **Comparability data means real data**, not a feeling. Pull Form 990
+  compensation for El Paso and comparable-budget Texas nonprofits from public
+  990 filings. Compare against organizations with *our* budget, not our
+  ambitions. An organization with a $60k budget cannot pay a $120k salary and
+  call it comparable to anything.
+- **Write the minutes the same day**, with the data attached.
+
+### What happens if you get it wrong
+
+Excess compensation is an **excess benefit transaction** under IRC § 4958:
+a **25% excise tax on the disqualified person** who received it, rising to
+**200%** if it is not corrected within the taxable period, plus **10% on
+organization managers** who knowingly approved it (capped — commonly cited at
+$20,000 per transaction, though sources vary) **[web]**.
+
+Note who pays: **you**, personally, not the organization. And the board members
+who approved it. This is precisely why you want the independent-approval
+procedure — it protects your directors, which is also what makes good directors
+willing to serve.
+
+### The real problem is not legal, it is structural
+
+The legal test assumes an **authorized body without a conflict of interest**.
+If you founded the organization, recruited all three directors, and they are
+your friends, that body is independent on paper and not in fact. The IRS may
+never look. A journalist, a rival, or a skeptical council member absolutely
+will — and "the founder's hand-picked board approved the founder's salary" is a
+one-line story that ends the trust thesis this organization is built on.
+
+Defensible looks like:
+
+- **A compensation committee of directors you did not recruit**, or at minimum a
+  majority-independent board (doc 05, "Structural") that includes someone with
+  no prior relationship to you.
+- **Publish the salary and the comparability data voluntarily**, before anyone
+  asks. Form 990 Part VII makes it public anyway; publishing it first is free
+  and converts a liability into evidence.
+- **Fixed salary, no revenue share.** Never tie your pay to donations raised or
+  members signed up. Revenue-based compensation for insiders is the shape
+  regulators look for.
+- **Target at or below the median** of the comparability set. You will be
+  arguing that this organization exists to serve people who cannot afford $20/mo
+  for ChatGPT; a top-quartile salary undermines that in a way no amount of
+  compliance fixes.
+
+### Sequencing
+
+Realistically the question is moot for a while: at a $3.5k/year budget
+(doc 03) there is nothing to pay anyone. The honest ladder is **volunteer →
+documented reimbursement of actual expenses → a modest contract or stipend for
+defined work → part-time employment → full-time**, each step approved by
+independent directors with data on the record.
+
+One more note: **founder-as-employee and founder-as-director are separable.**
+Being the paid administrator does not require being on the board, and stepping
+off the board while being employed by it is a *stronger* governance position,
+not a weaker one — it makes the board your supervisor rather than your
+committee. Worth considering once there are directors you trust.
 
 ## The uncomfortable thing to decide early
 

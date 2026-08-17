@@ -45,11 +45,12 @@ custom layer that handles:
 3. **Google for Nonprofits provides up to $10,000/year in cloud credits.** That
    plausibly covers hosting *and* inference for ~700 members. The MVP's cash
    cost in year one is close to zero; the real spend is legal. See doc 03.
-4. **The membership model as described has a tax problem that must be designed
-   around, not retrofitted.** "Members pay dues and receive compute" is a
-   cooperative; 501(c)(3) requires public rather than private benefit. There is
-   a clean resolution, but it has to be chosen before the certificate of
-   formation is filed. See doc 05.
+4. **A nonprofit can charge for AI. It just cannot run a closed buyers' club.**
+   501(c)(3)s sell services routinely, and fee income related to the exempt
+   purpose is not even taxed — surplus reinvested is simply what a nonprofit is.
+   The constraints are that the beneficiary class must be broader than the class
+   of payers, and that pricing must not look commercial. This shapes the
+   certificate of formation, so it has to be decided before filing. See doc 05.
 
 ## Docs
 
