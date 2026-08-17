@@ -374,6 +374,20 @@
     window.addEventListener('popstate', function () { swapTo(location.href, false); }, { signal: signal });
   }
 
+  /* ---- the rail's mark returns to the top ----
+     A real #top anchor, so it works with scripting off. With JS it scrolls smoothly
+     and leaves no hash behind, matching how the modal cleans up after itself. */
+  function initBrand() {
+    var brand = document.querySelector('.sectionnav a.nav-brand');
+    if (!brand) return;
+    brand.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    });
+  }
+
   var ac = null;
   function boot(restoreTab) {
     if (ac) ac.abort();
@@ -387,6 +401,7 @@
     initSpy(signal);
     initLangDock(signal);
     initLangSwap(signal);
+    initBrand();
   }
 
   boot();

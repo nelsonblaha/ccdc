@@ -676,7 +676,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   }
   /* A tick per entry — the same gauge language as the water bars. The flag is not
      a destination, so it gets no tick. */
-  .sectionnav a:not(.nav-flag)::before {
+  .sectionnav a:not(.nav-flag):not(.nav-brand)::before {
     content: "";
     flex: none;
     width: 0.85rem;
@@ -692,7 +692,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sectionnav a:not(.nav-flag)::before { transition: none; }
+  .sectionnav a:not(.nav-flag):not(.nav-brand)::before { transition: none; }
 }
 
 /* ---------- citations ----------
@@ -848,7 +848,7 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   }
   .sectionnav .nav-brand { display: none; }
   .sectionnav .nav-lang { display: flex; align-items: center; gap: 0.3rem; opacity: 1; transform: none; pointer-events: auto; }
-  .sectionnav a:not(.nav-flag) { order: 1; }
+  .sectionnav a:not(.nav-flag):not(.nav-brand) { order: 1; }
   .sectionnav .nav-flag.is-current {
     outline: 1px solid var(--sun);
     outline-offset: -0.45rem;
@@ -956,8 +956,18 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
     padding-bottom: 0.9rem;
   }
 
-  .nav-brand {
+  /* Element-qualified for the same reason as the flags: `.sectionnav a` is (0,2,0)
+     and would otherwise override the accent colour and the weight. */
+  .sectionnav a.nav-brand {
     display: block;
+    text-decoration: none;
+    border-bottom: 0;
+    /* Vertical padding for a comfortable target, cancelled by an equal negative
+       margin so the mark sits exactly where the non-clickable span did. No
+       horizontal padding: a negative side margin would eat the 0.75rem gap that
+       keeps the flags clear of the text. */
+    padding: 0.4rem 0;
+    margin: -0.4rem 0;
     font-family: var(--font-display);
     /* Same size and tracking as the nav labels; the accent colour and a heavier
        weight mark it as the name rather than a sixth destination. */
@@ -967,6 +977,8 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
     letter-spacing: 0.13em;
     color: var(--sun);
   }
+
+  .sectionnav a.nav-brand:hover { filter: brightness(1.15); }
 
   .nav-lang {
     display: flex;
