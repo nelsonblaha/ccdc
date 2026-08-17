@@ -825,8 +825,10 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     align-items: start;
   }
   .langbar     { grid-row: 1; grid-column: 1 / -1; }
-  /* Full width so the headline has the whole hero to fit on one line. */
-  .hero-head   { grid-row: 2; grid-column: 1 / -1; }
+  /* Full width so the headline has the whole hero to fit on one line — the 44rem
+     reading cap applies to the paragraphs, not to the headline, or the text
+     overflows its box and spills across the image column. */
+  .hero-head   { grid-row: 2; grid-column: 1 / -1; max-width: none; }
   .hero-in     { grid-row: 3; grid-column: 1; }
   .hero-more   { grid-row: 4; grid-column: 1; }
   /* Spans every row of hero text and centres in it. Sized by the column width at
