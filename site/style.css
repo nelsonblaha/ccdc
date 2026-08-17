@@ -801,13 +801,24 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
     letter-spacing: 0.05em;
   }
 
+  /* Two rows of two when the labels do not fit side by side, never a lopsided
+     3 + 1. auto-fit produced exactly that at 430-480px, so the column count is
+     explicit: two here, four once there is room for all of them (below). The
+     longest Spanish label, "MEDIO AMBIENTE", needs about 6.7rem plus padding, and
+     a 320px phone gives each of two columns 8.5rem. */
+  .tablist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
   .tab {
-    flex: 1 1 auto;
     min-width: 0;
     text-align: center;
     padding: 0.7rem 0.35rem;
     font-size: 0.66rem;
     letter-spacing: 0.05em;
+    /* No -1px overlap when there is a row above the container's border. */
+    margin-bottom: 0;
   }
   .tab:first-child { padding-left: 0.35rem; }
 
@@ -986,4 +997,9 @@ html[lang="es"] { --h1-ratio: 28.1; --sun-ratio: 29.3; }
 @media (prefers-reduced-motion: reduce) {
   .nav-lang { transition: none; }
   .nav-flag { transition: none; }
+}
+
+/* Wide enough for all four labels on one line, but still the narrow-screen bar. */
+@media (min-width: 38rem) and (max-width: 52rem) {
+  .tablist { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
