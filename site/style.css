@@ -896,7 +896,9 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
    25px of slack in Spanish and keeps the word. Only 360px-and-under phones, where
    Spanish overruns by ~8px, fall back to the mark. */
 @media (max-width: 23rem) {
-  .sectionnav .nav-short { display: none; }
+  /* Only .nav-swap, never .nav-short as a class: the other four labels have no
+     replacement, and hiding them left a "?" followed by four empty tabs. */
+  .sectionnav .nav-swap { display: none; }
   .sectionnav .nav-min { display: inline; }
 }
 
