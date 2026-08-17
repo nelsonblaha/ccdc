@@ -325,6 +325,7 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 .bar-fill.is-sun { background: var(--sun); }
 
 @media (prefers-reduced-motion: reduce) {
+  .tab { transition: none; }
   .bar-fill { transition: none; }
   .btn { transition: none; }
 }
@@ -742,6 +743,32 @@ section[id], header[id] { scroll-margin-top: 3.25rem; }
   .sectionnav a:hover::before { background: var(--ink-3); }
   .sectionnav a[aria-current] { border-bottom: 0; }
   .sectionnav a[aria-current]::before { width: 1.7rem; background: var(--sun); }
+
+  /* ---------- the sticky reason tabs grow while you are inside the section ----------
+     Habitual downward scrolling carries a reader straight past three of the four
+     reasons, so once the bar pins itself to the top it enlarges to say there is
+     more here, and returns to its normal size before the section ends so the
+     change is noticed a second time on the way out.
+
+     Only the type grows, never the bar. The bar reserves the taller height at all
+     times and aligns its tabs to the bottom: it is sticky and in flow, so a height
+     that changed mid-scroll would shove the panel text below it by that amount,
+     right where the reader is looking. Bottom alignment also keeps the active
+     tab's underline sitting on the bar's own rule rather than floating above it.
+
+     Measured before choosing 1.5: the tabs span 443px of a 1040px column, so the
+     enlarged row needs about 664px and still fits with room to spare. */
+  .tablist {
+    min-height: 3.55rem;
+    align-items: flex-end;
+  }
+  .tab {
+    transition: font-size 280ms ease, padding 280ms ease;
+  }
+  .tablist.is-big .tab {
+    font-size: 1.17rem;
+    padding-right: 1.6rem;
+  }
 
   section[id], header[id] { scroll-margin-top: 1.5rem; }
 }

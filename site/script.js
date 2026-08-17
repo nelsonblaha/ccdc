@@ -458,6 +458,36 @@
     });
   }
 
+  /* ---- the reason tabs grow while the section owns the screen ----
+     Big once the bar is pinned, normal again before the section runs out, so the
+     size change is visible on the way in and on the way out. Desktop only: on a
+     phone the bar is already most of the width and there is nothing to gain. */
+  function initTabGrow(signal) {
+    var wrap = document.getElementById('reason-tabs');
+    var list = wrap && wrap.querySelector('.tablist');
+    if (!list) return;
+    var wide = window.matchMedia('(min-width: 84rem)');
+    // How much of the section must remain below the bar for it to stay large.
+    // Shrinking this early leaves a clear stretch at normal size before the bar
+    // scrolls away, which is the second look.
+    var TAIL = 240;
+
+    function apply() {
+      if (!wide.matches) { list.classList.remove('is-big'); return; }
+      var top = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--stick-top')) || 0;
+      var r = wrap.getBoundingClientRect();
+      var pinned = r.top <= top + 1;
+      var remaining = r.bottom - top;
+      list.classList.toggle('is-big', pinned && remaining > TAIL);
+    }
+
+    window.addEventListener('scroll', apply, { passive: true, signal: signal });
+    window.addEventListener('resize', apply, { signal: signal });
+    wide.addEventListener('change', apply, { signal: signal });
+    apply();
+  }
+
   var ac = null;
   function boot(restoreTab) {
     if (ac) ac.abort();
@@ -472,6 +502,7 @@
     initLangDock(signal);
     initLangSwap(signal);
     initNavIcons();
+    initTabGrow(signal);
   }
 
   boot();
