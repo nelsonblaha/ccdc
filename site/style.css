@@ -244,6 +244,37 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   text-decoration: none;
   transition: transform 120ms ease, filter 120ms ease;
 }
+/* ---------- signup button with the join count as subtext ----------
+   The label and the count stack, and the arrow stays vertically centred against
+   both rather than against the label alone. The count is hidden above the rail's
+   breakpoint, where the edge tab carries the number instead, so on desktop this
+   button looks exactly as it did. */
+
+.btn-with-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.btn-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+}
+.btn-arrow { flex: none; }
+
+/* On the button, the count borrows the button's own ink rather than the page's
+   muted grey, which would be close to unreadable on the accent fill. */
+.btn-with-sub .joininline {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
+  color: inherit;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.btn-with-sub .joininline b { color: inherit; font-weight: 700; }
+
 .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
 .btn-quiet {
@@ -734,8 +765,12 @@ a.joininline:hover { color: var(--ink-2); }
 a.joininline:hover b { color: var(--sun); }
 a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 
-/* Hidden until there is margin to hold it. */
+/* Hidden until there is margin to hold it. The one exception is a signed-in
+   administrator: the count inside the button cannot be a link, since an anchor
+   nested in an anchor is invalid, so at phone widths this tab is their only route
+   to the list. A visitor never receives the class. */
 .jointag { display: none; }
+.jointag.is-admin { display: flex; }
 
 @media (min-width: 84rem) {
   .joininline { display: none; }
@@ -876,6 +911,11 @@ a.joininline.is-new, a.joininline.is-new b { color: var(--sun); }
 @media (max-width: 52rem) {
   .nav-long { display: none; }
   .nav-short { display: inline; }
+
+  /* The third call to action takes a line of its own, so "Get updates" and "Why"
+     stay together on the first one. Left to wrap naturally the three would break
+     wherever the widths happened to land, and in Spanish that is mid-pair. */
+  .hero .cta-row > .btn:last-child { flex-basis: 100%; }
 
   /* Fill the bar rather than clustering left: size to content, then grow into
      whatever is left over, so the labels spread across the available width.

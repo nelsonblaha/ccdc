@@ -631,17 +631,17 @@ def join_markup(lang: str) -> tuple[str, str]:
     # watermark, so their tag is never in it.
     lit = " is-new" if admin and st["active"] else ""
     tag = (
-        f'<a class="jointag{lit}" href="{"/admin" if admin else "#signup"}">'
+        f'<a class="jointag{lit}{" is-admin" if admin else ""}" '
+        f'href="{"/admin" if admin else "#signup"}">'
         f'<span class="jt-lead">{w["lead"]}</span>'
         f'<span class="jt-n">{total}</span>'
         f'<span class="jt-unit">{unit}</span></a>'
     )
-    text = f'{w["lead"]} <b>{total}</b> {unit}'
-    inline = (
-        f'<a class="joininline{lit}" href="/admin">{text}</a>'
-        if admin
-        else f'<span class="joininline">{text}</span>'
-    )
+    # Always a span: this now renders inside the signup button, and an anchor
+    # nested in an anchor is invalid and behaves unpredictably. The administrator
+    # keeps a route to the list through the edge tab, which .is-admin reveals at
+    # phone widths where it is otherwise hidden.
+    inline = f'<span class="joininline">{w["lead"]} <b>{total}</b> {unit}</span>'
     return tag, inline
 
 
