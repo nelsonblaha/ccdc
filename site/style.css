@@ -261,8 +261,9 @@ section > .wrap { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 
 /* ---------- tier cards ---------- */
 
+/* Stacked on phones, three across once there is room for three columns of text. */
 .tiers { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-@media (min-width: 44rem) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 52rem) { .tiers { grid-template-columns: repeat(3, 1fr); } }
 
 .tier { background: var(--surface); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .tier-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; }

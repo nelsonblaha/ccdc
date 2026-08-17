@@ -13,9 +13,10 @@ external answer; none of them should block Phase 0 (doc 04).
    (open sliding-scale program; membership buys governance) is recommended.
    **Decide before filing Form 202**, because the certificate encodes it.
 
-   1a. What is the actual **price ladder**? Doc 05 proposes $0 / ~$5 / ~$15
-   against a ~$1–2 cost and a $20 commercial comparable. The free tier has to be
-   real and used, not a demo, or the commerciality analysis gets much harder.
+   1a. What are the actual **numbers in the paid band**? Doc 05 and the site both
+   say $5–50/mo deliberately vaguely, because the board should set it. The free
+   tier has to be real and used, not a demo, or the commerciality analysis (doc 05)
+   gets much harder.
 
 2. **Do the Google for Nonprofits cloud credits apply to Vertex AI inference,
    or only to compute/storage?** Doc 03 treats this as the load-bearing

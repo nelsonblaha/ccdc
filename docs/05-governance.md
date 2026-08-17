@@ -90,15 +90,20 @@ payments over $75 where the donor gets goods or services in return.
 This keeps 501(c)(3), keeps deductibility for the donation portion, and keeps
 the public-trust story clean: *anyone in El Paso can use it; members govern it.*
 
-A concrete pricing ladder that fits inside this, all of it open to any El Paso
-resident rather than to members only:
+A concrete ladder that fits inside this, all of it open to any resident of the
+metro rather than to members only. **Three tiers, and the paid band is stated as
+a range on purpose** — the board should set the numbers, and a page that commits
+to $15 invites an argument about $15 instead of about the structure:
 
 | Tier | Price | Why it is defensible |
 |---|---|---|
-| Community | **$0** | Real, usable, and used. This is the charitable program, not a demo. |
-| Supporter | **~$5/mo** | Well below the $20 commercial equivalent and at or near our ~$1–2 cost (doc 03) |
-| Sustainer | **~$15/mo** | Still below commercial; cross-subsidizes the free tier |
-| Voting member | **flat annual dues** | Buys **governance**, not compute |
+| Free | **$0** | Real, usable, and used. This is the charitable program, not a demo. |
+| Member | **flat annual dues**, waived on request | Buys **governance**, not compute |
+| Supporter | **$5–50/mo** | Priced under the $20 commercial equivalent rather than against it; the top of the band cross-subsidizes the free tier |
+
+Note the ordering matters to the argument: Free first because it is the point,
+Member second because governance is what dues buy, Supporter last because paying
+more is how you fund somebody else's access — not how you buy more say.
 
 Every paid tier is priced below the commercial alternative and the surplus
 visibly funds free access. That is the opposite of the *Living Faith* fact
