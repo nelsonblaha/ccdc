@@ -2,5 +2,5 @@
 # Pinned to a tag rather than a branch: a deploy should never pick up an upstream
 # change nobody here decided to take. Fetched as a tarball rather than with git+,
 # so the build image does not need git installed.
-https://github.com/nelsonblaha/campaignlanding/archive/refs/tags/v0.1.1.tar.gz
+https://github.com/nelsonblaha/campaignlanding/archive/refs/tags/v0.2.0.tar.gz
 gunicorn==23.0.0
